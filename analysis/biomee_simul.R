@@ -21,7 +21,7 @@ site_info <- tibble(
   koeppen_code = NA,
   igbp_land_use = "Mixed Forests",
   plant_functional_type = "Broadleaf trees"
-  )
+)
 
 site_info <- site_info %>% 
   dplyr::mutate(date_start = lubridate::ymd(paste0(year_start, "-01-01"))) %>%
@@ -40,7 +40,7 @@ params_siml <- tibble(
   do_closedN_run        = TRUE,
   method_photosynth     = "pmodel", # gs_leuning or pmodel
   method_mortality      = "dbh" # dbh or cstarvation or growthrate or const_selfthing
-  )
+)
 
 params_tile <- tibble(
   soiltype     = 3,     # Sand = 1, LoamySand = 2, SandyLoam = 3, SiltLoam = 4, FrittedClay = 5, Loam = 6, Clay = 7
@@ -64,7 +64,7 @@ params_tile <- tibble(
   tf_base        = 1,
   par_mort       = 1,    # param_dbh=1 param_csv=1 param_gr=1 CAI_MAX=2
   par_mort_under = 1
-  )
+)
 
 params_species <- tibble(
   
@@ -113,7 +113,7 @@ params_species <- tibble(
   phiRL         = rep(3.5,16),
   LAI_light     = rep(3.5,16)               # Light-limited crown LAI
   
-  ) 
+) 
 
 params_soil <- tibble(
   type              = c("Coarse","Medium","Fine","CM","CF","MF","CMF","Peat","MCM"),
@@ -125,23 +125,22 @@ params_soil <- tibble(
   k_sat_ref         = c(130.8, 75.1, 53.2, 12.1, 11.1, 12.7, 1.69, 53.2, 53.2), # mol/(s MPa m)
   alphaSoil         = rep(1, 9),
   heat_capacity_dry = c(1.2e6, 1.1e6, 1.1e6, 1.1e6, 1.1e6, 1.1e6, 1.1e6, 1.4e6, 1.0)
-  )
+)
 
 init_cohort <- tibble(
- init_cohort_species = rep(1, 10),   # indicates sps # 1 - Fagus sylvatica
- init_cohort_nindivs = rep(0.05,10),  # initial individual density, individual/m2 ! 1 indiv/m2 = 10.000 indiv/ha
- init_cohort_bsw     = rep(0.05,10), # initial biomass of sapwood, kg C/individual
- init_cohort_bHW     = rep(0.0, 10), # initial biomass of heartwood, kg C/tree
- init_cohort_nsc     = rep(0.05,10)  # initial non-structural biomass
+  init_cohort_species = c(1,1,1,1),   # indicates sps # 1 - Fagus sylvatica
+  init_cohort_nindivs = rep(0.05,4),  # initial individual density, individual/m2 ! 1 indiv/m2 = 10.000 indiv/ha
+  init_cohort_bsw     = rep(0.05,4), # initial biomass of sapwood, kg C/individual
+  init_cohort_bHW     = rep(0.0, 4), # initial biomass of heartwood, kg C/tree
+  init_cohort_nsc     = rep(0.05,4)  # initial non-structural biomass
 )
 
 init_soil <- tibble( #list
- init_fast_soil_C    = 0.0,    # initial fast soil C, kg C/m2
- init_slow_soil_C    = 0.0,    # initial slow soil C, kg C/m2
- init_Nmineral       = 0.015,  # Mineral nitrogen pool, (kg N/m2)
- N_input             = 0.0008  # annual N input to soil N pool, kgN m-2 yr-1
+  init_fast_soil_C    = 0.0,    # initial fast soil C, kg C/m2
+  init_slow_soil_C    = 0.0,    # initial slow soil C, kg C/m2
+  init_Nmineral       = 0.015,  # Mineral nitrogen pool, (kg N/m2)
+  N_input             = 0.0008  # annual N input to soil N pool, kgN m-2 yr-1
 )
-
 
 df_soiltexture <- bind_rows(
   top    = tibble(layer = "top",    fsand = 0.4, fclay = 0.3, forg = 0.1, fgravel = 0.1),
@@ -181,15 +180,15 @@ forcing <- forcing %>% rename(year=YEAR,doy=DOY,hour=HOUR,par=PAR,ppfd=Swdown,te
 
 ## for versions above 4.0
 df_drivers <- tibble(sitename,
-                    site_info = list(tibble(site_info)),
-                    params_siml = list(tibble(params_siml)),
-                    params_tile = list(tibble(params_tile)),
-                    params_species=list(tibble(params_species)),
-                    params_soil=list(tibble(params_soil)),
-                    init_cohort=list(tibble(init_cohort)),
-                    init_soil=list(tibble(init_soil)),
-                    forcing=list(tibble(forcing)),
-                    .name_repair = "unique")
+                     site_info = list(tibble(site_info)),
+                     params_siml = list(tibble(params_siml)),
+                     params_tile = list(tibble(params_tile)),
+                     params_species=list(tibble(params_species)),
+                     params_soil=list(tibble(params_soil)),
+                     init_cohort=list(tibble(init_cohort)),
+                     init_soil=list(tibble(init_soil)),
+                     forcing=list(tibble(forcing)),
+                     .name_repair = "unique")
 
 out <- run_biomee_f_bysite( sitename,
                             params_siml,
@@ -201,7 +200,14 @@ out <- run_biomee_f_bysite( sitename,
                             init_cohort,
                             init_soil,
                             makecheck = TRUE
-                            )
+)
+
+out$output_annual_tile %>% 
+  ggplot() +
+  geom_line(aes(x = year, y = plantC)) +
+  theme_classic()+labs(x = "Year", y = "plantC")
+
+xx <- out$output_annual_cohorts
 
 gg1 <- out$output_annual_tile %>%
   ggplot() +
