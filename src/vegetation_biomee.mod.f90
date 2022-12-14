@@ -853,7 +853,7 @@ contains
                 ! deathrate = param_dbh * 0.1 *    &
                 !            (1.*exp(2.*(cc%dbh-1))/  &
                 !            (1. + exp(2.*(cc%dbh-1))))
-                deathrate = min(1.0, param_dbh * cc%dbh ** 1.5) ! 1.5, 2.5, 5
+                deathrate = min(1.0, param_dbh * sp%mortrate_d_c * cc%dbh ** 1.5) ! 1.5, 2.5, 5
               else
                 deathrate = sp%mortrate_d_c !0.01
               endif
@@ -2157,7 +2157,7 @@ contains
     if (read_from_parameter_file) then
 
       ! Initialize plant cohorts
-      init_n_cohorts = nCohorts ! Weng,2018-11-21
+      init_n_cohorts = 4 !nCohorts ! Weng,2018-11-21
       allocate(cc(1:init_n_cohorts), STAT = istat)
       vegn%cohorts => cc
       vegn%n_cohorts = init_n_cohorts

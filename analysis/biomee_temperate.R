@@ -66,10 +66,19 @@ params_tile <- tibble(
   par_mort_under = 1
 )
 
+# Run site simulations
+# Lon 23.75°, Lat 52.75° Temperate; Bialowieza (BIA): 
+# Picea abies - shade tolerant needleleaf (PFT2) 
+# Betula spp.- Shade intolerant broadleaf deciduous (PFT3)
+# Carpinus betulus or Tilia cordata - (intermediate) shade tolerant broadleaf deciduous (PFT4)
+# Grasses (PFT8).
+
+# Shade tolerant-low Vcmax, low resp. rate and low mortality rate
+# Shade intolerant-high Vcmax, high resp. rate and high mortality rate
+
 params_species <- tibble(
-  
-  lifeform      = rep(1,16),                      # 0 for grasses; 1 for trees
-  phenotype     = c(0,1,1,rep(1,13)),             # 0 for Deciduous; 1 for Evergreen
+  lifeform      = c(0,rep(1,15)),                 # 0 for grasses; 1 for trees
+  phenotype     = c(0,0,0,1,rep(1,12)),           # 0 for Deciduous; 1 for Evergreen
   pt            = rep(0,16),                      # 0 for C3; 1 for C4
   # Root parameters
   alpha_FR      = rep(1.2,16),                    # Fine root turnover rate yr-1
@@ -78,20 +87,20 @@ params_species <- tibble(
   root_zeta     = rep(0.29,16), 
   Kw_root       = rep(3.5e-09,16),               # mol /(s m2 Mpa)
   leaf_size     = rep(0.04,16), 
-  
   # Photosynthesis parameters
-  Vmax          = rep(35.0E-6,16),               # mol m-2 s-1
+  #Vmax          = rep(35.0E-6,16),               # mol m-2 s-1
+  Vmax          = c(20.0E-6,22.0E-6,20.0E-6,18.0E-6,rep(18.0E-6,12)),     # mol m-2 s-1 From BiomeE rep(35.0E-6,16), 
   Vannual       = rep(1.2,16),                   # kgC m-2 yr-1
   wet_leaf_dreg = rep(0.3,16),                   # wet leaf photosynthesis down-regulation: wet leaf is 30% less than dry leaf
   m_cond        = rep(7.0,16), 
   alpha_phot    = rep(0.06,16), 
-  gamma_L       = rep(0.02,16), 
-  gamma_LN      = rep(70.5 ,16),  # kgC kgN-1 yr-1
-  gamma_SW      = rep(0.08,16),   # kgC m-2 Acambium yr-1
-  gamma_FR      = rep(12.0,16),   # kgC kgN-1 yr-1
-  tc_crit       = rep(283.16,16),   # OFF
-  tc_crit_on    = rep(280.16,16),   # ON
-  gdd_crit      = rep(280.0,16),   # Simulations 280, 240, 200
+  gamma_L       = c(0.02,0.03,0.02,0.02,rep(0.02,12)), #rep(0.02,16),   # leaf respiration coeficient (per yr)
+  gamma_LN      = rep(70.5 ,16),  # leaf respiration coeficient per unit N, kgC kgN-1 yr-1
+  gamma_SW      = rep(0.08,16),   # Sapwood respiration rate, kgC m-2 Acambium yr-1
+  gamma_FR      = rep(12.0,16),   # Fine root respiration rate kgC kgN-1 yr-1
+  tc_crit       = rep(283.16,16), # OFF
+  tc_crit_on    = rep(280.16,16), # ON
+  gdd_crit      = rep(280.0,16),   
   
   seedlingsize  = rep(0.05,16),                   # initial size of seedlings #In Ensheng BiomeE: 0.05
   LNbase        = rep(0.8E-3,16),                 # kgN m-2 leaf, Vmax = 0.03125*LNbase
@@ -99,20 +108,18 @@ params_species <- tibble(
   Nfixrate0     = rep(0,16),                      # 0.03 kgN kgRootC-1 yr-1
   NfixCost0     = rep(12,16),                     # 12, 24 gC/gN
   phiCSA        = rep(0.25E-4,16),                # ratio of sapwood area to leaf area
-  mortrate_d_c  = rep(0.01,16),                   # canopy tree mortality rate, year-1
-  mortrate_d_u  = rep(0.075,16),                  # understory tree mortality rate, year-1
+  mortrate_d_c  = c(0.01,0.02,0.01,0.01,rep(0.01,12)), #rep(0.01,16), # canopy tree mortality rate, year-1
+  mortrate_d_u  = c(0.075,0.015,0.075,0.075,rep(0.075,12)), #rep(0.075,16), # understory tree mortality rate, year-1
   maturalage    = rep(5,16),                      # the age that can reproduce
   fNSNmax       = rep(5,16),                      # multiplier for NSNmax as sum of potential bl and br
-  LMA           = c(0.05,0.17,0.11,rep(0.1,13)),  # Leaf mass per unit area. For sps: Beech-Spruce-Fir # In Ensheng rep(0.035,16)
-  rho_wood      = c(590,370,350,rep(300,13)),     # In Ensheng rep(300,16),   # c(590,370,350,rep(300,13)),
-  alphaBM       = rep(5200,16),                   #c(0.19,0.15,0.09,rep(0.15,13)), # In Ensheng BiomeE: 5200.0 
-  thetaBM       = c(2.36,2.30,2.54,rep(2.30,13)), # In Ensheng BiomeE: 2.5 rep(2.5,16),
-  
+  LMA           = c(0.025,0.025,0.025,0.14,rep(0.1,12)),  # Leaf mass per unit area. For sps: Beech-Spruce-Fir # In Ensheng rep(0.035,16)
+  rho_wood      = c(90,350,350,300,rep(300,12)),          # In Ensheng rep(300,16),
+  alphaBM       = rep(5200,16),                  
+  thetaBM       = rep(2.5,16), 
   # add calibratable params
   kphio         = rep(0.05,16),
   phiRL         = rep(3.5,16),
   LAI_light     = rep(3.5,16)               # Light-limited crown LAI
-  
 ) 
 
 params_soil <- tibble(
@@ -128,11 +135,12 @@ params_soil <- tibble(
 )
 
 init_cohort <- tibble(
-  init_cohort_species = c(1,1,1,1),   # indicates sps # 1 - Fagus sylvatica
-  init_cohort_nindivs = rep(0.05,4),  # initial individual density, individual/m2 ! 1 indiv/m2 = 10.000 indiv/ha
-  init_cohort_bsw     = rep(0.05,4), # initial biomass of sapwood, kg C/individual
-  init_cohort_bHW     = rep(0.0, 4), # initial biomass of heartwood, kg C/tree
-  init_cohort_nsc     = rep(0.05,4)  # initial non-structural biomass
+  init_cohort_species = seq(1,10,1),   # indicates different species. The number taken is = init_n_cohorts defined in the model!
+  #init_cohort_species = rep(1,10),    # indicates sps # 1 - Fagus sylvatica
+  init_cohort_nindivs = rep(0.008,10),  # initial individual density, individual/m2 ! 1 indiv/m2 = 10.000 indiv/ha
+  init_cohort_bsw     = rep(0.2,10),  # initial biomass of sapwood, kg C/individual
+  init_cohort_bHW     = rep(0.0, 10),  # initial biomass of heartwood, kg C/tree
+  init_cohort_nsc     = rep(0.5,10)   # initial non-structural biomass
 )
 
 init_soil <- tibble( #list
@@ -146,7 +154,6 @@ df_soiltexture <- bind_rows(
   top    = tibble(layer = "top",    fsand = 0.4, fclay = 0.3, forg = 0.1, fgravel = 0.1),
   bottom = tibble(layer = "bottom", fsand = 0.4, fclay = 0.3, forg = 0.1, fgravel = 0.1)
 )
-
 
 load("data-raw/CH-LAE_forcing.rda")
 
@@ -164,7 +171,6 @@ if (params_siml$method_photosynth == "gs_leuning"){
   forcing <- forcingLAE[,-c(1:2)]
   forcing <- bind_rows(replicate(800, forcing, simplify = FALSE)) # Duplicate for the # of transient years
 }
-
 
 if (params_siml$method_photosynth == "gs_leuning"){
   forcing <- forcing %>% mutate(Swdown = Swdown*1) # levels = *1, *1.15 and *1.30
@@ -207,7 +213,71 @@ out$output_annual_tile %>%
   geom_line(aes(x = year, y = plantC)) +
   theme_classic()+labs(x = "Year", y = "plantC")
 
-xx <- out$output_annual_cohorts
+out$output_annual_tile %>% 
+  ggplot() +
+  geom_line(aes(x = year, y = LAI)) +
+  theme_classic()+labs(x = "Year", y = "LAI")
+
+xx <- out$output_annual_cohorts  #%>% filter(PFT==3)
+str(xx)
+
+out$output_annual_cohorts %>% group_by(PFT,year) %>%
+  summarise(meanDBH=mean(dbh)) %>% mutate(PFT=as.factor(PFT)) %>%
+  ggplot() +
+  geom_line(aes(x = year, y = meanDBH,col=PFT)) +
+  theme_classic()+labs(x = "Year", y = "meanDBH")
+
+out$output_annual_cohorts %>% group_by(PFT,year) %>%
+  summarise(meanVol=mean(Volume)) %>% mutate(PFT=as.factor(PFT)) %>%
+  ggplot() +
+  geom_line(aes(x = year, y = meanVol,col=PFT)) +
+  theme_classic()+labs(x = "Year", y = "meanVol")
+
+yy <- out$output_annual_tile
+
+pft1 <- out$output_annual_cohorts %>% filter(PFT==1) %>% 
+  ggplot() +
+  geom_line(aes(x = year, y = GPP_yr)) +
+  theme_classic()+labs(x = "Year", y = "GPP_yr")
+
+pft2 <- out$output_annual_cohorts %>% filter(PFT==2) %>% 
+  ggplot() +
+  geom_line(aes(x = year, y = GPP_yr)) +
+  theme_classic()+labs(x = "Year", y = "GPP_yr")
+
+pft3 <- out$output_annual_cohorts %>% filter(PFT==3) %>% 
+  ggplot() +
+  geom_line(aes(x = year, y = GPP_yr)) +
+  theme_classic()+labs(x = "Year", y = "GPP_yr")
+
+pft4 <- out$output_annual_cohorts %>% filter(PFT==4) %>% 
+  ggplot() +
+  geom_line(aes(x = year, y = GPP_yr)) +
+  theme_classic()+labs(x = "Year", y = "GPP_yr")
+
+(pft1 + pft2)/(pft3 + pft4)
+
+pft1 <- out$output_annual_cohorts %>% filter(PFT==1) %>% 
+  ggplot() +
+  geom_line(aes(x = year, y = wood)) +
+  theme_classic()+labs(x = "Year", y = "wood")
+
+pft2 <- out$output_annual_cohorts %>% filter(PFT==2) %>% 
+  ggplot() +
+  geom_line(aes(x = year, y = wood)) +
+  theme_classic()+labs(x = "Year", y = "wood")
+
+pft3 <- out$output_annual_cohorts %>% filter(PFT==3) %>% 
+  ggplot() +
+  geom_line(aes(x = year, y = wood)) +
+  theme_classic()+labs(x = "Year", y = "wood")
+
+pft4 <- out$output_annual_cohorts %>% filter(PFT==4) %>% 
+  ggplot() +
+  geom_line(aes(x = year, y = wood)) +
+  theme_classic()+labs(x = "Year", y = "wood")
+
+(pft1 + pft2)/(pft3 + pft4)
 
 gg1 <- out$output_annual_tile %>%
   ggplot() +
