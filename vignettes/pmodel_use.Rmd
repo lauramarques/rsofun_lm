@@ -33,7 +33,8 @@ The package includes two demo datasets to run and validate pmodel output. These 
 library(rsofun)
 
 p_model_drivers
-
+p_model_drivers$forcing
+print(head(p_model_drivers$forcing))
 p_model_validation
 ```
 
@@ -60,6 +61,7 @@ output <- rsofun::runread_pmodel_f(
   p_model_drivers,
   par = params_modl
   )
+output$data
 ```
 
 ### Plotting output
