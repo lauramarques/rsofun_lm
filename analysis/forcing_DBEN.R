@@ -26,7 +26,7 @@ rhum
 rhum <- rhum %>% rownames_to_column(var="date") %>% 
   mutate(date=gsub('X','',date),date=gsub('\\.','-',date),date=as.Date(date),
          doy = lubridate::yday(date),month=lubridate::month(date),year=lubridate::year(date))
-rh_FIN <- rhum %>% select(date,doy,year, FI) %>% rename(rh=FI) %>% mutate(rh=rh*-100)
+rh_FIN <- rhum %>% select(date,doy,year, FI) %>% rename(rh=FI) %>% mutate(rh=rh*100)
 rh_BIA <- rhum %>% select(date,doy,year, BIA) %>% rename(rh=BIA) %>% mutate(rh=rh*100)
 rh_BCI <- rhum %>% select(date,doy,year, BCI) %>% rename(rh=BCI) %>% mutate(rh=rh*100)
 
@@ -256,8 +256,10 @@ biomee_forcing_FIN <- temp_FIN %>% left_join(tsoil_FIN) %>% left_join(prec_FIN) 
 order_years <- as.factor(c(2014 ,1996, 2010, 1998, 1991, 2002, 2012, 2016, 2017, 1999, 2008, 2001, 2015, 2019, 
                            2006, 1993, 1994, 2020, 2000, 2004, 1992, 1995, 2018, 2011, 2005, 2007, 2013, 2009, 
                            1997, 2003))
-#order_years <- as.data.frame(order_years) %>% rename(year=order_years) %>% mutate(order=seq(1:30))
-biomee_forcing_FIN <- biomee_forcing_FIN %>% arrange(factor(year, levels = order_years))
+df_order_years <- as.data.frame(order_years) %>% rename(year=order_years) %>% 
+  mutate(order=seq(1:30),year=as.character(year),year=as.double(year)) %>% as.tibble()
+biomee_forcing_FIN <- biomee_forcing_FIN %>% arrange(factor(year, levels = order_years)) %>%
+  left_join(df_order_years) %>% relocate(order, .after = year) %>% rename(yearID=year, year=order)
 unique(biomee_forcing_FIN$year)
 
 write.csv(biomee_forcing_FIN,"~/Documents/Collaborations/DBEN/cru_jra_1901-2020/biomee_forcing_FIN.csv")
@@ -415,8 +417,10 @@ biomee_forcing_BIA <- temp_BIA %>% left_join(tsoil_BIA) %>% left_join(prec_BIA) 
 order_years <- as.factor(c(2014 ,1996, 2010, 1998, 1991, 2002, 2012, 2016, 2017, 1999, 2008, 2001, 2015, 2019, 
                            2006, 1993, 1994, 2020, 2000, 2004, 1992, 1995, 2018, 2011, 2005, 2007, 2013, 2009, 
                            1997, 2003))
-#order_years <- as.data.frame(order_years) %>% rename(year=order_years) %>% mutate(order=seq(1:30))
-biomee_forcing_BIA <- biomee_forcing_BIA %>% arrange(factor(year, levels = order_years))
+df_order_years <- as.data.frame(order_years) %>% rename(year=order_years) %>% 
+  mutate(order=seq(1:30),year=as.character(year),year=as.double(year)) %>% as.tibble()
+biomee_forcing_BIA <- biomee_forcing_BIA %>% arrange(factor(year, levels = order_years)) %>%
+  left_join(df_order_years) %>% relocate(order, .after = year) %>% rename(yearID=year, year=order)
 unique(biomee_forcing_BIA$year)
 
 write.csv(biomee_forcing_BIA,"~/Documents/Collaborations/DBEN/cru_jra_1901-2020/biomee_forcing_BIA.csv")
@@ -572,10 +576,12 @@ biomee_forcing_BCI <- temp_BCI %>% left_join(tsoil_BCI) %>% left_join(prec_BCI) 
 
 ### Order of years ####
 order_years <- as.factor(c(2014 ,1996, 2010, 1998, 1991, 2002, 2012, 2016, 2017, 1999, 2008, 2001, 2015, 2019, 
-                 2006, 1993, 1994, 2020, 2000, 2004, 1992, 1995, 2018, 2011, 2005, 2007, 2013, 2009, 
-                 1997, 2003))
-#order_years <- as.data.frame(order_years) %>% rename(year=order_years) %>% mutate(order=seq(1:30))
-biomee_forcing_BCI <- biomee_forcing_BCI %>% arrange(factor(year, levels = order_years))
+                           2006, 1993, 1994, 2020, 2000, 2004, 1992, 1995, 2018, 2011, 2005, 2007, 2013, 2009, 
+                           1997, 2003))
+df_order_years <- as.data.frame(order_years) %>% rename(year=order_years) %>% 
+  mutate(order=seq(1:30),year=as.character(year),year=as.double(year)) %>% as.tibble()
+biomee_forcing_BCI <- biomee_forcing_BCI %>% arrange(factor(year, levels = order_years)) %>%
+  left_join(df_order_years) %>% relocate(order, .after = year) %>% rename(yearID=year, year=order)
 unique(biomee_forcing_BCI$year)
 
 write.csv(biomee_forcing_BCI,"~/Documents/Collaborations/DBEN/cru_jra_1901-2020/biomee_forcing_BCI.csv")
