@@ -11,7 +11,7 @@ library(stringr)
 library(ingestr)
 
 # Precipitation (kg/m2 = mm) ####
-load("~/Documents/Collaborations/DBEN/cru_jra_1901-2020/forcing_sel_sites_precip.RData")
+load("~/Documents/Collaborations/DBEN/cru_jra_1901-2020/allyears/forcing_sel_sites_precip.RData")
 precip
 precip <- precip %>% rownames_to_column(var="date") %>% 
   mutate(date=gsub('X','',date),date=gsub('\\.','-',date),date=as.Date(date),
@@ -21,17 +21,17 @@ prec_BIA <- precip %>% select(date,doy,year, BIA) %>% rename(prec=BIA)
 prec_BCI <- precip %>% select(date,doy,year, BCI) %>% rename(prec=BCI)
 
 # Relative humidity (%) #### 
-load("~/Documents/Collaborations/DBEN/cru_jra_1901-2020/forcing_sel_sites_rhum.RData")
+load("~/Documents/Collaborations/DBEN/cru_jra_1901-2020/allyears/forcing_sel_sites_rhum.RData")
 rhum
 rhum <- rhum %>% rownames_to_column(var="date") %>% 
   mutate(date=gsub('X','',date),date=gsub('\\.','-',date),date=as.Date(date),
          doy = lubridate::yday(date),month=lubridate::month(date),year=lubridate::year(date))
-rh_FIN <- rhum %>% select(date,doy,year, FI) %>% rename(rh=FI) %>% mutate(rh=rh*-100)
+rh_FIN <- rhum %>% select(date,doy,year, FI) %>% rename(rh=FI) %>% mutate(rh=rh*100)
 rh_BIA <- rhum %>% select(date,doy,year, BIA) %>% rename(rh=BIA) %>% mutate(rh=rh*100)
 rh_BCI <- rhum %>% select(date,doy,year, BCI) %>% rename(rh=BCI) %>% mutate(rh=rh*100)
 
 # Air temperature (K, converted to Celsius) ####
-load("~/Documents/Collaborations/DBEN/cru_jra_1901-2020/forcing_sel_sites_temp.RData")
+load("~/Documents/Collaborations/DBEN/cru_jra_1901-2020/allyears/forcing_sel_sites_temp.RData")
 temp
 temp <- temp %>% rownames_to_column(var="date") %>% 
   mutate(date=gsub('X','',date),date=gsub('\\.','-',date),date=as.Date(date),
@@ -41,7 +41,7 @@ temp_BIA <- temp %>% select(date,doy,year, BIA) %>% rename(temp=BIA) %>% mutate(
 temp_BCI <- temp %>% select(date,doy,year, BCI) %>% rename(temp=BCI) %>% mutate(temp=temp-273.15)
 
 # Total surface downwelling radiation (W/m2) ####
-load("~/Documents/Collaborations/DBEN/cru_jra_1901-2020/forcing_sel_sites_tswrf.RData")
+load("~/Documents/Collaborations/DBEN/cru_jra_1901-2020/allyears/forcing_sel_sites_tswrf.RData")
 tswrf 
 tswrf <- tswrf %>% rownames_to_column(var="date") %>% 
   mutate(date=gsub('X','',date),date=gsub('\\.','-',date),date=as.Date(date),
@@ -51,7 +51,7 @@ ppfd_BIA <- tswrf %>% select(date,doy,year, BIA) %>% rename(ppfd=BIA)
 ppfd_BCI <- tswrf %>% select(date,doy,year, BCI) %>% rename(ppfd=BCI) 
 
 # Wind speed (m/s) ####
-load("~/Documents/Collaborations/DBEN/cru_jra_1901-2020/forcing_sel_sites_wind.RData")
+load("~/Documents/Collaborations/DBEN/cru_jra_1901-2020/allyears/forcing_sel_sites_wind.RData")
 wind
 wind <- wind %>% rownames_to_column(var="date") %>% 
   mutate(date=gsub('X','',date),date=gsub('\\.','-',date),date=as.Date(date),
@@ -179,7 +179,7 @@ params_siml <- tibble(
   lgn3               = FALSE,
   lgr4               = FALSE,
   firstyeartrend     = 1991,
-  nyeartrend         = 29
+  nyeartrend         = 30
 )
 ###  site_info ####
 p_model_drivers$site_info
@@ -187,7 +187,7 @@ site_info <- tibble(
   lon              = sites[1,2][[1]],
   lat              = sites[1,3][[1]], 
   elv              = sites[1,4][[1]],  
-  year_end         = 2019,
+  year_end         = 2020,
   classid          = "EBF",
   c4               = F,
   whc              = 240,
@@ -195,7 +195,7 @@ site_info <- tibble(
   igbp_land_use    = "Mixed Forests",
   plant_functional_type="Evergreen Needleleaf Trees",
   date_start       = "1991-01-01",
-  date_end         = "2019-12-31")
+  date_end         = "2020-12-31")
 
 ###  params_soil ####
 p_model_drivers$params_soil
@@ -252,15 +252,17 @@ biomee_forcing_FIN <- temp_FIN %>% left_join(tsoil_FIN) %>% left_join(prec_FIN) 
   mutate(wscal=ifelse(is.na(wscal),mean(wscal,na.rm=T),wscal)) %>%
   rename(temp_soil=tsoil,swc=wscal)
 
-write.csv(biomee_forcing_FIN,"~/Documents/Collaborations/DBEN/cru_jra_1901-2020/biomee_forcing_FIN.csv")
-
 ### Order of years ####
 order_years <- as.factor(c(2014 ,1996, 2010, 1998, 1991, 2002, 2012, 2016, 2017, 1999, 2008, 2001, 2015, 2019, 
                            2006, 1993, 1994, 2020, 2000, 2004, 1992, 1995, 2018, 2011, 2005, 2007, 2013, 2009, 
                            1997, 2003))
-#order_years <- as.data.frame(order_years) %>% rename(year=order_years) %>% mutate(order=seq(1:30))
-biomee_forcing_FIN <- biomee_forcing_FIN %>% arrange(factor(year, levels = order_years))
+#df_order_years <- as.data.frame(order_years) %>% rename(year=order_years) %>% 
+#  mutate(order=seq(1:30),year=as.character(year),year=as.double(year)) %>% as_tibble()
+biomee_forcing_FIN <- biomee_forcing_FIN %>% arrange(factor(year, levels = order_years)) #%>%
+  #left_join(df_order_years) %>% relocate(order, .after = year) %>% rename(yearID=year, year=order)
 unique(biomee_forcing_FIN$year)
+
+write.csv(biomee_forcing_FIN,"~/Documents/Collaborations/DBEN/cru_jra_1901-2020/biomee_forcing_FIN.csv")
 
 ## BIA forcing ####
 
@@ -341,7 +343,7 @@ params_siml <- tibble(
   lgn3               = FALSE,
   lgr4               = FALSE,
   firstyeartrend     = 1991,
-  nyeartrend         = 29
+  nyeartrend         = 30
 )
 ###  site_info ####
 p_model_drivers$site_info
@@ -349,7 +351,7 @@ site_info <- tibble(
   lon              = sites[2,2][[1]],
   lat              = sites[2,3][[1]], 
   elv              = sites[2,4][[1]], 
-  year_end         = 2019,
+  year_end         = 2020,
   classid          = "EBF",
   c4               = F,
   whc              = 240,
@@ -357,7 +359,7 @@ site_info <- tibble(
   igbp_land_use    = "Mixed Forests",
   plant_functional_type="Evergreen Needleleaf Trees",
   date_start       = "1991-01-01",
-  date_end         = "2019-12-31")
+  date_end         = "2020-12-31")
 
 ###  params_soil ####
 p_model_drivers$params_soil
@@ -411,15 +413,17 @@ biomee_forcing_BIA <- temp_BIA %>% left_join(tsoil_BIA) %>% left_join(prec_BIA) 
   mutate(wscal=ifelse(is.na(wscal),mean(wscal,na.rm=T),wscal))  %>%
   rename(temp_soil=tsoil,swc=wscal)
 
-write.csv(biomee_forcing_BIA,"~/Documents/Collaborations/DBEN/cru_jra_1901-2020/biomee_forcing_BIA.csv")
-
 ### Order of years ####
 order_years <- as.factor(c(2014 ,1996, 2010, 1998, 1991, 2002, 2012, 2016, 2017, 1999, 2008, 2001, 2015, 2019, 
                            2006, 1993, 1994, 2020, 2000, 2004, 1992, 1995, 2018, 2011, 2005, 2007, 2013, 2009, 
                            1997, 2003))
-#order_years <- as.data.frame(order_years) %>% rename(year=order_years) %>% mutate(order=seq(1:30))
-biomee_forcing_BIA <- biomee_forcing_BIA %>% arrange(factor(year, levels = order_years))
+#df_order_years <- as.data.frame(order_years) %>% rename(year=order_years) %>% 
+#  mutate(order=seq(1:30),year=as.character(year),year=as.double(year)) %>% as.tibble()
+biomee_forcing_BIA <- biomee_forcing_BIA %>% arrange(factor(year, levels = order_years)) #%>%
+ # left_join(df_order_years) %>% relocate(order, .after = year) %>% rename(yearID=year, year=order)
 unique(biomee_forcing_BIA$year)
+
+write.csv(biomee_forcing_BIA,"~/Documents/Collaborations/DBEN/cru_jra_1901-2020/biomee_forcing_BIA.csv")
 
 ## BCI forcing ####
 
@@ -500,7 +504,7 @@ params_siml <- tibble(
   lgn3               = FALSE,
   lgr4               = FALSE,
   firstyeartrend     = 1991,
-  nyeartrend         = 29
+  nyeartrend         = 30
 )
 ###  site_info ####
 p_model_drivers$site_info
@@ -508,7 +512,7 @@ site_info <- tibble(
   lon              = sites[3,2][[1]],
   lat              = sites[3,3][[1]], 
   elv              = sites[3,4][[1]], 
-  year_end         = 2019,
+  year_end         = 2020,
   classid          = "EBF",
   c4               = F,
   whc              = 240,
@@ -516,7 +520,7 @@ site_info <- tibble(
   igbp_land_use    = "Mixed Forests",
   plant_functional_type="Evergreen Needleleaf Trees",
   date_start       = "1991-01-01",
-  date_end         = "2019-12-31")
+  date_end         = "2020-12-31")
 
 ###  params_soil ####
 p_model_drivers$params_soil
@@ -570,12 +574,14 @@ biomee_forcing_BCI <- temp_BCI %>% left_join(tsoil_BCI) %>% left_join(prec_BCI) 
   mutate(wscal=ifelse(is.na(wscal),mean(wscal,na.rm=T),wscal)) %>%
   rename(temp_soil=tsoil,swc=wscal) 
 
-write.csv(biomee_forcing_BCI,"~/Documents/Collaborations/DBEN/cru_jra_1901-2020/biomee_forcing_BCI.csv")
-
 ### Order of years ####
 order_years <- as.factor(c(2014 ,1996, 2010, 1998, 1991, 2002, 2012, 2016, 2017, 1999, 2008, 2001, 2015, 2019, 
-                 2006, 1993, 1994, 2020, 2000, 2004, 1992, 1995, 2018, 2011, 2005, 2007, 2013, 2009, 
-                 1997, 2003))
-#order_years <- as.data.frame(order_years) %>% rename(year=order_years) %>% mutate(order=seq(1:30))
-biomee_forcing_BCI <- biomee_forcing_BCI %>% arrange(factor(year, levels = order_years))
+                           2006, 1993, 1994, 2020, 2000, 2004, 1992, 1995, 2018, 2011, 2005, 2007, 2013, 2009, 
+                           1997, 2003))
+#df_order_years <- as.data.frame(order_years) %>% rename(year=order_years) %>% 
+#  mutate(order=seq(1:30),year=as.character(year),year=as.double(year)) %>% as.tibble()
+biomee_forcing_BCI <- biomee_forcing_BCI %>% arrange(factor(year, levels = order_years)) #%>%
+ # left_join(df_order_years) %>% relocate(order, .after = year) %>% rename(yearID=year, year=order)
 unique(biomee_forcing_BCI$year)
+
+write.csv(biomee_forcing_BCI,"~/Documents/Collaborations/DBEN/cru_jra_1901-2020/biomee_forcing_BCI.csv")
