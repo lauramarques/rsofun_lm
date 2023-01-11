@@ -5,6 +5,7 @@ library(patchwork)
 library(multidplyr)
 
 # Define drivers #### 
+biomee_p_model_drivers$params_siml[[1]]
 
 sitename <- "FIN"
 
@@ -166,7 +167,7 @@ harv_vec[100] <- fharv
 harv_vec <- c(harv_vec, rep(c(fharv, rep(0, 249)), 4), rep(c(fharv, rep(0, 24)), 40), 0)
 df_harv <- tibble(year = seq(length(harv_vec)), harv = harv_vec)
 
-df_harv <- tibble(year = seq(1:450), harv = c(rep(0,30),.9,rep(0,419)))
+df_harv <- tibble(year = seq(1:450), harv = c(rep(0,30),fharv,rep(0,419)))
 
 df_harv %>% 
   ggplot(aes(year, harv)) +
@@ -177,32 +178,34 @@ df_harv %>%
 #biomee_p_model_drivers$forcing[[1]]
 biomee_forcing_FIN <- read.csv("~/Documents/Collaborations/DBEN/cru_jra_1901-2020/biomee_forcing_FIN.csv")
 biomee_forcing_FIN
-df_forcing <-biomee_forcing_FIN
+df_forcing <- biomee_forcing_FIN
 
 # Set fix values of co2 412 and 562
 df_forcing$co2 <- 412
 
 ## get mean seasonal cycle and repeat this every year of all simulations
-#df_forcing <- biomee_p_model_drivers$forcing[[1]] %>% mutate(doy = lubridate::yday(date)) %>% 
-#  group_by(doy) %>% 
-#  summarise(across(is.numeric, mean))
+df_forcing <- biomee_p_model_drivers$forcing[[1]] %>% mutate(doy = lubridate::yday(date)) %>% 
+  group_by(doy) %>% 
+  summarise(across(is.numeric, mean))
 
 # Repeat mean seasonal cycle `nyears` times where `nyears` corresponds to the length of the harvest time 
 # series (rows in `df_harv`). The column `year` now signifies simulation year and goes from 1 to `nyears`.
 # Add harvest forcing to drivers. 
-#nyears <- nrow(df_harv)
-#df_forcing <- df_forcing %>% 
-#  slice(rep(1:n(), nyears)) %>% 
-#  mutate(year = rep(1:nyears, each = 365))
-
+nyears <- nrow(df_harv)
+df_forcing <- df_forcing %>% 
+  slice(rep(1:n(), nyears)) %>% 
+  mutate(year = rep(1:nyears, each = 365))
 nyears <- nrow(df_harv)/length(unique(biomee_forcing_FIN$year))
 df_forcing <- df_forcing %>% 
-  slice(rep(1:n(), nyears))
+  slice(rep(1:n(), nyears)) %>% rename(yearID=year) %>%
+  mutate(year = rep(1:450, each = 365)) %>% relocate(year, .after=yearID) %>%
+  mutate(hour=11.5)
 
 # Add 2020 for running spinup
-spinup_forcing <- biomee_forcing_FIN %>% filter(yearID==2020)
-df_forcing <- spinup_forcing %>% bind_rows(df_forcing)
-
+spinup_forcing <- biomee_forcing_FIN %>% filter(year==2020)
+df_forcing <- spinup_forcing %>% bind_rows(df_forcing) %>% rename(yearID=year) %>%
+  mutate(year = rep(1:451, each = 365)) %>% relocate(year, .after=yearID) %>%
+  mutate(hour=11.5)
 
 # Add harvest to forcing, assuming harvest on Jan 1st.
 df_forcing_disturb <- df_forcing %>% 
@@ -233,7 +236,7 @@ df_drivers_disturb <-tibble(sitename = site_info$sitename,
                      params_soil=list(tibble(params_soil)),
                      init_cohort=list(tibble(init_cohort)),
                      init_soil=list(tibble(init_soil)),
-                     forcing=list(tibble(df_forcing_disturb)),
+                     forcing=list(tibble(df_forcing)),
                      .name_repair = "unique")
 
 ## simulations with disturbance
@@ -262,12 +265,13 @@ out_sc1_ann <- out_sc1$data[[1]]$output_annual_tile
 out_sc1$data[[1]]$output_annual_tile %>%
   ggplot() +
   geom_line(aes(x = year, y = plantC)) +
-  theme_classic()+labs(x = "Year", y = "plantC")
+  theme_classic()+labs(x = "Year", y = "plantC") 
 
 # model output includes the spinup. Remove it for plotting and overwrite years.
 out_sc1_ann <- out_sc1_ann %>%
   slice((df_drivers_disturb$params_siml[[1]]$spinupyears + 1):nrow(out_sc1_ann)) %>% 
-  mutate(year = 1:nyears)
+  mutate(year = 1:450)
+out_sc1_ann
 
 #out_sc1$data[[1]]$output_annual_tile %>% 
 out_sc1_ann %>%

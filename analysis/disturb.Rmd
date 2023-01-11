@@ -130,7 +130,7 @@ biomee_p_model_drivers_xx1$params_siml[[1]]$nyeartrend <- 3000
 filn <- "data/out_sc1.rds"
 if (!file.exists(filn)){
   out_sc1 <- runread_biomee_f(
-       biomee_p_model_drivers_xx1,
+       biomee_p_model_drivers_xx0,
        makecheck = TRUE,
        parallel = FALSE
        )

@@ -81,6 +81,7 @@ contains
 
     simu_steps = 0
 
+
     !----------------------------------------------------------------
     ! LOOP THROUGH MONTHS
     !----------------------------------------------------------------
@@ -224,6 +225,14 @@ contains
     !if (iyears == 45) then
     !  stop
     !end if
+
+    !---------------------------------------------
+    ! Reset vegetation to initial conditions
+    !---------------------------------------------
+    
+    if (iyears==200)  then
+    call reset_vegn_initial(vegn)
+    endif
 
     if (myinterface%steering%finalize) then
       !----------------------------------------------------------------

@@ -44,6 +44,7 @@ module md_params_siml_biomee
     integer :: outyear         ! year AD written to output
     logical :: spinup          ! is true during spinup
     logical :: init            ! is true in first simulation year
+    !logical :: reinit          ! is true in the year after disturbance was implemented as fharv = 1.0.
     logical :: finalize        ! is true in the last simulation year
     logical :: do_soilequil    ! true in year of analytical soil equilibration (during spinup)
     logical :: average_soil    ! true in years before analytical soil equilibration, when average in and out are taken
@@ -163,6 +164,8 @@ contains
     else
       out_steering%init = .false.
     endif 
+
+  
 
     if (year==params_siml%runyears) then
       out_steering%finalize = .true.
