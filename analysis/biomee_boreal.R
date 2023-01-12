@@ -186,13 +186,8 @@ print(packageVersion("rsofun"))
 forcing <- forcing %>% rename(year=YEAR,doy=DOY,hour=HOUR,par=PAR,ppfd=Swdown,temp=TEMP,temp_soil=SoilT,rh=RH,prec=RAIN,
                               wind=WIND,patm=PRESSURE,co2=aCO2_AW,swc=SWC)
 
-forcing <- biomee_forcing_FIN %>% mutate(hour=11.5) %>% 
-  select(year, doy, hour, par, ppfd, temp, temp_soil, rh, prec, wind, patm, co2, swc)
-
-forcing <- bind_rows(replicate(50, forcing, simplify = FALSE))
-
 ## for versions above 4.0
-df_drivers <- tibble(sitename,
+df_drivers <- tibble(sitename = sitename,
                      site_info = list(tibble(site_info)),
                      params_siml = list(tibble(params_siml)),
                      params_tile = list(tibble(params_tile)),
