@@ -266,7 +266,8 @@ out_sc1 <- runread_biomee_f(
 out_sc1$data[[1]]$output_annual_tile
 out_sc1$data[[1]]$output_annual_cohorts
 
-out_sc1_ann <- out_sc1$data[[1]]$output_annual_tile
+out_sc1_tile <- out_sc1$data[[1]]$output_annual_tile
+out_sc1_cohort <- out_sc1$data[[1]]$output_annual_cohorts
 
 ### Plant C
 

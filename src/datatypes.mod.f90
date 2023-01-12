@@ -1119,6 +1119,7 @@ contains
 
     ! re-initialise to avoid elements not updated when number 
     ! of cohorts declines from one year to the next
+    !if (.not. myinterface%steering%spinup) then 
     out_annual_cohorts(:)%year       = dummy
     out_annual_cohorts(:)%cID        = dummy
     out_annual_cohorts(:)%PFT        = dummy
@@ -1147,6 +1148,7 @@ contains
     out_annual_cohorts(:)%n_deadtrees = dummy
     out_annual_cohorts(:)%c_deadtrees = dummy
     out_annual_cohorts(:)%deathrate = dummy
+    ! endif
 
     ! Cohorts ouput
     do i = 1, vegn%n_cohorts
@@ -1161,6 +1163,7 @@ contains
       dVol      = (cc%Volume - cc%Vol_ys)
       cc%BA     = pi/4*cc%dbh*cc%dbh
 
+      !if (.not. myinterface%steering%spinup) then 
       out_annual_cohorts(i)%year        = iyears
       out_annual_cohorts(i)%cID         = cc%ccID
       out_annual_cohorts(i)%PFT         = cc%species
@@ -1190,6 +1193,7 @@ contains
       out_annual_cohorts(i)%n_deadtrees = cc%n_deadtrees
       out_annual_cohorts(i)%c_deadtrees = cc%c_deadtrees
       out_annual_cohorts(i)%deathrate   = cc%deathratevalue
+      ! endif
 
     enddo
 
