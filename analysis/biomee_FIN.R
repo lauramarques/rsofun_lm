@@ -66,9 +66,16 @@ params_tile <- tibble(
   par_mort_under = 1
 )
 
+# Run site simulations
+# Lon 23.25°, Lat 62.25° Boreal: Finland (FIN): 
+# Pinus sylvestris - shade intolerant needleleaf (PFT1)
+# Picea abies - shade tolerant needleleaf (PFT2)
+# Betula pendula - shade intolerant broadleaf deciduous (PFT3)
+# Grasses combined (PFT8)
+
 params_species <- tibble(
-  lifeform      = rep(1,16),                      # 0 for grasses; 1 for trees
-  phenotype     = c(0,1,1,rep(1,13)),             # 0 for Deciduous; 1 for Evergreen
+  lifeform      = c(0,rep(1,15)),                 # 0 for grasses; 1 for trees
+  phenotype     = c(0,0,1,1,rep(1,12)),           # 0 for Deciduous; 1 for Evergreen
   pt            = rep(0,16),                      # 0 for C3; 1 for C4
   # Root parameters
   alpha_FR      = rep(1.2,16),                    # Fine root turnover rate yr-1
@@ -78,7 +85,7 @@ params_species <- tibble(
   Kw_root       = rep(3.5e-09,16),               # mol /(s m2 Mpa)
   leaf_size     = rep(0.04,16), 
   # Photosynthesis parameters
-  Vmax          = rep(35.0E-6,16),               # mol m-2 s-1
+  Vmax          = c(20.0E-6,22.0E-6,18.0E-6,18.0E-6,rep(20.0E-6,12)),     # mol m-2 s-1 From BiomeE rep(35.0E-6,16), 
   Vannual       = rep(1.2,16),                   # kgC m-2 yr-1
   wet_leaf_dreg = rep(0.3,16),                   # wet leaf photosynthesis down-regulation: wet leaf is 30% less than dry leaf
   m_cond        = rep(7.0,16), 
@@ -100,8 +107,8 @@ params_species <- tibble(
   mortrate_d_u  = rep(0.075,16),                  # understory tree mortality rate, year-1
   maturalage    = rep(5,16),                      # the age that can reproduce
   fNSNmax       = rep(5,16),                      # multiplier for NSNmax as sum of potential bl and br
-  LMA           = c(0.05,0.17,0.11,rep(0.1,13)),  # Leaf mass per unit area. For sps: Beech-Spruce-Fir # In Ensheng rep(0.035,16)
-  rho_wood      = c(590,370,350,rep(300,13)),     # In Ensheng rep(300,16),   # c(590,370,350,rep(300,13)),
+  LMA           = c(0.025,0.025,0.14,0.14,rep(0.1,12)),  # Leaf mass per unit area. For sps: Beech-Spruce-Fir # In Ensheng rep(0.035,16)
+  rho_wood      = c(90,350,300,300,rep(300,12)),         # In Ensheng rep(300,16),
   alphaBM       = rep(5200,16),                   #c(0.19,0.15,0.09,rep(0.15,13)), # In Ensheng BiomeE: 5200.0 
   thetaBM       = c(2.36,2.30,2.54,rep(2.30,13)), # In Ensheng BiomeE: 2.5 rep(2.5,16),
   # add calibratable params
@@ -123,11 +130,12 @@ params_soil <- tibble(
 )
 
 init_cohort <- tibble(
-  init_cohort_species = rep(1, 10),   # indicates sps # 1 - Fagus sylvatica
-  init_cohort_nindivs = rep(0.05,10),  # initial individual density, individual/m2 ! 1 indiv/m2 = 10.000 indiv/ha
-  init_cohort_bsw     = rep(0.05,10), # initial biomass of sapwood, kg C/individual
-  init_cohort_bHW     = rep(0.0, 10), # initial biomass of heartwood, kg C/tree
-  init_cohort_nsc     = rep(0.05,10)  # initial non-structural biomass
+  init_cohort_species = seq(1,10,1),   # indicates different species. The number taken is = init_n_cohorts defined in the model!
+  #init_cohort_species = rep(1,10),    # indicates sps # 1 - Fagus sylvatica
+  init_cohort_nindivs = rep(0.008,10),  # initial individual density, individual/m2 ! 1 indiv/m2 = 10.000 indiv/ha
+  init_cohort_bsw     = rep(0.2,10),  # initial biomass of sapwood, kg C/individual
+  init_cohort_bHW     = rep(0.0, 10),  # initial biomass of heartwood, kg C/tree
+  init_cohort_nsc     = rep(0.5,10)   # initial non-structural biomass
 )
 
 init_soil <- tibble( #list
