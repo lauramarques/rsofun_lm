@@ -244,7 +244,7 @@ df_drivers_disturb <-tibble(sitename = site_info$sitename,
                      params_soil=list(tibble(params_soil)),
                      init_cohort=list(tibble(init_cohort)),
                      init_soil=list(tibble(init_soil)),
-                     forcing=list(tibble(df_forcing)),
+                     forcing=list(tibble(df_forcing_disturb)),
                      .name_repair = "unique")
 
 ## simulations with disturbance
@@ -275,6 +275,13 @@ out_sc1$data[[1]]$output_annual_tile %>%
   ggplot() +
   geom_line(aes(x = year, y = plantC)) +
   theme_classic()+labs(x = "Year", y = "plantC") 
+
+out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
+  summarise(meanDBH=mean(dbh)) %>% mutate(PFT=as.factor(PFT)) %>%
+  ggplot() +
+  geom_line(aes(x = year, y = meanDBH,col=PFT)) +
+  theme_classic()+labs(x = "Year", y = "meanDBH")
+
 
 # model output includes the spinup. Remove it for plotting and overwrite years.
 out_sc1_ann <- out_sc1_ann %>%
