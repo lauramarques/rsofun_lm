@@ -175,7 +175,7 @@ harv_vec[100] <- fharv
 harv_vec <- c(harv_vec, rep(c(fharv, rep(0, 249)), 4), rep(c(fharv, rep(0, 24)), 40), 0)
 df_harv <- tibble(year = seq(length(harv_vec)), harv = harv_vec)
 
-df_harv <- tibble(year = seq(1:450), harv = c(rep(0,30),fharv,rep(0,419)))
+df_harv <- tibble(year = seq(1:450), harv = c(rep(0,30),0,rep(0,419)))
 
 df_harv %>% 
   ggplot(aes(year, harv)) +
@@ -282,10 +282,9 @@ out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   geom_line(aes(x = year, y = meanDBH,col=PFT)) +
   theme_classic()+labs(x = "Year", y = "meanDBH")
 
-
 # model output includes the spinup. Remove it for plotting and overwrite years.
-out_sc1_ann <- out_sc1_ann %>%
-  slice((df_drivers_disturb$params_siml[[1]]$spinupyears + 1):nrow(out_sc1_ann)) %>% 
+out_sc1_ann <- out_sc1_tile %>%
+  slice((df_drivers_disturb$params_siml[[1]]$spinupyears + 1):nrow(out_sc1_tile)) %>% 
   mutate(year = 1:450)
 out_sc1_ann
 

@@ -521,8 +521,9 @@ contains
       TURN_ON_life = (sp%phenotype == 0 .and. &
         cc%status    == LEAF_OFF       .and. &
         cc%gdd        > sp%gdd_crit    .and. &
-        vegn%tc_pheno > sp%tc_crit_on) .and. &
-        (sp%lifeform .ne. 0 .OR.(sp%lifeform .eq. 0 .and. cc%layer==1))
+        vegn%tc_pheno > sp%tc_crit_on) !.and. &
+        !(sp%lifeform .ne. 0 .OR.(sp%lifeform .eq. 0 .and. cc%layer==1))
+        !(sp%lifeform==1 .OR.sp%lifeform==0)
 
       cc_firstday = .false.
       if (TURN_ON_life) then
