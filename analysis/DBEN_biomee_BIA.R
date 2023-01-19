@@ -5,14 +5,14 @@ library(patchwork)
 library(multidplyr)
 
 # Define drivers #### 
-biomee_p_model_drivers$params_siml[[1]]
+#biomee_p_model_drivers$params_siml[[1]]
 
-sitename <- "FIN"
+sitename <- "BIA"
 
 site_info <- tibble(
-  sitename="FIN",
-  lon = 23.25,
-  lat = 62.25,
+  sitename="BIA",
+  lon = 23.75,
+  lat = 52.75,
   elv = NA,
   year_start = 1991,
   year_end = 2020,
@@ -30,8 +30,8 @@ site_info <- site_info %>%
 
 params_siml <- tibble(
   spinup                = TRUE,
-  spinupyears           = 600, 
-  recycle               = 1,  
+  spinupyears           = 500, 
+  recycle               = 30,  
   firstyeartrend        = 0, 
   nyeartrend            = 450,
   outputhourly          = TRUE,
@@ -67,11 +67,14 @@ params_tile <- tibble(
 )
 
 # Run site simulations
-# Lon 23.25°, Lat 62.25° Boreal: Finland (FIN): 
-# Pinus sylvestris - shade intolerant needleleaf (PFT1)
+# Lon 23.75°, Lat 52.75° Temperate: Bialowieza, Poland (BIA): 
 # Picea abies - shade tolerant needleleaf (PFT2)
 # Betula pendula - shade intolerant broadleaf deciduous (PFT3)
-# Grasses combined (PFT8)
+# Carpinus betulus/Tilia cordata - shade tolerant broadleaf deciduous (PFT4)
+# Grasses combined (PFT8) C3
+
+# Shade tolerant-low Vcmax, low resp. rate and low mortality rate
+# Shade intolerant-high Vcmax, high resp. rate and high mortality rate
 
 params_species <- tibble(
   lifeform      = c(0,rep(1,15)),                 # 0 for grasses; 1 for trees
@@ -85,21 +88,21 @@ params_species <- tibble(
   Kw_root       = rep(3.5e-09,16),               # mol /(s m2 Mpa)
   leaf_size     = rep(0.04,16), 
   # Photosynthesis parameters
-  Vmax          = c(20.0E-6,22.0E-6,18.0E-6,18.0E-6,rep(20.0E-6,12)),     # mol m-2 s-1 From BiomeE rep(35.0E-6,16), 
+  Vmax          = rep(35.0E-6,16),               # mol m-2 s-1 
   Vannual       = rep(1.2,16),                   # kgC m-2 yr-1
   wet_leaf_dreg = rep(0.3,16),                   # wet leaf photosynthesis down-regulation: wet leaf is 30% less than dry leaf
-  m_cond        = rep(7.0,16), 
+  m_cond        = rep(7.0,16),                   # factor of stomatal conductance
   alpha_phot    = rep(0.06,16), 
   gamma_L       = rep(0.02,16), 
-  gamma_LN      = rep(70.5 ,16),  # kgC kgN-1 yr-1
-  gamma_SW      = rep(0.08,16),   # kgC m-2 Acambium yr-1
-  gamma_FR      = rep(12.0,16),   # kgC kgN-1 yr-1
-  tc_crit       = rep(283.16,16),   # OFF
-  tc_crit_on    = rep(280.16,16),   # ON
-  gdd_crit      = rep(280.0,16),   # Simulations 280, 240, 200
+  gamma_LN      = rep(70.5 ,16),                 # kgC kgN-1 yr-1
+  gamma_SW      = rep(0.08,16),                  # kgC m-2 Acambium yr-1
+  gamma_FR      = rep(12.0,16),                  # kgC kgN-1 yr-1
+  tc_crit       = rep(283.16,16),                # OFF
+  tc_crit_on    = rep(280.16,16),                # ON
+  gdd_crit      = rep(280.0,16),   
   seedlingsize  = rep(0.05,16),                   # initial size of seedlings #In Ensheng BiomeE: 0.05
   LNbase        = rep(0.8E-3,16),                 # kgN m-2 leaf, Vmax = 0.03125*LNbase
-  lAImax        = rep(3.5,16),                    # maximum crown LAI
+  lAImax        = c(2.5,4.5,4.5,4.8,rep(4.8,12)),  # maximum crown LAI # rep(3.5,16),
   Nfixrate0     = rep(0,16),                      # 0.03 kgN kgRootC-1 yr-1
   NfixCost0     = rep(12,16),                     # 12, 24 gC/gN
   phiCSA        = rep(0.25E-4,16),                # ratio of sapwood area to leaf area
@@ -107,10 +110,10 @@ params_species <- tibble(
   mortrate_d_u  = rep(0.075,16),                  # understory tree mortality rate, year-1
   maturalage    = rep(5,16),                      # the age that can reproduce
   fNSNmax       = rep(5,16),                      # multiplier for NSNmax as sum of potential bl and br
-  LMA           = c(0.025,0.025,0.14,0.14,rep(0.1,12)),  # Leaf mass per unit area. For sps: Beech-Spruce-Fir # In Ensheng rep(0.035,16)
-  rho_wood      = c(90,350,300,300,rep(300,12)),         # In Ensheng rep(300,16),
-  alphaBM       = rep(5200,16),                   #c(0.19,0.15,0.09,rep(0.15,13)), # In Ensheng BiomeE: 5200.0 
-  thetaBM       = c(2.36,2.30,2.54,rep(2.30,13)), # In Ensheng BiomeE: 2.5 rep(2.5,16),
+  LMA           = c(0.025,0.025,0.025,0.14,rep(0.14,12)),  # Leaf mass per unit area. In Ensheng rep(0.035,16)
+  rho_wood      = c(90,350,350,300,rep(300,12)),         # wood density In Ensheng rep(300,16),
+  alphaBM       = rep(5200,16),                   
+  thetaBM       = rep(2.5,16), 
   # add calibratable params
   kphio         = rep(0.05,16),
   phiRL         = rep(3.5,16),
@@ -175,7 +178,8 @@ harv_vec[100] <- fharv
 harv_vec <- c(harv_vec, rep(c(fharv, rep(0, 249)), 4), rep(c(fharv, rep(0, 24)), 40), 0)
 df_harv <- tibble(year = seq(length(harv_vec)), harv = harv_vec)
 
-df_harv <- tibble(year = seq(1:450), harv = c(rep(0,30),0,rep(0,419)))
+df_harv <- tibble(year = seq(1:450), harv = c(rep(0,200),0,rep(0,249)))
+df_harv <- tibble(year = seq(1:450), harv = c(rep(0,100),rep(c(fharv, rep(0, 69)), 5)))
 
 df_harv %>% 
   ggplot(aes(year, harv)) +
@@ -184,36 +188,35 @@ df_harv %>%
 
 # Define forcing data ####
 #biomee_p_model_drivers$forcing[[1]]
-biomee_forcing_FIN <- read.csv("~/Documents/Collaborations/DBEN/cru_jra_1901-2020/biomee_forcing_FIN.csv")
-biomee_forcing_FIN
-df_forcing <- biomee_forcing_FIN
+biomee_forcing_BIA <- read.csv("~/Documents/Collaborations/DBEN/cru_jra_1901-2020/biomee_forcing_BIA.csv")
+biomee_forcing_BIA
+df_forcing <- biomee_forcing_BIA
 
 # Set fix values of co2 412 and 562
-df_forcing$co2 <- 412
+df_forcing$co2 <- 412 # 562
 
 ## get mean seasonal cycle and repeat this every year of all simulations
-df_forcing <- biomee_p_model_drivers$forcing[[1]] %>% mutate(doy = lubridate::yday(date)) %>% 
-  group_by(doy) %>% 
-  summarise(across(is.numeric, mean))
+#df_forcing <- biomee_p_model_drivers$forcing[[1]] %>% mutate(doy = lubridate::yday(date)) %>% 
+#  group_by(doy) %>% 
+#  summarise(across(is.numeric, mean))
 
 # Repeat mean seasonal cycle `nyears` times where `nyears` corresponds to the length of the harvest time 
 # series (rows in `df_harv`). The column `year` now signifies simulation year and goes from 1 to `nyears`.
 # Add harvest forcing to drivers. 
-nyears <- nrow(df_harv)
-df_forcing <- df_forcing %>% 
-  slice(rep(1:n(), nyears)) %>% 
-  mutate(year = rep(1:nyears, each = 365))
-nyears <- nrow(df_harv)/length(unique(biomee_forcing_FIN$year))
+#nyears <- nrow(df_harv)
+#df_forcing <- df_forcing %>% 
+#  slice(rep(1:n(), nyears)) %>% 
+#  mutate(year = rep(1:nyears, each = 365))
+nyears <- nrow(df_harv)/length(unique(biomee_forcing_BIA$year))
 df_forcing <- df_forcing %>% 
   slice(rep(1:n(), nyears)) %>% rename(yearID=year) %>%
   mutate(year = rep(1:450, each = 365)) %>% relocate(year, .after=yearID) %>%
   mutate(hour=11.5)
 
 # Add 2020 for running spinup
-spinup_forcing <- biomee_forcing_FIN %>% filter(year==2020)
-df_forcing <- spinup_forcing %>% bind_rows(df_forcing) %>% rename(yearID=year) %>%
-  mutate(year = rep(1:451, each = 365)) %>% relocate(year, .after=yearID) %>%
-  mutate(hour=11.5)
+#spinup_forcing <- biomee_forcing_BIA %>% filter(year==2020) %>% rename(yearID=year) 
+#df_forcing <- spinup_forcing %>% bind_rows(df_forcing) %>%
+#  mutate(year = rep(1:451, each = 365)) %>% relocate(year, .after=yearID) 
 
 # Add harvest to forcing, assuming harvest on Jan 1st.
 df_forcing_disturb <- df_forcing %>% 
@@ -237,26 +240,23 @@ df_forcing_disturb <- df_forcing_disturb %>%
 
 ## for versions above 4.0
 df_drivers_disturb <-tibble(sitename = site_info$sitename,
-                     site_info = list(tibble(site_info)),
-                     params_siml = list(tibble(params_siml)),
-                     params_tile = list(tibble(params_tile)),
-                     params_species=list(tibble(params_species)),
-                     params_soil=list(tibble(params_soil)),
-                     init_cohort=list(tibble(init_cohort)),
-                     init_soil=list(tibble(init_soil)),
-                     forcing=list(tibble(df_forcing_disturb)),
-                     .name_repair = "unique")
+                            site_info = list(tibble(site_info)),
+                            params_siml = list(tibble(params_siml)),
+                            params_tile = list(tibble(params_tile)),
+                            params_species=list(tibble(params_species)),
+                            params_soil=list(tibble(params_soil)),
+                            init_cohort=list(tibble(init_cohort)),
+                            init_soil=list(tibble(init_soil)),
+                            forcing=list(tibble(df_forcing_disturb)),
+                            .name_repair = "unique")
 
 ## simulations with disturbance
-df_drivers_disturb <- biomee_p_model_drivers
-df_drivers_disturb$forcing[[1]] <- df_forcing_disturb
-df_drivers_disturb$params_siml[[1]]$firstyeartrend <- 0
-df_drivers_disturb$params_siml[[1]]$nyeartrend <- 3000
+#df_drivers_disturb <- biomee_p_model_drivers
+#df_drivers_disturb$forcing[[1]] <- df_forcing_disturb
+#df_drivers_disturb$params_siml[[1]]$firstyeartrend <- 0
+#df_drivers_disturb$params_siml[[1]]$nyeartrend <- 3000
 
-#biomee_p_model_drivers
-#biomee_p_model_drivers$params_siml[[1]]
-
-### sc1
+### Run the model
 out_sc1 <- runread_biomee_f(
   df_drivers_disturb,
   makecheck = TRUE,
@@ -281,6 +281,12 @@ out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   ggplot() +
   geom_line(aes(x = year, y = meanDBH,col=PFT)) +
   theme_classic()+labs(x = "Year", y = "meanDBH")
+
+out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
+  summarise(sumBA=sum(dbh*dbh*pi/4)) %>% mutate(PFT=as.factor(PFT)) %>%
+  ggplot() +
+  geom_line(aes(x = year, y = sumBA,col=PFT)) +
+  theme_classic()+labs(x = "Year", y = "sumBA")
 
 # model output includes the spinup. Remove it for plotting and overwrite years.
 out_sc1_ann <- out_sc1_tile %>%
@@ -310,13 +316,6 @@ out_sc1_ann %>%
 # Export of dead biomass from system (not added to soil) is implemented by simply not calling 
 # the `plant2soil()` in the subroutine `disturb()` (file `vegetation_biomee.mod.f90`). 
 # Comment it out and re-compile before running.
-
-
-
-
-
-
-
 
 out <- run_biomee_f_bysite( sitename,
                             params_siml,

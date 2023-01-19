@@ -230,7 +230,7 @@ contains
     ! Reset vegetation to initial conditions
     !---------------------------------------------
     
-    if (iyears==600+31)  then
+    if (iyears==500+31)  then
     call reset_vegn_initial(vegn)
     endif
 

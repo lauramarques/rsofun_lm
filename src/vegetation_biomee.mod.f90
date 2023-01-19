@@ -497,21 +497,19 @@ contains
     ! real    :: BL_u,BL_c
     real    :: ccNSC, ccNSN
     logical :: cc_firstday = .false.
-    logical :: TURN_ON_life = .false., TURN_OFF_life
+    logical :: TURN_ON_life, TURN_OFF_life
 
     vegn%litter = 0   ! daily litter
 
-    ! update vegn GDD and tc_pheno
+    ! -------------- update vegn GDD and tc_pheno
     vegn%gdd      = vegn%gdd + max(0.0, vegn%tc_daily - 278.15)
     vegn%tc_pheno = vegn%tc_pheno * 0.8 + vegn%Tc_daily * 0.2
 
-    ! ON and OFF of phenology: change the indicator of growing season for deciduous
+    ! -------------- ON and OFF of phenology: change the indicator of growing season for deciduous
     cohortloop2: do i = 1,vegn%n_cohorts
       cc => vegn%cohorts(i)
-
       ! update GDD for each cohort
       cc%gdd = cc%gdd + max(0.0, vegn%tc_daily - 278.15) ! GDD5
-
       associate (sp => spdata(cc%species) )
 
       ! for evergreen
@@ -521,9 +519,8 @@ contains
       TURN_ON_life = (sp%phenotype == 0 .and. &
         cc%status    == LEAF_OFF       .and. &
         cc%gdd        > sp%gdd_crit    .and. &
-        vegn%tc_pheno > sp%tc_crit_on) !.and. &
-        !(sp%lifeform .ne. 0 .OR.(sp%lifeform .eq. 0 .and. cc%layer==1))
-        !(sp%lifeform==1 .OR.sp%lifeform==0)
+        vegn%tc_pheno > sp%tc_crit_on) .and. &
+        (sp%lifeform == 1 .OR.(sp%lifeform == 0 .and. cc%layer<=3))
 
       cc_firstday = .false.
       if (TURN_ON_life) then
