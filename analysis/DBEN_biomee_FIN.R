@@ -49,7 +49,7 @@ params_tile <- tibble(
   WILTPT       = 0.05,  # soil property: wilting point
   K1           = 2.0,   # turnover rate of fast SOM per year
   K2           = 0.05,  # turnover rate of slow SOM per year
-  K_nitrogen   = 2.4,   # mineral Nitrogen turnover rate !8.0
+  K_nitrogen   = 0.0,   # mineral Nitrogen turnover rate !8.0, ! 2.4,
   MLmixRatio   = 0.8,   # the ratio of C and N returned to litters from microbes
   etaN         = 0.0,   # loss rate with runoff ! 0.025
   LMAmin       = 0.02,  # minimum LMA, boundary condition
@@ -77,8 +77,8 @@ params_tile <- tibble(
 # Shade intolerant-high Vcmax, high resp. rate and high mortality rate
 
 params_species <- tibble(
-  lifeform      = c(0,rep(1,15)),                 # 0 for grasses; 1 for trees
-  phenotype     = c(0,0,1,1,rep(1,12)),           # 0 for Deciduous; 1 for Evergreen
+  lifeform      = c(1,rep(1,15)),                 # 0 for grasses; 1 for trees
+  phenotype     = c(1,1,1,1,rep(1,12)),           # 0 for Deciduous; 1 for Evergreen
   pt            = rep(0,16),                      # 0 for C3; 1 for C4
   # Root parameters
   alpha_FR      = rep(1.2,16),                    # Fine root turnover rate yr-1
@@ -133,8 +133,8 @@ params_soil <- tibble(
 )
 
 init_cohort <- tibble(
-  init_cohort_species = seq(1,10,1),   # indicates different species. The number taken is = init_n_cohorts defined in the model!
-  #init_cohort_species = rep(1,10),    # indicates sps # 1 - Fagus sylvatica
+  #init_cohort_species = seq(1,10,1),   # indicates different species. The number taken is = init_n_cohorts defined in the model!
+  init_cohort_species = rep(1,10),    # indicates sps # 1 - Fagus sylvatica
   init_cohort_nindivs = c(0.2,rep(0.01,9)),  # initial individual density, individual/m2 ! 1 indiv/m2 = 10.000 indiv/ha
   init_cohort_bsw     = rep(0.2,10),  # initial biomass of sapwood, kg C/individual
   init_cohort_bHW     = rep(0.0, 10),  # initial biomass of heartwood, kg C/tree
@@ -145,7 +145,7 @@ init_soil <- tibble( #list
   init_fast_soil_C    = 0.5,  #0.0,    # initial fast soil C, kg C/m2
   init_slow_soil_C    = 40.0, #0.0,    # initial slow soil C, kg C/m2
   init_Nmineral       = 500.0E-3, #0.015,  # Mineral nitrogen pool, (kg N/m2)
-  N_input             = 20.E-3, #0.0008  # annual N input to soil N pool, kgN m-2 yr-1 # high N input --> Deciduous / low  N input --> Evergreen
+  N_input             = 0.0 #20.E-3 #0.0008  # annual N input to soil N pool, kgN m-2 yr-1 # high N input --> Deciduous / low  N input --> Evergreen
 ) 
 
 df_soiltexture <- bind_rows(
