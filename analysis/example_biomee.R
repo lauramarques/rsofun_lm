@@ -48,7 +48,7 @@ params_tile <- tibble(
   WILTPT       = 0.05,  # soil property: wilting point
   K1           = 2.0,   # turnover rate of fast SOM per year
   K2           = 0.05,  # turnover rate of slow SOM per year
-  K_nitrogen   = 8.0,   # mineral Nitrogen turnover rate
+  K_nitrogen   = 0.0, # 8.0,   # mineral Nitrogen turnover rate
   MLmixRatio   = 0.8,   # the ratio of C and N returned to litters from microbes
   etaN         = 0.025, # loss rate with runoff
   LMAmin       = 0.02,  # minimum LMA, boundary condition
@@ -67,9 +67,8 @@ params_tile <- tibble(
   )
 
 params_species <- tibble(
-  
-  lifeform      = rep(1,16),                      # 0 for grasses; 1 for trees
-  phenotype     = c(0,1,1,rep(1,13)),             # 0 for Deciduous; 1 for Evergreen
+  lifeform      = c(0,0,1,rep(1,13)),             # 0 for grasses; 1 for trees
+  phenotype     = c(0,0,1,rep(1,13)),             # 0 for Deciduous; 1 for Evergreen
   pt            = rep(0,16),                      # 0 for C3; 1 for C4
   # Root parameters
   alpha_FR      = rep(1.2,16),                    # Fine root turnover rate yr-1
@@ -101,16 +100,16 @@ params_species <- tibble(
   phiCSA        = rep(0.25E-4,16),                # ratio of sapwood area to leaf area
   mortrate_d_c  = rep(0.01,16),                   # canopy tree mortality rate, year-1
   mortrate_d_u  = rep(0.075,16),                  # understory tree mortality rate, year-1
-  maturalage    = rep(5,16),                      # the age that can reproduce
+  maturalage    = c(0,0,5,rep(5,13)),                      # the age that can reproduce
   fNSNmax       = rep(5,16),                      # multiplier for NSNmax as sum of potential bl and br
-  LMA           = c(0.05,0.17,0.11,rep(0.1,13)),  # Leaf mass per unit area. For sps: Beech-Spruce-Fir # In Ensheng rep(0.035,16)
-  rho_wood      = c(590,370,350,rep(300,13)),     # In Ensheng rep(300,16),   # c(590,370,350,rep(300,13)),
+  LMA           = c(0.02,0.02,0.035,rep(5,13)),  # Leaf mass per unit area. For sps: Beech-Spruce-Fir # In Ensheng rep(0.035,16)
+  rho_wood      = c(120,120,350,rep(300,13)),      # In Ensheng rep(300,16),   # c(590,370,350,rep(300,13)),
   alphaBM       = rep(5200,16),                   #c(0.19,0.15,0.09,rep(0.15,13)), # In Ensheng BiomeE: 5200.0 
-  thetaBM       = c(2.36,2.30,2.54,rep(2.30,13)), # In Ensheng BiomeE: 2.5 rep(2.5,16),
+  thetaBM       = rep(2.5,16),   # In Ensheng BiomeE: 2.5 rep(2.5,16),
   
   # add calibratable params
   kphio         = rep(0.05,16),
-  phiRL         = rep(3.5,16),
+  phiRL         = rep(0.07,16),  #rep(3.5,16),
   LAI_light     = rep(3.5,16)               # Light-limited crown LAI
   
   ) 
@@ -128,7 +127,9 @@ params_soil <- tibble(
   )
 
 init_cohort <- tibble(
- init_cohort_species = rep(1, 10),   # indicates sps # 1 - Fagus sylvatica
+ #init_cohort_species = seq(1, 10),   # indicates sps # 1 - Fagus sylvatica
+ init_cohort_species = c(2,1,3,4,5,6,7,8,9,10),   # indicates sps # 1 - Fagus sylvatica
+ #init_cohort_species = rep(1, 10),   # indicates sps # 1 - Fagus sylvatica
  init_cohort_nindivs = rep(0.05,10),  # initial individual density, individual/m2 ! 1 indiv/m2 = 10.000 indiv/ha
  init_cohort_bsw     = rep(0.05,10), # initial biomass of sapwood, kg C/individual
  init_cohort_bHW     = rep(0.0, 10), # initial biomass of heartwood, kg C/tree
@@ -139,7 +140,7 @@ init_soil <- tibble( #list
  init_fast_soil_C    = 0.0,    # initial fast soil C, kg C/m2
  init_slow_soil_C    = 0.0,    # initial slow soil C, kg C/m2
  init_Nmineral       = 0.015,  # Mineral nitrogen pool, (kg N/m2)
- N_input             = 0.0008  # annual N input to soil N pool, kgN m-2 yr-1
+ N_input             = 0.0 # 0.0008  # annual N input to soil N pool, kgN m-2 yr-1
 )
 
 
@@ -203,6 +204,30 @@ out <- run_biomee_f_bysite( sitename,
                             makecheck = TRUE
                             )
 
+
+out_tile <- out$output_annual_tile
+out_cohort <- out$output_annual_cohorts
+
+### Plant C
+
+out$output_annual_tile %>%
+  ggplot() +
+  geom_line(aes(x = year, y = plantC)) +
+  theme_classic()+labs(x = "Year", y = "plantC") 
+
+out$output_annual_cohorts %>% group_by(PFT,year) %>%
+  summarise(meanDBH=mean(dbh)) %>% mutate(PFT=as.factor(PFT)) %>%
+  ggplot() +
+  geom_line(aes(x = year, y = meanDBH,col=PFT)) +
+  theme_classic()+labs(x = "Year", y = "meanDBH")
+
+out$output_annual_cohorts %>% group_by(PFT,year) %>%
+  summarise(sumBA=sum(dbh*dbh*pi/4*density/10000)) %>% mutate(PFT=as.factor(PFT)) %>%
+  ggplot() +
+  geom_line(aes(x = year, y = sumBA,col=PFT)) +
+  theme_classic()+labs(x = "Year", y = "sumBA")
+
+
 gg1 <- out$output_annual_tile %>%
   ggplot() +
   geom_line(aes(x = year, y = GPP)) +
@@ -212,6 +237,7 @@ gg2 <- out$output_annual_tile %>%
   ggplot() +
   geom_line(aes(x = year, y = plantC)) +
   theme_classic()+labs(x = "Year", y = "plantC")
+gg2
 
 #print("Writing luxembourg.pdf")
 print(gg1/gg2)
