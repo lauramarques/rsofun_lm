@@ -49,7 +49,7 @@ params_tile <- tibble(
   WILTPT       = 0.05,  # soil property: wilting point
   K1           = 2.0,   # turnover rate of fast SOM per year
   K2           = 0.05,  # turnover rate of slow SOM per year
-  K_nitrogen   = 0.0,   # mineral Nitrogen turnover rate !8.0, ! 2.4,
+  K_nitrogen   = 0.0, #2.4,   # mineral Nitrogen turnover rate !8.0, ! 2.4,
   MLmixRatio   = 0.8,   # the ratio of C and N returned to litters from microbes
   etaN         = 0.0,   # loss rate with runoff ! 0.025
   LMAmin       = 0.02,  # minimum LMA, boundary condition
@@ -77,8 +77,9 @@ params_tile <- tibble(
 # Shade intolerant-high Vcmax, high resp. rate and high mortality rate
 
 params_species <- tibble(
-  lifeform      = c(1,rep(1,15)),                 # 0 for grasses; 1 for trees
-  phenotype     = c(1,1,1,1,rep(1,12)),           # 0 for Deciduous; 1 for Evergreen
+  # species         0 1 2 3 4    ...
+  lifeform      = c(0,0,1,1,1,rep(1,11)),         # 0 for grasses; 1 for trees
+  phenotype     = c(0,0,1,1,1,rep(1,11)),         # 0 for Deciduous; 1 for Evergreen
   pt            = rep(0,16),                      # 0 for C3; 1 for C4
   # Root parameters
   alpha_FR      = rep(1.2,16),                    # Fine root turnover rate yr-1
@@ -91,7 +92,7 @@ params_species <- tibble(
   Vmax          = rep(35.0E-6,16),               # mol m-2 s-1 
   Vannual       = rep(1.2,16),                   # kgC m-2 yr-1
   wet_leaf_dreg = rep(0.3,16),                   # wet leaf photosynthesis down-regulation: wet leaf is 30% less than dry leaf
-  m_cond        = rep(7.0,16),                   # factor of stomatal conductance
+  m_cond        = c(7.0,7.0,9.0,9.0,9.0,rep(9.0,11)),                   # factor of stomatal conductance
   alpha_phot    = rep(0.06,16), 
   gamma_L       = rep(0.02,16), 
   gamma_LN      = rep(70.5 ,16),                 # kgC kgN-1 yr-1
@@ -102,21 +103,21 @@ params_species <- tibble(
   gdd_crit      = rep(280.0,16),   
   seedlingsize  = rep(0.05,16),                   # initial size of seedlings #In Ensheng BiomeE: 0.05
   LNbase        = rep(0.8E-3,16),                 # kgN m-2 leaf, Vmax = 0.03125*LNbase
-  lAImax        = c(2.5,4.5,4.8,4.8,rep(4.8,12)),  # maximum crown LAI # rep(3.5,16),
+  lAImax        = rep(3.5,16),  # maximum crown LAI # rep(3.5,16), c(2.5,2.5,4.8,4.8,rep(4.8,12)),
   Nfixrate0     = rep(0,16),                      # 0.03 kgN kgRootC-1 yr-1
-  NfixCost0     = rep(12,16),                     # 12, 24 gC/gN
+  NfixCost0     = rep(0,16),                     # 12, 24 gC/gN
   phiCSA        = rep(0.25E-4,16),                # ratio of sapwood area to leaf area
   mortrate_d_c  = rep(0.01,16),                   # canopy tree mortality rate, year-1
   mortrate_d_u  = rep(0.075,16),                  # understory tree mortality rate, year-1
-  maturalage    = rep(5,16),                      # the age that can reproduce
+  maturalage    = c(0,0,5,5,5,rep(5,11)),        # the age that can reproduce
   fNSNmax       = rep(5,16),                      # multiplier for NSNmax as sum of potential bl and br
-  LMA           = c(0.025,0.025,0.14,0.14,rep(0.14,12)),  # Leaf mass per unit area. In Ensheng rep(0.035,16)
-  rho_wood      = c(120,350,300,300,rep(300,12)),         # wood density In Ensheng rep(300,16),
+  LMA           = c(0.025,0.025,0.14,0.14,0.14,rep(0.14,11)),  # Leaf mass per unit area. In Ensheng rep(0.035,16)
+  rho_wood      = c(120,120,300,300,300,rep(300,11)),         # wood density In Ensheng rep(300,16),
   alphaBM       = rep(5200,16),                   
   thetaBM       = rep(2.5,16), 
   # add calibratable params
   kphio         = rep(0.05,16),
-  phiRL         = rep(3.5,16),
+  phiRL         = rep(3.5,16), #c(0.7,0.7,1.2,1.2,1.2,rep(1.2,11)),
   LAI_light     = rep(3.5,16)               # Light-limited crown LAI
 ) 
 
@@ -134,19 +135,19 @@ params_soil <- tibble(
 
 init_cohort <- tibble(
   #init_cohort_species = seq(1,10,1),   # indicates different species. The number taken is = init_n_cohorts defined in the model!
-  init_cohort_species = rep(1,10),    # indicates sps # 1 - Fagus sylvatica
-  init_cohort_nindivs = c(0.2,rep(0.01,9)),  # initial individual density, individual/m2 ! 1 indiv/m2 = 10.000 indiv/ha
+  init_cohort_species = c(4,3,2,1,5,6,7,8,9,10),    # indicates sps # 1 - Fagus sylvatica
+  init_cohort_nindivs = c(0.001, 0.001, 0.2, 0.001, rep(0.001,6)),  # initial individual density, individual/m2 ! 1 indiv/m2 = 10.000 indiv/ha
   init_cohort_bsw     = rep(0.2,10),  # initial biomass of sapwood, kg C/individual
   init_cohort_bHW     = rep(0.0, 10),  # initial biomass of heartwood, kg C/tree
   init_cohort_nsc     = rep(0.5,10)   # initial non-structural biomass
 )
 
 init_soil <- tibble( #list
-  init_fast_soil_C    = 0.5,  #0.0,    # initial fast soil C, kg C/m2
-  init_slow_soil_C    = 40.0, #0.0,    # initial slow soil C, kg C/m2
+  init_fast_soil_C    = 0.5, #0.0,    # initial fast soil C, kg C/m2
+  init_slow_soil_C    = 0.01, #0.0,    # initial slow soil C, kg C/m2
   init_Nmineral       = 500.0E-3, #0.015,  # Mineral nitrogen pool, (kg N/m2)
-  N_input             = 0.0 #20.E-3 #0.0008  # annual N input to soil N pool, kgN m-2 yr-1 # high N input --> Deciduous / low  N input --> Evergreen
-) 
+  N_input             = 0.0, #0.0000  # annual N input to soil N pool, kgN m-2 yr-1
+)
 
 df_soiltexture <- bind_rows(
   top    = tibble(layer = "top",    fsand = 0.4, fclay = 0.3, forg = 0.1, fgravel = 0.1),
