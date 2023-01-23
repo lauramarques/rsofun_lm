@@ -28,9 +28,9 @@ site_info <- site_info %>%
 
 params_siml <- tibble(
   spinup                = TRUE,
-  spinupyears           = 700, 
+  spinupyears           = 500, 
   recycle               = 800,    # 9 or 11 changed to 1 when aggregating forcing into 1 year
-  firstyeartrend        = 2009, 
+  firstyeartrend        = 0, 
   nyeartrend            = 800,    # 9 or 11 (longer transient years)
   outputhourly          = TRUE,
   outputdaily           = TRUE,
@@ -47,7 +47,7 @@ params_tile <- tibble(
   WILTPT       = 0.05,  # soil property: wilting point
   K1           = 2.0,   # turnover rate of fast SOM per year
   K2           = 0.05,  # turnover rate of slow SOM per year
-  K_nitrogen   = 8.0,   # mineral Nitrogen turnover rate
+  K_nitrogen   = 2.4, #8.0,   # mineral Nitrogen turnover rate
   MLmixRatio   = 0.8,   # the ratio of C and N returned to litters from microbes
   etaN         = 0.025, # loss rate with runoff
   LMAmin       = 0.02,  # minimum LMA, boundary condition
@@ -67,8 +67,8 @@ params_tile <- tibble(
 
 params_species <- tibble(
   
-  lifeform      = c(0,1,1,rep(1,13)),                      # 0 for grasses; 1 for trees
-  phenotype     = c(0,1,1,rep(1,13)),             # 0 for Deciduous; 1 for Evergreen
+  lifeform      = c(1,1,1,1,rep(1,12)),                      # 0 for grasses; 1 for trees
+  phenotype     = c(0,0,1,1,rep(1,12)),             # 0 for Deciduous; 1 for Evergreen
   pt            = rep(0,16),                      # 0 for C3; 1 for C4
   # Root parameters
   alpha_FR      = rep(1.2,16),                    # Fine root turnover rate yr-1
@@ -100,12 +100,12 @@ params_species <- tibble(
   phiCSA        = rep(0.25E-4,16),                # ratio of sapwood area to leaf area
   mortrate_d_c  = rep(0.01,16),                   # canopy tree mortality rate, year-1
   mortrate_d_u  = rep(0.075,16),                  # understory tree mortality rate, year-1
-  maturalage    = rep(5,16),                      # the age that can reproduce
+  maturalage    = c(5,5,5,5,rep(5,12)),                      # the age that can reproduce
   fNSNmax       = rep(5,16),                      # multiplier for NSNmax as sum of potential bl and br
-  LMA           = c(0.05,0.17,0.11,rep(0.1,13)),  # Leaf mass per unit area. For sps: Beech-Spruce-Fir # In Ensheng rep(0.035,16)
-  rho_wood      = c(590,370,350,rep(300,13)),     # In Ensheng rep(300,16),   # c(590,370,350,rep(300,13)),
+  LMA           = rep(0.035,16),  # Leaf mass per unit area. For sps: Beech-Spruce-Fir # In Ensheng rep(0.035,16)
+  rho_wood      = c(300,300,300,300,rep(300,12)),    # In Ensheng rep(300,16),   # c(590,370,350,rep(300,13)),
   alphaBM       = rep(5200,16),                   #c(0.19,0.15,0.09,rep(0.15,13)), # In Ensheng BiomeE: 5200.0 
-  thetaBM       = c(2.36,2.30,2.54,rep(2.30,13)), # In Ensheng BiomeE: 2.5 rep(2.5,16),
+  thetaBM       = rep(2.5,16), # In Ensheng BiomeE: 2.5 rep(2.5,16),
   
   # add calibratable params
   kphio         = rep(0.05,16),
@@ -127,7 +127,9 @@ params_soil <- tibble(
 )
 
 init_cohort <- tibble(
-  init_cohort_species = rep(1, 10),   # indicates sps # 1 - Fagus sylvatica
+  #init_cohort_species = rep(1, 10),   # indicates sps # 1 - Fagus sylvatica
+  init_cohort_species = seq(1, 10, 1),   # indicates sps # 1 - Fagus sylvatica
+  #init_cohort_species = c(3,2,1,4,5,6,7,8,9,10),   # indicates sps # 1 - Fagus sylvatica
   init_cohort_nindivs = rep(0.05,10),  # initial individual density, individual/m2 ! 1 indiv/m2 = 10.000 indiv/ha
   init_cohort_bsw     = rep(0.05,10), # initial biomass of sapwood, kg C/individual
   init_cohort_bHW     = rep(0.0, 10), # initial biomass of heartwood, kg C/tree
@@ -262,32 +264,21 @@ df_forcing <- df_forcing %>%
 df_forcing_disturb <- df_forcing_disturb %>% 
   mutate(nox = 0, nhy = 0)
 
-#Create new driver objects.
-## control simulations without disturbance
-biomee_p_model_drivers_xx0 <- biomee_p_model_drivers
+
+biomee_p_model_drivers_xx0 <- df_drivers
 biomee_p_model_drivers_xx0$forcing[[1]] <- df_forcing
-biomee_p_model_drivers_xx0$params_siml[[1]]$firstyeartrend <- 0
-biomee_p_model_drivers_xx0$params_siml[[1]]$nyeartrend <- 3000
-
-## simulations with disturbance
-biomee_p_model_drivers_xx1 <- biomee_p_model_drivers
-biomee_p_model_drivers_xx1$forcing[[1]] <- df_forcing_disturb
-biomee_p_model_drivers_xx1$params_siml[[1]]$firstyeartrend <- 0
-biomee_p_model_drivers_xx1$params_siml[[1]]$nyeartrend <- 3000
-
-biomee_p_model_drivers$params_siml[[1]]
 
 ### sc1
 out_sc1 <- runread_biomee_f(
-    biomee_p_model_drivers_xx0,
-    makecheck = TRUE,
-    parallel = FALSE
-  )
+  biomee_p_model_drivers_xx0,
+  makecheck = TRUE,
+  parallel = FALSE
+)
 
 out_sc1$data[[1]]$output_annual_tile
 out_sc1$data[[1]]$output_annual_cohorts
 
-out_sc1_ann <- out_sc1$data[[1]]$output_annual_tile
+xxx <- out_sc1$data[[1]]$output_annual_cohorts
 
 ### Plant C
 
@@ -296,61 +287,12 @@ out_sc1$data[[1]]$output_annual_tile %>%
   geom_line(aes(x = year, y = plantC)) +
   theme_classic() 
 
-# model output includes the spinup. Remove it for plotting and overwrite years.
-out_sc1_ann <- out_sc1_ann %>%
-  slice((biomee_p_model_drivers_xx1$params_siml[[1]]$spinupyears + 1):nrow(out_sc1_ann)) %>% 
-  mutate(year = 1:nyears)
-
-#out_sc1$data[[1]]$output_annual_tile %>% 
-  out_sc1_ann %>%
+out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
+  summarise(sumBA=sum(dbh*dbh*pi/4*density/10000)) %>% mutate(PFT=as.factor(PFT)) %>%
   ggplot() +
-  geom_line(aes(x = year, y = plantC)) +
-  theme_classic() +
-  geom_vline(xintercept = df_harv %>% filter(harv > 0) %>% pull(year), color = "red", alpha = 0.3) +
-  labs(x = "Year", y = "plant C", title = "Simulation sc1") +
-  ylim(0, 15)
-
-### Soil C
-out_sc1_ann %>% 
-  ggplot() +
-  geom_line(aes(x = year, y = fastSOM + SlowSOM)) +
-  theme_classic() +
-  geom_vline(xintercept = df_harv %>% filter(harv > 0) %>% pull(year), color = "red", alpha = 0.3) +
-  labs(x = "Year", y = "Soil C", title = "Simulation sc1") +
-  ylim(0, 100)
-
-### sc2
-# Export of dead biomass from system (not added to soil) is implemented by simply not calling 
-# the `plant2soil()` in the subroutine `disturb()` (file `vegetation_biomee.mod.f90`). 
-# Comment it out and re-compile before running.
+  geom_line(aes(x = year, y = sumBA,col=PFT)) +
+  theme_classic()+labs(x = "Year", y = "sumBA")
 
 
 
 
-
-
-
-
-out <- run_biomee_f_bysite( sitename,
-                            params_siml,
-                            site_info,
-                            forcing, # ddf_input
-                            params_tile,
-                            params_species,
-                            params_soil,
-                            init_cohort,
-                            init_soil,
-                            makecheck = TRUE
-)
-
-gg1 <- out$output_annual_tile %>%
-  ggplot() +
-  geom_line(aes(x = year, y = GPP)) +
-  theme_classic()+labs(x = "Year", y = "GPP")
-
-gg2 <- out$output_annual_tile %>%
-  ggplot() +
-  geom_line(aes(x = year, y = plantC)) +
-  theme_classic()+labs(x = "Year", y = "plantC")
-
-print(gg1/gg2)

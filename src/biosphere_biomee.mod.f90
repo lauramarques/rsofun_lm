@@ -230,9 +230,9 @@ contains
     ! Reset vegetation to initial conditions
     !---------------------------------------------
     
-    if (iyears==500+31)  then
-    call reset_vegn_initial(vegn)
-    endif
+    !if (iyears==500+31)  then
+    !call reset_vegn_initial(vegn)
+    !endif
 
     if (myinterface%steering%finalize) then
       !----------------------------------------------------------------
