@@ -284,6 +284,19 @@ out_sc1 <- runread_biomee_f(
     parallel = FALSE
   )
 
+gg1 <- out_sc1$data[[1]]$output_annual_tile %>%
+  ggplot() +
+  geom_line(aes(x = year, y = GPP)) +
+  theme_classic()+labs(x = "Year", y = "GPP")
+
+gg2 <- out_sc1$data[[1]]$output_annual_tile %>%
+  ggplot() +
+  geom_line(aes(x = year, y = plantC)) +
+  theme_classic()+labs(x = "Year", y = "plantC")
+
+#print("Writing luxembourg.pdf")
+print(gg1/gg2)
+
 out_sc1$data[[1]]$output_annual_tile
 out_sc1$data[[1]]$output_annual_cohorts
 

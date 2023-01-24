@@ -272,16 +272,19 @@ out_sc1_cohort <- out_sc1$data[[1]]$output_annual_cohorts
 
 ### Plant C
 
-out_sc1$data[[1]]$output_annual_tile %>%
+gg1 <- out_sc1$data[[1]]$output_annual_tile %>%
   ggplot() +
   geom_line(aes(x = year, y = plantC)) +
   theme_classic()+labs(x = "Year", y = "plantC") 
 
-out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
+gg2 <-out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   summarise(sumBA=sum(dbh*dbh*pi/4*density/10000)) %>% mutate(PFT=as.factor(PFT)) %>%
   ggplot() +
   geom_line(aes(x = year, y = sumBA,col=PFT)) +
   theme_classic()+labs(x = "Year", y = "sumBA")
+
+#print("Writing luxembourg.pdf")
+print(gg1/gg2)
 
 out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   summarise(meanDBH=mean(dbh)) %>% mutate(PFT=as.factor(PFT)) %>%

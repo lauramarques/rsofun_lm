@@ -201,6 +201,8 @@ contains
 
     ! print*,'E: vegn%cohorts(:)%nindivs', vegn%cohorts(:)%nindivs
     call kill_lowdensity_cohorts( vegn )
+
+    call kill_old_grass( vegn )
     
     ! print*,'F: vegn%cohorts(:)%nindivs', vegn%cohorts(:)%nindivs
     call relayer_cohorts( vegn )
@@ -230,9 +232,9 @@ contains
     ! Reset vegetation to initial conditions
     !---------------------------------------------
     
-    !if (iyears==500+31)  then
-    !call reset_vegn_initial(vegn)
-    !endif
+    if (iyears==500+31)  then
+    call reset_vegn_initial(vegn)
+    endif
 
     if (myinterface%steering%finalize) then
       !----------------------------------------------------------------

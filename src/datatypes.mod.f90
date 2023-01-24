@@ -121,6 +121,8 @@ module datatypes
     real    :: tc_crit                            ! K, for turning OFF a growth season
     real    :: tc_crit_on                         ! K, for turning ON a growth season
     real    :: gdd_crit                           ! K, critical value of GDD5 for turning ON growth season
+    real    :: betaON
+    real    :: betaOFF
 
     !===== Vital rates
     real    :: maturalage                         ! the age that can reproduce
@@ -152,6 +154,7 @@ module datatypes
     integer :: layer      = 1.0          ! the layer of this cohort (numbered from top, top layer=1)
     integer :: firstlayer = 0.0          ! 0 = never been in the first layer; 1 = at least one year in first layer
     real    :: layerfrac  = 0.0          ! fraction of layer area occupied by this cohort
+    real    :: leaf_age   = 0.0 ! leaf age (year)
 
     !===== Population structure
     real :: nindivs   = 1.0          ! density of vegetation, individuals/m2
@@ -468,6 +471,8 @@ module datatypes
   ! real :: tc_crit(0:MSPECIES)= 283.16 ! OFF
   ! real :: tc_crit_on(0:MSPECIES)= 280.16 ! ON
   ! real :: gdd_crit(0:MSPECIES)= 280.0 ! Simulations 280, 240, 200
+    real :: betaON(0:MSPECIES)  = 0.2  ! Critical soil moisture for phenology ON
+    real :: betaOFF(0:MSPECIES) = 0.1  ! Critical soil moisture for phenology OFF
 
   !===== Allometry parameters
   real :: alphaHT(0:MSPECIES)      = 36.0
@@ -590,6 +595,8 @@ contains
     spdata%leaf_size     = myinterface%params_species(:)%leaf_size
     spdata%tc_crit       = myinterface%params_species(:)%tc_crit
     spdata%gdd_crit      = myinterface%params_species(:)%gdd_crit
+    spdata%betaON        = betaON
+    spdata%betaOFF       = betaOFF
 
     ! Plant traits
     spdata%LMA           = myinterface%params_species(:)%LMA ! leaf mass per unit area, kg C/m2
