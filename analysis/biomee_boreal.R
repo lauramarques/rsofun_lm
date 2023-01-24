@@ -210,19 +210,18 @@ out <- run_biomee_f_bysite( sitename,
                             makecheck = TRUE
 )
 
-out$output_annual_tile %>% 
+gg1 <- out$output_annual_tile %>% 
   ggplot() +
   geom_line(aes(x = year, y = plantC)) +
   theme_classic()+labs(x = "Year", y = "plantC")
 
-xx <- out$output_annual_cohorts  #%>% filter(PFT==3)
-str(xx)
-
-out$output_annual_cohorts %>% group_by(PFT,year) %>%
+gg2 <- out$output_annual_cohorts %>% group_by(PFT,year) %>%
   summarise(meanDBH=mean(dbh)) %>% mutate(PFT=as.factor(PFT)) %>%
   ggplot() +
   geom_line(aes(x = year, y = meanDBH,col=PFT)) +
   theme_classic()+labs(x = "Year", y = "meanDBH")
+
+print(gg1/gg2)
 
 out$output_annual_cohorts %>% group_by(PFT,year) %>%
   summarise(meanVol=mean(Volume)) %>% mutate(PFT=as.factor(PFT)) %>%

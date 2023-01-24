@@ -208,6 +208,20 @@ out <- run_biomee_f_bysite( sitename,
 out_tile <- out$output_annual_tile
 out_cohort <- out$output_annual_cohorts
 
+
+gg1 <- out$output_annual_tile %>%
+  ggplot() +
+  geom_line(aes(x = year, y = GPP)) +
+  theme_classic()+labs(x = "Year", y = "GPP")
+
+gg2 <- out$output_annual_tile %>%
+  ggplot() +
+  geom_line(aes(x = year, y = plantC)) +
+  theme_classic()+labs(x = "Year", y = "plantC")
+
+#print("Writing luxembourg.pdf")
+print(gg1/gg2)
+
 ### Plant C
 
 out$output_annual_tile %>%
@@ -227,18 +241,4 @@ out$output_annual_cohorts %>% group_by(PFT,year) %>%
   geom_line(aes(x = year, y = sumBA,col=PFT)) +
   theme_classic()+labs(x = "Year", y = "sumBA")
 
-
-gg1 <- out$output_annual_tile %>%
-  ggplot() +
-  geom_line(aes(x = year, y = GPP)) +
-  theme_classic()+labs(x = "Year", y = "GPP")
-
-gg2 <- out$output_annual_tile %>%
-  ggplot() +
-  geom_line(aes(x = year, y = plantC)) +
-  theme_classic()+labs(x = "Year", y = "plantC")
-gg2
-
-#print("Writing luxembourg.pdf")
-print(gg1/gg2)
 ggsave("luxembourg.pdf")
