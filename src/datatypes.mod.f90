@@ -126,7 +126,7 @@ module datatypes
 
     !===== Vital rates
     real    :: maturalage                         ! the age that can reproduce
-    real    :: v_seed                             ! fracton of G_SF to G_F
+    real    :: v_seed                             ! fracton of G_SF to G_F ! seed allocation
     real    :: seedlingsize                       ! size of the seedlings, kgC/indiv
     real    :: prob_g,prob_e                      ! germination and establishment probabilities
     real    :: mortrate_d_c                       ! yearly mortality rate in canopy

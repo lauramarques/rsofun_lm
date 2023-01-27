@@ -2317,10 +2317,11 @@ end subroutine kill_old_grass
     par_mort_under  = myinterface%params_tile%par_mort_under  !calibratable
 
     !  Read parameters from the parameter file (namelist)
+
     if (read_from_parameter_file) then
 
       ! Initialize plant cohorts
-      init_n_cohorts = 4 ! nCohorts ! Weng,2018-11-21 !For running several species, 2023-01-12
+      init_n_cohorts = 4 !nCohorts !4 Weng,2018-11-21 !For running several species, 2023-01-12
       allocate(cc(1:init_n_cohorts), STAT = istat)
       vegn%cohorts => cc
       vegn%n_cohorts = init_n_cohorts

@@ -127,7 +127,7 @@ params_soil <- tibble(
 )
 
 init_cohort <- tibble(
-  init_cohort_species = rep(1, 10),   # indicates sps # 1 - Fagus sylvatica
+  init_cohort_species = seq(1, 10,1),   # indicates sps # 1 - Fagus sylvatica
   init_cohort_nindivs = rep(0.05,10),  # initial individual density, individual/m2 ! 1 indiv/m2 = 10.000 indiv/ha
   init_cohort_bsw     = rep(0.05,10), # initial biomass of sapwood, kg C/individual
   init_cohort_bHW     = rep(0.0, 10), # initial biomass of heartwood, kg C/tree
@@ -289,10 +289,11 @@ gg1 <- out_sc1$data[[1]]$output_annual_tile %>%
   geom_line(aes(x = year, y = GPP)) +
   theme_classic()+labs(x = "Year", y = "GPP")
 
-gg2 <- out_sc1$data[[1]]$output_annual_tile %>%
+gg2 <-out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
+  summarise(sumBA=sum(dbh*dbh*pi/4*density/10000)) %>% mutate(PFT=as.factor(PFT)) %>%
   ggplot() +
-  geom_line(aes(x = year, y = plantC)) +
-  theme_classic()+labs(x = "Year", y = "plantC")
+  geom_line(aes(x = year, y = sumBA,col=PFT)) +
+  theme_classic()+labs(x = "Year", y = "sumBA")
 
 #print("Writing luxembourg.pdf")
 print(gg1/gg2)

@@ -30,7 +30,7 @@ site_info <- site_info %>%
 
 params_siml <- tibble(
   spinup                = TRUE,
-  spinupyears           = 500, 
+  spinupyears           = 510, 
   recycle               = 30,  
   firstyeartrend        = 0, 
   nyeartrend            = 450,
@@ -49,9 +49,9 @@ params_tile <- tibble(
   WILTPT       = 0.05,  # soil property: wilting point
   K1           = 2.0,   # turnover rate of fast SOM per year
   K2           = 0.05,  # turnover rate of slow SOM per year
-  K_nitrogen   = 8.0,   # mineral Nitrogen turnover rate
+  K_nitrogen   = 8.0, #2.4,   # mineral Nitrogen turnover rate !8.0, ! 2.4,
   MLmixRatio   = 0.8,   # the ratio of C and N returned to litters from microbes
-  etaN         = 0.025, # loss rate with runoff
+  etaN         = 0.0,   # loss rate with runoff ! 0.025
   LMAmin       = 0.02,  # minimum LMA, boundary condition
   fsc_fine     = 1.0,   # fraction of fast turnover carbon in fine biomass
   fsc_wood     = 0.0,   # fraction of fast turnover carbon in wood biomass
@@ -77,8 +77,9 @@ params_tile <- tibble(
 # Shade intolerant-high Vcmax, high resp. rate and high mortality rate
 
 params_species <- tibble(
-  lifeform      = c(0,rep(1,15)),                 # 0 for grasses; 1 for trees
-  phenotype     = c(0,0,1,1,rep(1,12)),           # 0 for Deciduous; 1 for Evergreen
+  # species         0 1 2 3 4    ...
+  lifeform      = c(9999,0,1,1,1,rep(1,11)),         # 0 for grasses; 1 for trees
+  phenotype     = c(9999,0,0,1,1,rep(1,11)),         # 0 for Deciduous; 1 for Evergreen
   pt            = rep(0,16),                      # 0 for C3; 1 for C4
   # Root parameters
   alpha_FR      = rep(1.2,16),                    # Fine root turnover rate yr-1
@@ -91,7 +92,7 @@ params_species <- tibble(
   Vmax          = rep(35.0E-6,16),               # mol m-2 s-1 
   Vannual       = rep(1.2,16),                   # kgC m-2 yr-1
   wet_leaf_dreg = rep(0.3,16),                   # wet leaf photosynthesis down-regulation: wet leaf is 30% less than dry leaf
-  m_cond        = rep(7.0,16),                   # factor of stomatal conductance
+  m_cond        = c(9999,7.0,9.0,9.0,9.0,rep(9.0,11)),                   # factor of stomatal conductance
   alpha_phot    = rep(0.06,16), 
   gamma_L       = rep(0.02,16), 
   gamma_LN      = rep(70.5 ,16),                 # kgC kgN-1 yr-1
@@ -100,23 +101,23 @@ params_species <- tibble(
   tc_crit       = rep(283.16,16),                # OFF
   tc_crit_on    = rep(280.16,16),                # ON
   gdd_crit      = rep(280.0,16),   
-  seedlingsize  = rep(0.05,16),                   # initial size of seedlings #In Ensheng BiomeE: 0.05
+  seedlingsize  = c(9999,0.05,0.01,0.01,0.01,rep(0.01,11)),                  # initial size of seedlings #In Ensheng BiomeE: 0.05
   LNbase        = rep(0.8E-3,16),                 # kgN m-2 leaf, Vmax = 0.03125*LNbase
-  lAImax        = c(2.5,4.5,4.5,4.8,rep(4.8,12)),  # maximum crown LAI # rep(3.5,16),
+  lAImax        = rep(3.5,16),  # maximum crown LAI # rep(3.5,16), c(2.5,2.5,4.8,4.8,rep(4.8,12)),
   Nfixrate0     = rep(0,16),                      # 0.03 kgN kgRootC-1 yr-1
-  NfixCost0     = rep(12,16),                     # 12, 24 gC/gN
+  NfixCost0     = rep(0,16),                     # 12, 24 gC/gN
   phiCSA        = rep(0.25E-4,16),                # ratio of sapwood area to leaf area
   mortrate_d_c  = rep(0.01,16),                   # canopy tree mortality rate, year-1
   mortrate_d_u  = rep(0.075,16),                  # understory tree mortality rate, year-1
-  maturalage    = rep(5,16),                      # the age that can reproduce
+  maturalage    = c(9999,0,5,5,5,rep(5,11)),        # the age that can reproduce
   fNSNmax       = rep(5,16),                      # multiplier for NSNmax as sum of potential bl and br
-  LMA           = c(0.025,0.025,0.025,0.14,rep(0.14,12)),  # Leaf mass per unit area. In Ensheng rep(0.035,16)
-  rho_wood      = c(90,350,350,300,rep(300,12)),         # wood density In Ensheng rep(300,16),
+  LMA           = c(9999,0.025,0.14,0.14,0.14,rep(0.14,11)),  # Leaf mass per unit area. In Ensheng rep(0.035,16)
+  rho_wood      = c(9999,120,350,300,300,rep(300,11)),         # wood density In Ensheng rep(300,16),
   alphaBM       = rep(5200,16),                   
   thetaBM       = rep(2.5,16), 
   # add calibratable params
   kphio         = rep(0.05,16),
-  phiRL         = rep(3.5,16),
+  phiRL         = rep(3.5,16), #c(0.7,0.7,1.2,1.2,1.2,rep(1.2,11)),
   LAI_light     = rep(3.5,16)               # Light-limited crown LAI
 ) 
 
@@ -179,7 +180,7 @@ harv_vec <- c(harv_vec, rep(c(fharv, rep(0, 249)), 4), rep(c(fharv, rep(0, 24)),
 df_harv <- tibble(year = seq(length(harv_vec)), harv = harv_vec)
 
 df_harv <- tibble(year = seq(1:450), harv = c(rep(0,200),0,rep(0,249)))
-df_harv <- tibble(year = seq(1:450), harv = c(rep(0,100),rep(c(fharv, rep(0, 69)), 5)))
+#df_harv <- tibble(year = seq(1:450), harv = c(rep(0,100),rep(c(fharv, rep(0, 69)), 5)))
 
 df_harv %>% 
   ggplot(aes(year, harv)) +
@@ -263,64 +264,44 @@ out_sc1 <- runread_biomee_f(
   parallel = FALSE
 )
 
-out_sc1$data[[1]]$output_annual_tile
-out_sc1$data[[1]]$output_annual_cohorts
-
-out_sc1_tile <- out_sc1$data[[1]]$output_annual_tile
-out_sc1_cohort <- out_sc1$data[[1]]$output_annual_cohorts
-
 ### Plant C
 
-out_sc1$data[[1]]$output_annual_tile %>%
+g1 <- out_sc1$data[[1]]$output_annual_tile %>%
   ggplot() +
   geom_line(aes(x = year, y = plantC)) +
   theme_classic()+labs(x = "Year", y = "plantC") 
 
-out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
-  summarise(meanDBH=mean(dbh)) %>% mutate(PFT=as.factor(PFT)) %>%
-  ggplot() +
-  geom_line(aes(x = year, y = meanDBH,col=PFT)) +
-  theme_classic()+labs(x = "Year", y = "meanDBH")
-
-out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
-  summarise(sumBA=sum(dbh*dbh*pi/4)) %>% mutate(PFT=as.factor(PFT)) %>%
+g2 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
+  summarise(sumBA=sum(dbh*dbh*pi/4*density/10000)) %>% mutate(PFT=as.factor(PFT)) %>%
   ggplot() +
   geom_line(aes(x = year, y = sumBA,col=PFT)) +
-  theme_classic()+labs(x = "Year", y = "sumBA")
+  theme_classic()+labs(x = "Year", y = "BA") + 
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
 
-# model output includes the spinup. Remove it for plotting and overwrite years.
-out_sc1_ann <- out_sc1_tile %>%
-  slice((df_drivers_disturb$params_siml[[1]]$spinupyears + 1):nrow(out_sc1_tile)) %>% 
-  mutate(year = 1:450)
-out_sc1_ann
+print(g1/g2)
 
-#out_sc1$data[[1]]$output_annual_tile %>% 
-out_sc1_ann %>%
-  ggplot() +
-  geom_line(aes(x = year, y = plantC)) +
-  theme_classic() +
-  geom_vline(xintercept = df_harv %>% filter(harv > 0) %>% pull(year), color = "red", alpha = 0.3) +
-  labs(x = "Year", y = "plant C", title = "Simulation sc1") +
-  ylim(0, 15)
 
-### Soil C
-out_sc1_ann %>% 
-  ggplot() +
-  geom_line(aes(x = year, y = fastSOM + SlowSOM)) +
-  theme_classic() +
-  geom_vline(xintercept = df_harv %>% filter(harv > 0) %>% pull(year), color = "red", alpha = 0.3) +
-  labs(x = "Year", y = "Soil C", title = "Simulation sc1") +
-  ylim(0, 100)
 
-### sc2
-# Export of dead biomass from system (not added to soil) is implemented by simply not calling 
-# the `plant2soil()` in the subroutine `disturb()` (file `vegetation_biomee.mod.f90`). 
-# Comment it out and re-compile before running.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 out <- run_biomee_f_bysite( sitename,
                             params_siml,
                             site_info,
-                            forcing, # ddf_input
+                            df_forcing_disturb, # ddf_input
                             params_tile,
                             params_species,
                             params_soil,
@@ -329,14 +310,41 @@ out <- run_biomee_f_bysite( sitename,
                             makecheck = TRUE
 )
 
-gg1 <- out$output_annual_tile %>%
-  ggplot() +
-  geom_line(aes(x = year, y = GPP)) +
-  theme_classic()+labs(x = "Year", y = "GPP")
+### Plant C
 
-gg2 <- out$output_annual_tile %>%
+g1 <- out$output_annual_tile %>%
   ggplot() +
   geom_line(aes(x = year, y = plantC)) +
-  theme_classic()+labs(x = "Year", y = "plantC")
+  theme_classic()+labs(x = "Year", y = "plantC") 
 
-print(gg1/gg2)
+g2 <- out$output_annual_cohorts %>% group_by(PFT,year) %>%
+  summarise(sumBA=sum(dbh*dbh*pi/4*density/10000)) %>% mutate(PFT=as.factor(PFT)) %>%
+  ggplot() +
+  geom_line(aes(x = year, y = sumBA,col=PFT)) +
+  theme_classic()+labs(x = "Year", y = "BA") + 
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
+
+print(g1/g2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
