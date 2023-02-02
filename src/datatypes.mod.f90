@@ -593,7 +593,8 @@ contains
     ! spdata%rho_N_up0   = rho_N_up0
     ! spdata%N_roots0    = N_roots0
     spdata%leaf_size     = myinterface%params_species(:)%leaf_size
-    spdata%tc_crit       = myinterface%params_species(:)%tc_crit
+    spdata%tc_crit       = myinterface%params_species(:)%tc_crit ! In celsius !+ 273.15
+    spdata%tc_crit_on    = myinterface%params_species(:)%tc_crit_on ! In celsius !+ 273.15
     spdata%gdd_crit      = myinterface%params_species(:)%gdd_crit
     spdata%betaON        = betaON
     spdata%betaOFF       = betaOFF

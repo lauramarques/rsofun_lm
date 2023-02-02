@@ -236,6 +236,10 @@ contains
     call reset_vegn_initial(vegn)
     endif
 
+    if (iyears > myinterface%params_siml%spinupyears+31 .and. rand(0)<0.40) &
+         call reset_vegn_initial(vegn) ! 0.01, 0.02, 0.04, 0.08, 0.20, 0.40
+
+
     if (myinterface%steering%finalize) then
       !----------------------------------------------------------------
       ! Finazlize run: deallocating memory

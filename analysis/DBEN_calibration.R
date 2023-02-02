@@ -6,7 +6,6 @@ library(tibble)
 library(rsofun)
 library(ggplot2)
 library(multidplyr)
-library(tidyverse)
 
 # Get ddf_obs ####
 
@@ -29,6 +28,25 @@ regrowth_dynamics_BCI <- regrowth_dynamics %>% filter(Biome=="Tropics")
 ggplot(regrowth_dynamics_BCI,aes(x=bin_num,y=AGB_kgCm2_med)) + 
   geom_errorbar(aes(ymin=AGB_kgCm2_10, ymax=AGB_kgCm2_90), width=.2, col="blue") + 
   geom_point() + scale_y_continuous(limits = c(0,35)) + geom_hline(yintercept=10, col="grey")
+
+regrowth_biomass <- read.csv("~/Documents/Collaborations/DBEN/DBEN_site_simulations_perspective_paper/Benchmarking_datasets/benchmark_eq_dynamics_16012023.csv")
+
+unique(regrowth_biomass$site)
+# FIN
+regrowth_biomass_FIN <- regrowth_biomass %>% filter(site=="FI")
+ggplot(regrowth_biomass_FIN,aes(x=Year,y=cwood_kgCm2)) + 
+  geom_errorbar(aes(ymin=cwood_lower_kgCm2, ymax=cwood_upper_kgCm2), width=.2, col="blue") + 
+  geom_point() + scale_y_continuous(limits = c(0,35)) + geom_hline(yintercept=10, col="grey")
+# BIA
+regrowth_biomass_BIA <- regrowth_biomass %>% filter(site=="BIA")
+ggplot(regrowth_biomass_BIA,aes(x=Year,y=cwood_kgCm2)) + 
+  geom_errorbar(aes(ymin=cwood_lower_kgCm2, ymax=cwood_upper_kgCm2), width=.2, col="blue") + 
+  geom_point() + scale_y_continuous(limits = c(0,35)) + geom_hline(yintercept=12, col="grey")
+# BCI
+regrowth_biomass_BCI <- regrowth_biomass %>% filter(site=="BCI")
+ggplot(regrowth_biomass_BCI,aes(x=Year,y=cwood_kgCm2)) + 
+  geom_errorbar(aes(ymin=cwood_lower_kgCm2, ymax=cwood_upper_kgCm2), width=.2, col="blue") + 
+  geom_point() + scale_y_continuous(limits = c(0,35)) + geom_hline(yintercept=15, col="grey")
 
 stand_structure <- read.csv("~/Documents/Collaborations/DBEN/DBEN_site_simulations_perspective_paper/Benchmarking_datasets/benchmark_stand_structure.csv")
 str(stand_structure)
