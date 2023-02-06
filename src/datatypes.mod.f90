@@ -913,7 +913,7 @@ contains
       vegn%Resp   = vegn%Resp   + cc%Resp   * cc%nindivs
     enddo
 
-    ! NEP is equal to NNP minus soil respiration
+    ! NEP is equal to NPP minus soil respiration
     vegn%nep = vegn%npp - vegn%rh ! kgC m-2 hour-1; time step is hourly
 
      if (.not. myinterface%steering%spinup) then
@@ -1166,7 +1166,7 @@ contains
       fleaf     = cc%NPPleaf/treeG
       froot     = cc%NPProot/treeG
       fwood     = cc%NPPwood/treeG
-      dDBH      = (cc%dbh - cc%DBH_ys) !*1000 to convert to mm
+      dDBH      = (cc%dbh - cc%DBH_ys)
       cc%Volume = (cc%psapw%c%c12 + cc%pwood%c%c12) / spdata(cc%species)%rho_wood
       dVol      = (cc%Volume - cc%Vol_ys)
       cc%BA     = pi/4*cc%dbh*cc%dbh

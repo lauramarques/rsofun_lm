@@ -18,7 +18,22 @@ library(patchwork)
 BiomeE_P0_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/BiomeE_P0_FIN_aCO2_annual_tile.csv")
 BiomeE_P0_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/BiomeE_P0_FIN_aCO2_annual_cohorts.csv")
 
-# BiomeE_P0_FIN_aCO2 (412 ppm) ####
+# BiomeE_PS_FIN_aCO2 (412 ppm) ####
+BiomeE_PS1_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS1_FIN_aCO2_annual_tile.csv")
+BiomeE_PS1_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS1_FIN_aCO2_annual_cohorts.csv")
+
+BiomeE_PS2_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS2_FIN_aCO2_annual_tile.csv")
+BiomeE_PS2_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS2_FIN_aCO2_annual_cohorts.csv")
+
+BiomeE_PS3_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS3_FIN_aCO2_annual_tile.csv")
+BiomeE_PS3_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS3_FIN_aCO2_annual_cohorts.csv")
+
+BiomeE_PS4_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS4_FIN_aCO2_annual_tile.csv")
+BiomeE_PS4_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS4_FIN_aCO2_annual_cohorts.csv")
+
+BiomeE_PS5_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS5_FIN_aCO2_annual_tile.csv")
+BiomeE_PS5_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS5_FIN_aCO2_annual_cohorts.csv")
+
 BiomeE_PS6_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS6_FIN_aCO2_annual_tile.csv")
 BiomeE_PS6_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS6_FIN_aCO2_annual_cohorts.csv")
 
@@ -30,8 +45,8 @@ fig1a <- BiomeE_PS6_FIN_aCO2_annual_tile %>% #filter(year>510) %>%
   mutate(year = 1:450) %>%
   ggplot() + 
   geom_line(aes(x=year, y=plantC),col="#377EB8") + 
-  labs(x = "t", y = expression(paste("Plant C (kg C ", m^-2, " ", yr^-1, ") "))) + 
-  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+  labs(x = "t", y = expression(paste("Plant C (kg C ", m^-2, ") "))) + 
+  theme_classic() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                      axis.text = element_text(size = 10),axis.title = element_text(size = 10),
                      legend.text = element_text(size = 9),legend.title = element_text(size = 9),
                      plot.title = element_text(size = 10)) #+
@@ -46,7 +61,7 @@ fig1b <- BiomeE_P0_FIN_aCO2_annual_tile %>% #filter(year>510) %>%
   ggplot() + 
   geom_line(aes(x=year, y=GPP),col="#377EB8") + 
   labs(x = "t", y = expression(paste("GPP (kg C ", m^-2, " ", yr^-1, ") "))) + 
-  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+  theme_classic() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                      axis.text = element_text(size = 10),axis.title = element_text(size = 10),
                      legend.text = element_text(size = 9),legend.title = element_text(size = 9),
                      plot.title = element_text(size = 10)) #+
@@ -61,7 +76,7 @@ fig1c <- BiomeE_P0_FIN_aCO2_annual_tile %>% #filter(year>510) %>%
   ggplot() + 
   geom_line(aes(x=year, y=Rauto),col="#377EB8") + 
   labs(x = "t", y = expression(paste("Rauto (kg C ", m^-2, " ", yr^-1, ") "))) + 
-  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+  theme_classic() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                      axis.text = element_text(size = 10),axis.title = element_text(size = 10),
                      legend.text = element_text(size = 9),legend.title = element_text(size = 9),
                      plot.title = element_text(size = 10)) #+
@@ -76,7 +91,7 @@ fig1d <- BiomeE_P0_FIN_aCO2_annual_tile %>% #filter(year>510) %>%
   ggplot() + 
   geom_line(aes(x=year, y=soilC),col="#377EB8") + 
   labs(x = "t", y =expression(paste("Soil C (kg C ", m^-2, " ", yr^-1, ") "))) + 
-  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+  theme_classic() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                      axis.text = element_text(size = 10),axis.title = element_text(size = 10),
                      legend.text = element_text(size = 9),legend.title = element_text(size = 9),
                      plot.title = element_text(size = 10)) #+
@@ -95,7 +110,7 @@ fig2a <- BiomeE_PS6_FIN_aCO2_annual_cohorts%>% #filter(year>510) %>%
   geom_line(aes(x = year, y = sumBA,col=PFT)) +
   #geom_smooth(aes(x=year, y=sumBA, color=PFT),se=F,size=.5) + 
   labs(x = "t", y = expression(paste("Basal area (", m^-2, " ", ha^-1, ") "))) + 
-  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+  theme_classic() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                      axis.text = element_text(size = 10),axis.title = element_text(size = 10),
                      legend.text = element_text(size = 9),legend.title = element_text(size = 9),
                      plot.title = element_text(size = 10),
@@ -112,7 +127,7 @@ fig2a <- BiomeE_PS6_FIN_aCO2_annual_cohorts%>% #filter(year>510) %>%
 fig2a
 
 ## Crown area ####
-fig2b <- BiomeE_P0_FIN_aCO2_annual_cohorts %>% #filter(year>510) %>%
+fig2b <- BiomeE_PS6_FIN_aCO2_annual_cohorts %>% #filter(year>510) %>%
   group_by(PFT,year) %>%
   summarise(CrownArea=sum(Acrown*density/10000)) %>% 
   filter(year>510) %>%
@@ -121,7 +136,7 @@ fig2b <- BiomeE_P0_FIN_aCO2_annual_cohorts %>% #filter(year>510) %>%
   ggplot() + 
   geom_line(aes(x = year, y = CrownArea,col=PFT)) +
   labs(x = "t", y = expression(paste("Crown area (", m^-2, " ", m^-2, ") "))) + 
-  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+  theme_classic() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                      axis.text = element_text(size = 10),axis.title = element_text(size = 10),
                      legend.text = element_text(size = 9),legend.title = element_text(size = 9),
                      plot.title = element_text(size = 10),
@@ -163,6 +178,10 @@ fig2c <- BiomeE_P0_FIN_aCO2_annual_cohorts %>% #filter(year>510) %>%
 #scale_y_continuous(limits=c(0,65),breaks=seq(0,60,15))
 fig2c
 
+# Save plots ####
+fig1a/fig2a/fig2b 
+
+
 
 # Ensheng simulations ####
 p0_FIN_co2A_out_annual_tile    <- read.csv("~/Documents/Collaborations/DBEN/Ensheng/DBEN-BiomeE_FIN/BiomeE_P0_FIN_aCO2_Ecosystem_yearly.csv")
@@ -186,7 +205,7 @@ pS_FIN_co2A_40_out_annual_cohorts <- read.csv("~/Documents/Collaborations/DBEN/E
 fig1a <- pS_FIN_co2A_40_out_annual_tile %>% #filter(year>510) %>%
   ggplot() + 
   geom_line(aes(x=year, y=plantC),col="#377EB8") + 
-  labs(x = "t", y = expression(paste("Plant C (kg C ", m^-2, " ", yr^-1, ") "))) + 
+  labs(x = "t", y = expression(paste("Plant C (kg C ", m^-2, ") "))) + 
   theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                      axis.text = element_text(size = 10),axis.title = element_text(size = 10),
                      legend.text = element_text(size = 9),legend.title = element_text(size = 9),
