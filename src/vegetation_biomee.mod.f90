@@ -1038,10 +1038,8 @@ contains
     ! vegn%n_deadtrees   = vegn%n_deadtrees + deadtrees
     ! vegn%c_deadtrees   = vegn%c_deadtrees + deadtrees * (cc%plabl%c%c12 + cc%pseed%c%c12 + cc%pleaf%c%c12 + cc%proot%c%c12 + cc%psapw%c%c12 + cc%pwood%c%c12)
     
-    ! ! print*, "vegn%n_deadtrees", vegn%n_deadtrees
     ! print*, "deadtrees", deadtrees
     ! print*, "cc%n_deadtrees", cc%n_deadtrees
-    ! print*, "vegn%n_deadtrees", vegn%n_deadtrees
     ! print*, "vegn%n_deadtrees", vegn%n_deadtrees
     ! print*, "vegn%c_deadtrees", vegn%c_deadtrees
 

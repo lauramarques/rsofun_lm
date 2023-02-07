@@ -256,6 +256,8 @@ g3 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   theme_classic()+labs(x = "Year", y = "CrownArea") + 
 scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
 
+print(g1/g2)
+
 print(g1/g2/g3)
 
 ## Outputs ####

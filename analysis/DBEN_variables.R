@@ -142,7 +142,7 @@ height <- BiomeE_P0_FIN_aCO2_annual_cohorts %>%
 # FLUXES ####
 # Woody biomass growth ####
 # WBgrowth
-# Units: kg C m-2yr-1
+# Units: kg C m-2 yr-1
 # Timestep: annual
 # Dimensions: pft, time
 # cohort output
@@ -164,21 +164,37 @@ WBgrowth <- BiomeE_P0_FIN_aCO2_annual_cohorts %>%
 
 # Carbon Mass Flux lost from live wood due to mortality or other turnover process ####
 # cmort
-# Units: kg C m-2s-1
+# Units: kg C ha-1 yr-1
 # Timestep: annual
 # Dimensions: sizeclass, time
 # cohort output
+cmort <- BiomeE_P0_FIN_aCO2_annual_cohorts %>% 
+  group_by(PFT,year) %>%
+  summarise(cmort=sum(c_deadtrees)) %>% 
+  filter(year>510) %>%
+  mutate(PFT=as.factor(PFT)) %>%
+  mutate(year = year-510) %>%
+  ggplot() + 
+  geom_line(aes(x = year, y = cmort,col=PFT))
 
 # Stem number Flux lost from vegetation due to mortality or other turnover process ####
 # stemmort
-# Units: Count ha-1yr-1
+# Units: Count ha-1 yr-1
 # Timestep: annual
 # Dimensions: sizeclass, time, pft
 # cohort output
+stemmort <- BiomeE_P0_FIN_aCO2_annual_cohorts %>% 
+  group_by(PFT,year) %>%
+  summarise(stemmort=sum(n_deadtrees)) %>% 
+  filter(year>510) %>%
+  mutate(PFT=as.factor(PFT)) %>%
+  mutate(year = year-510) %>%
+  ggplot() + 
+  geom_line(aes(x = year, y = stemmort,col=PFT))
 
 # Carbon Mass Flux out of Atmosphere due to Gross Primary Production on Land ####
 # gpp
-# Units: kg C m-2s-1
+# Units: kg C m-2 yr-1
 # Timestep: annual
 # Dimensions: pft, time
 # cohort output
@@ -191,7 +207,7 @@ gpp <- BiomeE_P0_FIN_aCO2_annual_cohorts %>%
 
 # Carbon Mass Flux out of Atmosphere due to Net Primary Production on Land ####
 # npp
-# Units: kg C m-2s-1
+# Units: kg C m-2 yr-1
 # Timestep: annual
 # Dimensions: pft, time
 # cohort output
@@ -200,13 +216,13 @@ npp <- BiomeE_P0_FIN_aCO2_annual_cohorts %>%
   group_by(PFT,year) %>%
   summarise(npp=sum(NPP_yr*density/10000)) %>% 
   filter(year>510) %>%
-  mutate(year = year-510) 
+  mutate(year = year-510)
 
 # Carbon Mass Flux out of Atmosphere due to Net Biospheric Production on Land ####
 #This is the net mass flux of carbon between land and atmosphere calculated as 
 #photosynthesis MINUS the sum of plant and soil respiration, and carbon fluxes from fire. 
 # nbp
-# Units: kg C m-2s-1
+# Units: kg C m-2 yr-1
 # Timestep: annual
 # Dimensions: time
 # cohort tile
