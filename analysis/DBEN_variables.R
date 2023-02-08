@@ -192,6 +192,11 @@ stemmort <- BiomeE_P0_FIN_aCO2_annual_cohorts %>%
   ggplot() + 
   geom_line(aes(x = year, y = stemmort,col=PFT))
 
+BiomeE_P0_FIN_aCO2_annual_tile %>%
+  slice(510+1:nrow(BiomeE_PS6_FIN_aCO2_annual_tile)) %>% 
+  mutate(year = 1:450, AGB = NSC+leafC+SapwoodC+WoodC) %>%
+  select(year, AGB)
+
 # Carbon Mass Flux out of Atmosphere due to Gross Primary Production on Land ####
 # gpp
 # Units: kg C m-2 yr-1

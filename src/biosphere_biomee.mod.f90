@@ -243,9 +243,9 @@ contains
     !     call reset_vegn_initial(vegn) 
 
 
-    do i = myinterface%params_siml%spinupyears+31+50, 960, 50 ! 100,50,25,12.5,5,2.5
-        if (iyears == i) call reset_vegn_initial(vegn)
-    enddo
+    !do i = myinterface%params_siml%spinupyears+31+50, 960, 50 ! 100,50,25,12.5,5,2.5
+    !    if (iyears == i) call reset_vegn_initial(vegn)
+    !enddo
 
 
 

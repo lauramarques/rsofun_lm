@@ -276,27 +276,27 @@ module md_interface_biomee
     real :: PFT
     real :: layer
     real :: density
-    real :: f_layer
+    real :: flayer
     real :: dDBH
     real :: dbh
     real :: height
     real :: age
+    real :: BA
     real :: Acrown
+    real :: Aleaf
     real :: wood
     real :: nsc
-    real :: NSN
-    real :: NPPtr
-    real :: seed
-    real :: NPPL
-    real :: NPPR
-    real :: NPPW
+    real :: nsn
+    real :: treeG
+    real :: fseed
+    real :: fleaf
+    real :: froot
+    real :: fwood
     real :: GPP
     real :: NPP
     real :: Rauto
-    real :: N_uptk
-    real :: N_fix
-    real :: maxLAI
-    real :: Volume
+    real :: Nupt
+    real :: Nfix
     real :: n_deadtrees
     real :: c_deadtrees
     real :: deathrate
