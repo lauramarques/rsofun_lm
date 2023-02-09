@@ -29,14 +29,14 @@ p0_FIN_co2A_out_annual_cohorts <- read.csv("~/Documents/Collaborations/DBEN/Ensh
 
 # POOLS ####
 # Carbon mass in vegetation by PFT ####
-# cveg
+# cveg = Stem, coarse roots, fine roots, branches, leaves
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: pft, time
 # cohorts output
 cveg <- BiomeE_P0_FIN_aCO2_annual_cohorts %>% 
   group_by(PFT,year) %>%
-  summarise(cveg=sum(wood*density/10000)) %>% 
+  summarise(cveg=sum((nsc+seedC+leafC+rootC+sapwC+woodC)*density/10000)) %>% 
   filter(year>510) %>%
   mutate(PFT=as.factor(PFT)) %>%
   mutate(year = year-510) %>%
@@ -50,19 +50,21 @@ cveg <- BiomeE_P0_FIN_aCO2_annual_cohorts %>%
 # Dimensions: time
 # tile output
 AGB <- BiomeE_P0_FIN_aCO2_annual_tile %>%
-  slice(510+1:nrow(BiomeE_PS6_FIN_aCO2_annual_tile)) %>% 
+  slice(510+1:nrow(BiomeE_P0_FIN_aCO2_annual_tile)) %>% 
   mutate(year = 1:450, AGB = NSC+leafC+SapwoodC+WoodC) %>%
-  select(year, AGB)
+  select(year, AGB)  %>%
+  ggplot() + 
+  geom_line(aes(x = year, y = AGB))
 
 # Carbon mass in wood by PFT ####
-# cwood
+# cwood = Stem, coarse roots, branches
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: pft, time
 # cohort output
 cwood <- BiomeE_P0_FIN_aCO2_annual_cohorts %>% 
   group_by(PFT,year) %>%
-  summarise(cwood=sum(wood*density/10000)) %>% 
+  summarise(cwood=sum((sapwC+woodC)*density/10000)) %>% 
   filter(year>510) %>%
   mutate(PFT=as.factor(PFT)) %>%
   mutate(year = year-510) 
@@ -74,11 +76,11 @@ cwood <- BiomeE_P0_FIN_aCO2_annual_cohorts %>%
 # Dimensions: sizeclass, time
 # cohort output
 cwood_size <- BiomeE_P0_FIN_aCO2_annual_cohorts %>% 
-  mutate(dbh_bins = cut(dbh, breaks = c(0,1,5,10,20,30,40,50,60,70,80,90,100,150,200))) %>%
+  mutate(dbh_bins = cut(DBH, breaks = c(0,1,5,10,20,30,40,50,60,70,80,90,100,150,200))) %>%
   filter(year>510) %>%
   mutate(year = year-510) %>%
   group_by(dbh_bins,year) %>%
-  summarise(cwood_size=sum(wood*density/10000)) 
+  summarise(cwood_size=sum((sapwC+woodC)*density/10000)) 
 
 # Stem number by size class ####
 # nstem_size
@@ -87,7 +89,7 @@ cwood_size <- BiomeE_P0_FIN_aCO2_annual_cohorts %>%
 # Dimensions: sizeclass, time
 # cohort output
 nstem_size <- BiomeE_P0_FIN_aCO2_annual_cohorts %>% 
-  mutate(dbh_bins = cut(dbh, breaks = c(0,1,5,10,20,30,40,50,60,70,80,90,100,150,200))) %>%
+  mutate(dbh_bins = cut(DBH, breaks = c(0,1,5,10,20,30,40,50,60,70,80,90,100,150,200))) %>%
   filter(year>510) %>%
   mutate(year = year-510) %>%
   group_by(dbh_bins,year) %>%
@@ -99,6 +101,12 @@ nstem_size <- BiomeE_P0_FIN_aCO2_annual_cohorts %>%
 # Timestep: annual
 # Dimensions: pft, time
 # cohort output
+lai <- BiomeE_P0_FIN_aCO2_annual_cohorts %>% 
+  group_by(PFT,year) %>%
+  summarise(lai=sum(Aleaf*density/10000)) %>% 
+  filter(year>510) %>%
+  mutate(PFT=as.factor(PFT)) %>%
+  mutate(year = year-510) 
 
 # Crown area ####
 # CA
@@ -122,7 +130,8 @@ CA <- BiomeE_P0_FIN_aCO2_annual_cohorts %>%
 BA <- BiomeE_P0_FIN_aCO2_annual_cohorts %>% 
   mutate(PFT=as.factor(PFT)) %>%
   group_by(PFT,year) %>%
-  summarise(BA=sum(dbh*dbh*pi/4*density/10000)) %>% 
+  #summarise(BA=sum(DBH*DBH*pi/4*density/10000)) %>%
+  summarise(BA=sum(BA*density)) %>% 
   filter(year>510) %>%
   mutate(year = year-510) 
 
@@ -149,11 +158,9 @@ height <- BiomeE_P0_FIN_aCO2_annual_cohorts %>%
 WBgrowth <- BiomeE_P0_FIN_aCO2_annual_cohorts %>% 
   mutate(PFT=as.factor(PFT)) %>%
   group_by(PFT,year) %>%
-  summarise(WBgrowth=sum(NPPW*NPPtr*density/10000)) %>% 
+  summarise(WBgrowth=sum(fwood*treeG*density/10000)) %>% 
   filter(year>510) %>%
-  mutate(year = year-510) %>%
-  ggplot() + 
-  geom_line(aes(x=year, y=WBgrowth,col=PFT)) 
+  mutate(year = year-510) 
 
 # Basal area growth ####
 # BAgrowth
@@ -161,6 +168,12 @@ WBgrowth <- BiomeE_P0_FIN_aCO2_annual_cohorts %>%
 # Timestep: annual
 # Dimensions: pft, time
 # cohort output
+BAgrowth <- BiomeE_P0_FIN_aCO2_annual_cohorts %>% 
+  mutate(PFT=as.factor(PFT)) %>%
+  group_by(PFT,year) %>%
+  summarise(BAgrowth=sum(dBA*density)) %>% 
+  filter(year>510) %>%
+  mutate(year = year-510) 
 
 # Carbon Mass Flux lost from live wood due to mortality or other turnover process ####
 # cmort
@@ -173,9 +186,7 @@ cmort <- BiomeE_P0_FIN_aCO2_annual_cohorts %>%
   summarise(cmort=sum(c_deadtrees)) %>% 
   filter(year>510) %>%
   mutate(PFT=as.factor(PFT)) %>%
-  mutate(year = year-510) %>%
-  ggplot() + 
-  geom_line(aes(x = year, y = cmort,col=PFT))
+  mutate(year = year-510) 
 
 # Stem number Flux lost from vegetation due to mortality or other turnover process ####
 # stemmort
@@ -188,14 +199,7 @@ stemmort <- BiomeE_P0_FIN_aCO2_annual_cohorts %>%
   summarise(stemmort=sum(n_deadtrees)) %>% 
   filter(year>510) %>%
   mutate(PFT=as.factor(PFT)) %>%
-  mutate(year = year-510) %>%
-  ggplot() + 
-  geom_line(aes(x = year, y = stemmort,col=PFT))
-
-BiomeE_P0_FIN_aCO2_annual_tile %>%
-  slice(510+1:nrow(BiomeE_PS6_FIN_aCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+SapwoodC+WoodC) %>%
-  select(year, AGB)
+  mutate(year = year-510) 
 
 # Carbon Mass Flux out of Atmosphere due to Gross Primary Production on Land ####
 # gpp
@@ -206,7 +210,7 @@ BiomeE_P0_FIN_aCO2_annual_tile %>%
 gpp <- BiomeE_P0_FIN_aCO2_annual_cohorts %>% 
   mutate(PFT=as.factor(PFT)) %>%
   group_by(PFT,year) %>%
-  summarise(gpp=sum(GPP_yr*density/10000)) %>% 
+  summarise(gpp=sum(GPP*density/10000)) %>% 
   filter(year>510) %>%
   mutate(year = year-510)
 
@@ -219,7 +223,7 @@ gpp <- BiomeE_P0_FIN_aCO2_annual_cohorts %>%
 npp <- BiomeE_P0_FIN_aCO2_annual_cohorts %>% 
   mutate(PFT=as.factor(PFT)) %>%
   group_by(PFT,year) %>%
-  summarise(npp=sum(NPP_yr*density/10000)) %>% 
+  summarise(npp=sum(NPP*density/10000)) %>% 
   filter(year>510) %>%
   mutate(year = year-510)
 
@@ -232,7 +236,7 @@ npp <- BiomeE_P0_FIN_aCO2_annual_cohorts %>%
 # Dimensions: time
 # cohort tile
 nbp <- BiomeE_P0_FIN_aCO2_annual_tile %>%
-  slice(510+1:nrow(BiomeE_PS6_FIN_aCO2_annual_tile)) %>% 
+  slice(510+1:nrow(BiomeE_P0_FIN_aCO2_annual_tile)) %>% 
   mutate(year = 1:450, nbp = GPP-Rauto-Rh) %>%
   select(year, nbp) 
 

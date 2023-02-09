@@ -277,15 +277,20 @@ module md_interface_biomee
     real :: layer
     real :: density
     real :: flayer
+    real :: DBH
     real :: dDBH
-    real :: dbh
     real :: height
     real :: age
     real :: BA
+    real :: dBA
     real :: Acrown
     real :: Aleaf
-    real :: wood
     real :: nsc
+    real :: seedC
+    real :: leafC
+    real :: rootC
+    real :: sapwC
+    real :: woodC
     real :: nsn
     real :: treeG
     real :: fseed

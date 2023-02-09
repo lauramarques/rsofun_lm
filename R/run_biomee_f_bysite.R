@@ -345,9 +345,10 @@ run_biomee_f_bysite <- function(
     annual_values <- c(
       "year","cID",
       "PFT","layer","density",
-      "flayer","dDBH","dbh","height",
-      "age","BA","Acrown","Aleaf",
-      "wood","nsc","nsn","treeG",
+      "flayer","DBH","dDBH","height",
+      "age","BA","dBA","Acrown","Aleaf",
+      "nsc","seedC","leafC","rootC",
+      "sapwC","woodC","nsn","treeG",
       "fseed","fleaf","froot","fwood",
       "GPP","NPP","Rauto",
       "Nupt","Nfix","n_deadtrees",

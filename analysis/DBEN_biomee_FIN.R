@@ -243,7 +243,7 @@ g1 <- out_sc1$data[[1]]$output_annual_tile %>%
   theme_classic()+labs(x = "Year", y = "plantC") 
 
 g2 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
-  summarise(sumBA=sum(dbh*dbh*pi/4*density/10000)) %>% mutate(PFT=as.factor(PFT)) %>%
+  summarise(sumBA=sum(DBH*DBH*pi/4*density/10000)) %>% mutate(PFT=as.factor(PFT)) %>%
   ggplot() +
   geom_line(aes(x = year, y = sumBA,col=PFT)) +
   theme_classic()+labs(x = "Year", y = "BA") + 

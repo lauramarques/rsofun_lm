@@ -45,6 +45,7 @@ contains
     integer :: year0
     integer :: i
     integer :: idata
+    integer :: nfrequency
     integer, save :: simu_steps !, datalines
     integer, save :: iyears
     integer, save :: idays
@@ -242,11 +243,11 @@ contains
     !if (iyears == 700 .or. iyears == 800) &
     !     call reset_vegn_initial(vegn) 
 
+    nfrequency = 100 ! 100,50,25,12.5,5,2.5
 
-    !do i = myinterface%params_siml%spinupyears+31+50, 960, 50 ! 100,50,25,12.5,5,2.5
-    !    if (iyears == i) call reset_vegn_initial(vegn)
-    !enddo
-
+    do i = myinterface%params_siml%spinupyears+31+nfrequency, 960, nfrequency
+        if (iyears == i) call reset_vegn_initial(vegn)
+    enddo
 
 
     if (myinterface%steering%finalize) then
