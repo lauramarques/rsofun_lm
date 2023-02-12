@@ -240,14 +240,11 @@ contains
     !if (iyears > myinterface%params_siml%spinupyears+31 .and. rand(0)<0.40) &
     !     call reset_vegn_initial(vegn) ! 0.01, 0.02, 0.04, 0.08, 0.20, 0.40
 
-    !if (iyears == 700 .or. iyears == 800) &
-    !     call reset_vegn_initial(vegn) 
+    nfrequency = 75 ! 100,75,50,25,15,10 !!!! 100,50,25,12.5,5,2.5 
 
-    nfrequency = 100 ! 100,50,25,12.5,5,2.5
-
-    do i = myinterface%params_siml%spinupyears+31+nfrequency, 960, nfrequency
-        if (iyears == i) call reset_vegn_initial(vegn)
-    enddo
+    !do i = myinterface%params_siml%spinupyears+31+nfrequency, 960, nfrequency
+    !    if (iyears == i) call reset_vegn_initial(vegn)
+    !enddo
 
 
     if (myinterface%steering%finalize) then

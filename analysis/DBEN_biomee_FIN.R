@@ -4,7 +4,8 @@ library(ggplot2)
 library(patchwork)
 library(multidplyr)
 
-# Baseline run (P0) ####
+# CO2 412 ppm ####
+
 ## Define drivers #### 
 
 sitename <- "FIN"
@@ -260,60 +261,68 @@ scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"
 
 print(g1/g2/g3)
 
+out_sc1$data[[1]]$output_annual_tile %>%
+  ggplot() +
+  geom_line(aes(x = year, y = (SapwoodC+WoodC)*0.75)) +
+  theme_classic()+labs(x = "Year", y = "AGW") + geom_hline(yintercept=10, col="grey")
+
 ## Outputs ####
 ### P0 ####
-write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/BiomeE_P0_FIN_aCO2_annual_tile.csv")
-write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/BiomeE_P0_FIN_aCO2_annual_cohorts.csv")
-write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/BiomeE_P0_FIN_aCO2_daily_tile.csv")
-write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/BiomeE_P0_FIN_aCO2_daily_cohorts.csv")
-write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/BiomeE_P0_FIN_aCO2_hourly_tile.csv")
+write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_P0_FIN_aCO2_annual_tile.csv")
+write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_P0_FIN_aCO2_annual_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_P0_FIN_aCO2_daily_tile.csv")
+write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_P0_FIN_aCO2_daily_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_P0_FIN_aCO2_hourly_tile.csv")
 
-### PS-1 (0.01) ####
-write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/BiomeE_PS1_FIN_aCO2_annual_tile.csv")
-write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/BiomeE_PS1_FIN_aCO2_annual_cohorts.csv")
-write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/BiomeE_PS1_FIN_aCO2_daily_tile.csv")
-write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/BiomeE_PS1_FIN_aCO2_daily_cohorts.csv")
-write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/BiomeE_PS1_FIN_aCO2_hourly_tile.csv")
+### PS-1 (0.01 or nfrequency=100) ####
+write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS1_FIN_aCO2_annual_tile.csv")
+write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_PS1_FIN_aCO2_annual_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS1_FIN_aCO2_daily_tile.csv")
+write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_PS1_FIN_aCO2_daily_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS1_FIN_aCO2_hourly_tile.csv")
 
-### PS-2 (0.02) ####
-write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/BiomeE_PS2_FIN_aCO2_annual_tile.csv")
-write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/BiomeE_PS2_FIN_aCO2_annual_cohorts.csv")
-write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/BiomeE_PS2_FIN_aCO2_daily_tile.csv")
-write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/BiomeE_PS2_FIN_aCO2_daily_cohorts.csv")
-write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/BiomeE_PS2_FIN_aCO2_hourly_tile.csv")
+### PS-2 (0.02 or nfrequency=50) ####
+write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS2_FIN_aCO2_annual_tile.csv")
+write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_PS2_FIN_aCO2_annual_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS2_FIN_aCO2_daily_tile.csv")
+write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_PS2_FIN_aCO2_daily_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS2_FIN_aCO2_hourly_tile.csv")
 
-### PS-3 (0.04) ####
-write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/BiomeE_PS3_FIN_aCO2_annual_tile.csv")
-write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/BiomeE_PS3_FIN_aCO2_annual_cohorts.csv")
-write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/BiomeE_PS3_FIN_aCO2_daily_tile.csv")
-write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/BiomeE_PS3_FIN_aCO2_daily_cohorts.csv")
-write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/BiomeE_PS3_FIN_aCO2_hourly_tile.csv")
+### PS-3 (0.04 or nfrequency=25) ####
+write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS3_FIN_aCO2_annual_tile.csv")
+write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_PS3_FIN_aCO2_annual_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS3_FIN_aCO2_daily_tile.csv")
+write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_PS3_FIN_aCO2_daily_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS3_FIN_aCO2_hourly_tile.csv")
 
-### PS-4 (0.08) ####
-write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/BiomeE_PS4_FIN_aCO2_annual_tile.csv")
-write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/BiomeE_PS4_FIN_aCO2_annual_cohorts.csv")
-write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/BiomeE_PS4_FIN_aCO2_daily_tile.csv")
-write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/BiomeE_PS4_FIN_aCO2_daily_cohorts.csv")
-write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/BiomeE_PS4_FIN_aCO2_hourly_tile.csv")
+### PS-4 (0.08 or nfrequency=12.5) ####
+write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS4_FIN_aCO2_annual_tile.csv")
+write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_PS4_FIN_aCO2_annual_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS4_FIN_aCO2_daily_tile.csv")
+write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_PS4_FIN_aCO2_daily_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS4_FIN_aCO2_hourly_tile.csv")
 
-### PS-5 (0.20) ####
-write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/BiomeE_PS5_FIN_aCO2_annual_tile.csv")
-write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/BiomeE_PS5_FIN_aCO2_annual_cohorts.csv")
-write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/BiomeE_PS5_FIN_aCO2_daily_tile.csv")
-write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/BiomeE_PS5_FIN_aCO2_daily_cohorts.csv")
-write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/BiomeE_PS5_FIN_aCO2_hourly_tile.csv")
+### PS-5 (0.20 or nfrequency=5) ####
+write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS5_FIN_aCO2_annual_tile.csv")
+write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_PS5_FIN_aCO2_annual_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS5_FIN_aCO2_daily_tile.csv")
+write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_PS5_FIN_aCO2_daily_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS5_FIN_aCO2_hourly_tile.csv")
 
-### PS-6 (0.40) ####
-write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/BiomeE_PS6_FIN_aCO2_annual_tile.csv")
-write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/BiomeE_PS6_FIN_aCO2_annual_cohorts.csv")
-write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/BiomeE_PS6_FIN_aCO2_daily_tile.csv")
-write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/BiomeE_PS6_FIN_aCO2_daily_cohorts.csv")
-write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/BiomeE_PS6_FIN_aCO2_hourly_tile.csv")
+### PS-6 (0.40 or nfrequency=2.5) ####
+write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS6_FIN_aCO2_annual_tile.csv")
+write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_PS6_FIN_aCO2_annual_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS6_FIN_aCO2_daily_tile.csv")
+write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_PS6_FIN_aCO2_daily_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS6_FIN_aCO2_hourly_tile.csv")
 
+library(rsofun)
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+library(multidplyr)
 
-
-
-# Sensitivity runs (PS) ####
+# CO2 562 ppm ####
 
 ## Define drivers #### 
 
@@ -463,7 +472,7 @@ df_soiltexture <- bind_rows(
   bottom = tibble(layer = "bottom", fsand = 0.4, fclay = 0.3, forg = 0.1, fgravel = 0.1)
 )
 
-## Disturbance regime ####
+# Disturbance regime 
 
 #This contains the forcing time series data frame where the disturbance is to be defined as the fraction 
 #of aboveground biomass harvested (`harv`). Additional specifications of the disturbance forcing, 
@@ -499,7 +508,7 @@ biomee_forcing_FIN
 df_forcing <- biomee_forcing_FIN
 
 ## Define CO2 ####
-df_forcing$co2 <- 412 # 562
+df_forcing$co2 <- 562 # 412
 
 # Repeat mean seasonal cycle `nyears` times # Add harvest forcing to drivers. 
 nyears <- nrow(df_harv)/length(unique(biomee_forcing_FIN$year))
@@ -516,6 +525,14 @@ df_forcing_disturb <- df_forcing %>%
     by = c("doy", "year")
   ) %>% 
   mutate(harv = ifelse(is.na(harv), 0, harv))
+
+## for control simulation
+df_forcing <- df_forcing %>%
+  mutate(harv = 0)
+
+# Add N deposition as NOx and NHy.
+df_forcing <- df_forcing %>% 
+  mutate(nox = 0, nhy = 0)
 
 df_forcing_disturb <- df_forcing_disturb %>% 
   mutate(nox = 0, nhy = 0)
@@ -545,7 +562,7 @@ g1 <- out_sc1$data[[1]]$output_annual_tile %>%
   theme_classic()+labs(x = "Year", y = "plantC") 
 
 g2 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
-  summarise(sumBA=sum(dbh*dbh*pi/4*density/10000)) %>% mutate(PFT=as.factor(PFT)) %>%
+  summarise(sumBA=sum(DBH*DBH*pi/4*density/10000)) %>% mutate(PFT=as.factor(PFT)) %>%
   ggplot() +
   geom_line(aes(x = year, y = sumBA,col=PFT)) +
   theme_classic()+labs(x = "Year", y = "BA") + 
@@ -558,15 +575,59 @@ g3 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   theme_classic()+labs(x = "Year", y = "CrownArea") + 
   scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
 
+#print(g1/g2)
+
 print(g1/g2/g3)
 
 ## Outputs ####
-write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/BiomeE_P0_FIN_aCO2_annual_tile.csv")
-write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/BiomeE_P0_FIN_aCO2_annual_cohorts.csv")
-write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/BiomeE_P0_FIN_aCO2_daily_tile.csv")
-write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/BiomeE_P0_FIN_aCO2_daily_cohorts.csv")
-write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/BiomeE_P0_FIN_aCO2_hourly_tile.csv")
+### P0 ####
+write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_P0_FIN_eCO2_annual_tile.csv")
+write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_P0_FIN_eCO2_annual_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_P0_FIN_eCO2_daily_tile.csv")
+write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_P0_FIN_eCO2_daily_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_P0_FIN_eCO2_hourly_tile.csv")
 
+### PS-1 (0.01 or nfrequency=100) ####
+write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS1_FIN_eCO2_annual_tile.csv")
+write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_PS1_FIN_eCO2_annual_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS1_FIN_eCO2_daily_tile.csv")
+write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_PS1_FIN_eCO2_daily_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS1_FIN_eCO2_hourly_tile.csv")
+
+### PS-2 (0.02 or nfrequency=50) ####
+write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS2_FIN_eCO2_annual_tile.csv")
+write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_PS2_FIN_eCO2_annual_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS2_FIN_eCO2_daily_tile.csv")
+write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_PS2_FIN_eCO2_daily_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS2_FIN_eCO2_hourly_tile.csv")
+
+### PS-3 (0.04 or nfrequency=25) ####
+write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS3_FIN_eCO2_annual_tile.csv")
+write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_PS3_FIN_eCO2_annual_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS3_FIN_eCO2_daily_tile.csv")
+write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_PS3_FIN_eCO2_daily_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS3_FIN_eCO2_hourly_tile.csv")
+
+### PS-4 (0.08 or nfrequency=12.5) ####
+write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS4_FIN_eCO2_annual_tile.csv")
+write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_PS4_FIN_eCO2_annual_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS4_FIN_eCO2_daily_tile.csv")
+write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_PS4_FIN_eCO2_daily_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS4_FIN_eCO2_hourly_tile.csv")
+
+### PS-5 (0.20 or nfrequency=5) ####
+write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS5_FIN_aCO2_annual_tile.csv")
+write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_PS5_FIN_aCO2_annual_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS5_FIN_aCO2_daily_tile.csv")
+write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_PS5_FIN_aCO2_daily_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS5_FIN_aCO2_hourly_tile.csv")
+
+### PS-6 (0.40 or nfrequency=2.5) ####
+write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS6_FIN_eCO2_annual_tile.csv")
+write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_PS6_FIN_eCO2_annual_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS6_FIN_eCO2_daily_tile.csv")
+write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_PS6_FIN_eCO2_daily_cohorts.csv")
+write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS6_FIN_eCO2_hourly_tile.csv")
 
 
 

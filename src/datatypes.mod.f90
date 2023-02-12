@@ -1184,7 +1184,7 @@ contains
       out_annual_cohorts(i)%cID         = cc%ccID
       out_annual_cohorts(i)%PFT         = cc%species
       out_annual_cohorts(i)%layer       = cc%layer
-      out_annual_cohorts(i)%density     = cc%nindivs * 10000
+      out_annual_cohorts(i)%density     = cc%nindivs * 10000   ! * 10000 to convert in indivs/ha
       out_annual_cohorts(i)%flayer      = cc%layerfrac
       out_annual_cohorts(i)%DBH         = cc%dbh * 100   ! *100 to convert m in cm
       out_annual_cohorts(i)%dDBH        = dDBH * 100     ! *100 to convert m in cm

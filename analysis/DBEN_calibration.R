@@ -6,27 +6,30 @@ library(tibble)
 library(rsofun)
 library(ggplot2)
 library(multidplyr)
+library(patchwork)
 
 # benchmark ####
 
 # FIN ####
 
 ## Regrowth curves ####
+# AGcwood (aboveground woody carbon) 
 benchmark_regrowth <- read.csv("/home/laura/Documents/Collaborations/DBEN/DBEN_site_simulations_perspective_paper/Benchmarking_datasets/updated/benchmark_regrowth_curves.csv")
 benchmark_regrowth_FIN <- benchmark_regrowth %>% filter(Biome=="Boreal")
-plot_regrowth_bench <- ggplot(regrowth_dynamics_FIN,aes(x=bin_num,y=AGcwood_kgCm2_med)) + 
+plot_regrowth_bench <- ggplot(benchmark_regrowth_FIN,aes(x=bin_num,y=AGcwood_kgCm2_med)) + 
   geom_errorbar(aes(ymin=AGcwood_kgCm2_10, ymax=AGcwood_kgCm2_90), width=.2, col="blue") + 
   geom_point(col="blue") + geom_hline(yintercept=10, col="grey") +
   scale_x_continuous(lim=c(0,210)) + scale_y_continuous(lim=c(0,18)) + 
   theme_classic() + ggtitle("Benchmark target")
 plot_regrowth_bench
 
+BiomeE_P0_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_P0_FIN_aCO2_annual_tile.csv")
 plot_regrowth_out <- BiomeE_P0_FIN_aCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_P0_FIN_aCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+SapwoodC+WoodC) %>%
-  select(year, AGB)  %>%
+  mutate(year = 1:450, AGW = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGW)  %>%
   ggplot() + 
-  geom_line(aes(x = year, y = AGB)) + geom_hline(yintercept=10, col="grey") +
+  geom_line(aes(x = year, y = AGW)) + geom_hline(yintercept=10, col="grey") +
   scale_x_continuous(lim=c(31,100)) + scale_y_continuous(lim=c(0,18)) +
   theme_classic() + ggtitle("Model output")
 plot_regrowth_out
@@ -43,12 +46,13 @@ plot_biomass_bench <- ggplot(benchmark_biomass_FIN,aes(x=Year,y=AGB_kgCm2)) +
   scale_y_continuous(lim=c(4,15)) + theme_classic() + ggtitle("Benchmark target")
 plot_biomass_bench
 
+BiomeE_P0_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_P0_FIN_aCO2_annual_tile.csv")
 plot_biomass_out <- BiomeE_P0_FIN_aCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_P0_FIN_aCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = SapwoodC+WoodC) %>%
-  select(year, AGB)  %>%
+  mutate(year = 1:450, AGW = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGW)  %>%
   ggplot() + 
-  geom_line(aes(x = year, y = AGB)) + geom_hline(yintercept=10, col="grey") +
+  geom_line(aes(x = year, y = AGW)) + geom_hline(yintercept=10, col="grey") +
   scale_x_continuous(lim=c(200,450)) + scale_y_continuous(lim=c(4,15)) + 
   theme_classic() + ggtitle("Model output")
 plot_biomass_out
@@ -66,6 +70,7 @@ plot_stems_bench <- ggplot(stand_structure_FIN,aes(x=dbh_classes_num,y=nstem_siz
   theme_classic() + ggtitle("Benchmark target")
 plot_stems_bench
 
+BiomeE_P0_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_P0_FIN_aCO2_annual_cohorts.csv")
 plot_stems_out <- BiomeE_P0_FIN_aCO2_annual_cohorts %>% 
   mutate(dbh_bins = cut(DBH, breaks = c(0,1,5,10,20,30,40,50,60,70,80,90,100,150,200))) %>%
   filter(year>510) %>%
@@ -91,12 +96,13 @@ plot_cwood_bench <- ggplot(stand_structure_FIN,aes(x=dbh_classes_num,y=AGB_size_
   theme_classic() + ggtitle("Benchmark target")
 plot_cwood_bench
 
+BiomeE_P0_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_P0_FIN_aCO2_annual_cohorts.csv")
 plot_cwood_out <- BiomeE_P0_FIN_aCO2_annual_cohorts %>% 
   mutate(dbh_bins = cut(DBH, breaks = c(0,1,5,10,20,30,40,50,60,70,80,90,100,150,200))) %>%
   filter(year>510) %>%
   mutate(year = year-510) %>%
   group_by(dbh_bins,year) %>%
-  summarise(cwood_size=sum((sapwC+woodC)*density/10000)) %>%
+  summarise(cwood_size=sum((sapwC+woodC)*0.75*density/10000)) %>%
   group_by(dbh_bins) %>%
   summarise(cwood_size=mean(cwood_size)) %>% mutate(dbh_class_num = c(1,5,10,20,30,40,50,60)) %>%
   ggplot() + 
@@ -110,31 +116,105 @@ plot_cwood_out + plot_cwood_bench
 # BIA ####
 
 ## Regrowth curves ####
+# AGcwood (aboveground woody carbon) 
 benchmark_regrowth <- read.csv("/home/laura/Documents/Collaborations/DBEN/DBEN_site_simulations_perspective_paper/Benchmarking_datasets/updated/benchmark_regrowth_curves.csv")
 benchmark_regrowth_BIA <- benchmark_regrowth %>% filter(Biome=="Temperate")
-ggplot(regrowth_dynamics_BIA,aes(x=bin_num,y=AGcwood_kgCm2_med)) + 
+plot_regrowth_bench <- ggplot(benchmark_regrowth_BIA,aes(x=bin_num,y=AGcwood_kgCm2_med)) + 
   geom_errorbar(aes(ymin=AGcwood_kgCm2_10, ymax=AGcwood_kgCm2_90), width=.2, col="blue") + 
-  geom_line(col="blue") + scale_y_continuous(limits = c(0,35)) + geom_hline(yintercept=10, col="grey")
+  geom_point(col="blue") + geom_hline(yintercept=10, col="grey") +
+  scale_x_continuous(lim=c(0,210)) + scale_y_continuous(lim=c(0,18)) + 
+  theme_classic() + ggtitle("Benchmark target")
+plot_regrowth_bench
+
+BiomeE_P0_BIA_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_P0_BIA_aCO2_annual_tile.csv")
+plot_regrowth_out <- BiomeE_P0_BIA_aCO2_annual_tile %>%
+  slice(510+1:nrow(BiomeE_P0_BIA_aCO2_annual_tile)) %>% 
+  mutate(year = 1:450, AGW = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGW)  %>%
+  ggplot() + 
+  geom_line(aes(x = year, y = AGW)) + geom_hline(yintercept=10, col="grey") +
+  scale_x_continuous(lim=c(31,100)) + scale_y_continuous(lim=c(0,18)) +
+  theme_classic() + ggtitle("Model output")
+plot_regrowth_out
+
+plot_regrowth_out + plot_regrowth_bench
 
 ## Biomass ####
+# AGcwood (aboveground woody carbon) 
 benchmark_biomass <- read.csv("/home/laura/Documents/Collaborations/DBEN/DBEN_site_simulations_perspective_paper/Benchmarking_datasets/updated/benchmark_eq_dynamics.csv")
 benchmark_biomass_BIA <- benchmark_biomass %>% filter(site=="BIA")
-ggplot(benchmark_biomass_BIA,aes(x=Year,y=AGB_kgCm2)) + 
+plot_biomass_bench <- ggplot(benchmark_biomass_BIA,aes(x=Year,y=AGB_kgCm2)) + 
   geom_errorbar(aes(ymin=AGB_lower_kgCm2, ymax=AGB_upper_kgCm2), width=.2, col="blue") + 
-  geom_point() + scale_y_continuous(limits = c(0,35)) + geom_hline(yintercept=10, col="grey")
+  geom_point(col="blue") + geom_hline(yintercept=10, col="grey") +
+  scale_y_continuous(lim=c(4,15)) + theme_classic() + ggtitle("Benchmark target")
+plot_biomass_bench
+
+BiomeE_P0_BIA_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_P0_BIA_aCO2_annual_tile.csv")
+plot_biomass_out <- BiomeE_P0_BIA_aCO2_annual_tile %>%
+  slice(510+1:nrow(BiomeE_P0_BIA_aCO2_annual_tile)) %>% 
+  mutate(year = 1:450, AGW = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGW)  %>%
+  ggplot() + 
+  geom_line(aes(x = year, y = AGW)) + geom_hline(yintercept=10, col="grey") +
+  scale_x_continuous(lim=c(200,450)) + scale_y_continuous(lim=c(4,15)) + 
+  theme_classic() + ggtitle("Model output")
+plot_biomass_out
+
+plot_biomass_out + plot_biomass_bench
 
 ## Stand structure ####
 stand_structure <- read.csv("/home/laura/Documents/Collaborations/DBEN/DBEN_site_simulations_perspective_paper/Benchmarking_datasets/updated/benchmark_stand_structure.csv")
 stand_structure_BIA <- stand_structure %>% filter(site=="BIA")
-ggplot(stand_structure_BIA,aes(x=dbh_classes_num,y=nstem_size_ha.1)) + 
+### N stems size ####
+plot_stems_bench <- ggplot(stand_structure_BIA,aes(x=dbh_classes_num,y=nstem_size_ha.1)) + 
   geom_errorbar(aes(ymin=nstem_size_lower_ha.1, ymax=nstem_size_upper_ha.1), width=.2, col="blue") + 
-  geom_point() + scale_y_continuous(limits = c(0,600)) 
-ggplot(stand_structure_BIA,aes(x=dbh_classes_num,y=log(nstem_size_ha.1))) + 
-  geom_errorbar(aes(ymin=log(nstem_size_lower_ha.1), ymax=log(nstem_size_upper_ha.1)), width=.2, col="blue") + 
-  geom_point() + scale_y_continuous(limits = c(0,10))
-ggplot(stand_structure_BIA,aes(x=dbh_classes_num,y=AGB_size_kgCm.2)) + 
+  geom_point(col="blue") + scale_x_continuous(lim=c(0,100),breaks = seq(0,100,10)) +
+  scale_y_continuous(lim=c(0,750)) +
+  theme_classic() + ggtitle("Benchmark target")
+plot_stems_bench
+
+BiomeE_P0_BIA_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_P0_BIA_aCO2_annual_cohorts.csv")
+plot_stems_out <- BiomeE_P0_BIA_aCO2_annual_cohorts %>% 
+  mutate(dbh_bins = cut(DBH, breaks = c(0,1,5,10,20,30,40,50,60,70,80,90,100,150,200))) %>%
+  filter(year>510) %>%
+  mutate(year = year-510) %>%
+  group_by(dbh_bins,year) %>%
+  summarise(nstem_size=sum(density)) %>%
+  group_by(dbh_bins) %>%
+  summarise(nstem_size=mean(nstem_size)) %>% mutate(dbh_class_num = c(1,5,10,20,30,40,50,60,70,80,90)) %>%
+  ggplot() + 
+  geom_point(aes(x = dbh_class_num, y = nstem_size)) + 
+  scale_x_continuous(lim=c(0,60),breaks = seq(0,60,10)) +
+  scale_y_continuous(lim=c(0,750)) + 
+  theme_classic() + ggtitle("Model output")
+plot_stems_out
+
+plot_stems_out + plot_stems_bench
+
+### AGcwood size ####
+# AGcwood (aboveground woody carbon) 
+plot_cwood_bench <- ggplot(stand_structure_BIA,aes(x=dbh_classes_num,y=AGB_size_kgCm.2)) + 
   geom_errorbar(aes(ymin=AGB_size_lower_kgCm.2, ymax=AGB_size_upper_kgCm.2), width=.2, col="blue") + 
-  geom_point() + scale_y_continuous(limits = c(0,6.5)) 
+  geom_point(col="blue") + scale_y_continuous(limits = c(0,6.5)) + 
+  theme_classic() + ggtitle("Benchmark target")
+plot_cwood_bench
+
+BiomeE_P0_BIA_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_P0_BIA_aCO2_annual_cohorts.csv")
+plot_cwood_out <- BiomeE_P0_BIA_aCO2_annual_cohorts %>% 
+  mutate(dbh_bins = cut(DBH, breaks = c(0,1,5,10,20,30,40,50,60,70,80,90,100,150,200))) %>%
+  filter(year>510) %>%
+  mutate(year = year-510) %>%
+  group_by(dbh_bins,year) %>%
+  summarise(cwood_size=sum((sapwC+woodC)*0.75*density/10000)) %>%
+  group_by(dbh_bins) %>%
+  summarise(cwood_size=mean(cwood_size)) %>% mutate(dbh_class_num = c(1,5,10,20,30,40,50,60,70,80,90)) %>%
+  ggplot() + 
+  geom_point(aes(x = dbh_class_num, y = cwood_size)) + 
+  scale_y_continuous(limits = c(0,6.5)) + 
+  theme_classic() + ggtitle("Model output")
+plot_cwood_out
+
+plot_cwood_out + plot_cwood_bench
 
 # BCI ####
 

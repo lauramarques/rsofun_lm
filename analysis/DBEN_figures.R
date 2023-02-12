@@ -15,27 +15,84 @@ library(patchwork)
 # Outputs ####
 
 # BiomeE_P0_FIN_aCO2 (412 ppm) ####
-BiomeE_P0_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/BiomeE_P0_FIN_aCO2_annual_tile.csv")
-BiomeE_P0_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/BiomeE_P0_FIN_aCO2_annual_cohorts.csv")
+BiomeE_P0_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_P0_FIN_aCO2_annual_tile.csv")
+BiomeE_P0_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_P0_FIN_aCO2_annual_cohorts.csv")
 
 # BiomeE_PS_FIN_aCO2 (412 ppm) ####
-BiomeE_PS1_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS1_FIN_aCO2_annual_tile.csv")
-BiomeE_PS1_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS1_FIN_aCO2_annual_cohorts.csv")
+BiomeE_PS1_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS1_FIN_aCO2_annual_tile.csv")
+BiomeE_PS1_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS1_FIN_aCO2_annual_cohorts.csv")
 
-BiomeE_PS2_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS2_FIN_aCO2_annual_tile.csv")
-BiomeE_PS2_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS2_FIN_aCO2_annual_cohorts.csv")
+BiomeE_PS2_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS2_FIN_aCO2_annual_tile.csv")
+BiomeE_PS2_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS2_FIN_aCO2_annual_cohorts.csv")
 
-BiomeE_PS3_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS3_FIN_aCO2_annual_tile.csv")
-BiomeE_PS3_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS3_FIN_aCO2_annual_cohorts.csv")
+BiomeE_PS3_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS3_FIN_aCO2_annual_tile.csv")
+BiomeE_PS3_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS3_FIN_aCO2_annual_cohorts.csv")
 
-BiomeE_PS4_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS4_FIN_aCO2_annual_tile.csv")
-BiomeE_PS4_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS4_FIN_aCO2_annual_cohorts.csv")
+BiomeE_PS4_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS4_FIN_aCO2_annual_tile.csv")
+BiomeE_PS4_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS4_FIN_aCO2_annual_cohorts.csv")
 
-BiomeE_PS5_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS5_FIN_aCO2_annual_tile.csv")
-BiomeE_PS5_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS5_FIN_aCO2_annual_cohorts.csv")
+BiomeE_PS5_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS5_FIN_aCO2_annual_tile.csv")
+BiomeE_PS5_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS5_FIN_aCO2_annual_cohorts.csv")
 
-BiomeE_PS6_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS6_FIN_aCO2_annual_tile.csv")
-BiomeE_PS6_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/BiomeE_PS6_FIN_aCO2_annual_cohorts.csv")
+BiomeE_PS6_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS6_FIN_aCO2_annual_tile.csv")
+BiomeE_PS6_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS6_FIN_aCO2_annual_cohorts.csv")
+
+# Random BiomeE_P0_FIN_aCO2 (412 ppm) ####
+r_BiomeE_P0_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod_pre/BiomeE_P0_FIN_aCO2_annual_tile.csv")
+r_BiomeE_P0_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod_pre/BiomeE_P0_FIN_aCO2_annual_cohorts.csv")
+
+# RandomBiomeE_PS_FIN_aCO2 (412 ppm) ####
+r_BiomeE_PS1_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod_pre/BiomeE_PS1_FIN_aCO2_annual_tile.csv")
+r_BiomeE_PS1_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod_pre/BiomeE_PS1_FIN_aCO2_annual_cohorts.csv")
+
+r_BiomeE_PS2_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod_pre/BiomeE_PS2_FIN_aCO2_annual_tile.csv")
+r_BiomeE_PS2_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod_pre/BiomeE_PS2_FIN_aCO2_annual_cohorts.csv")
+
+r_BiomeE_PS3_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod_pre/BiomeE_PS3_FIN_aCO2_annual_tile.csv")
+r_BiomeE_PS3_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod_pre/BiomeE_PS3_FIN_aCO2_annual_cohorts.csv")
+
+r_BiomeE_PS4_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod_pre/BiomeE_PS4_FIN_aCO2_annual_tile.csv")
+r_BiomeE_PS4_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod_pre/BiomeE_PS4_FIN_aCO2_annual_cohorts.csv")
+
+r_BiomeE_PS5_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod_pre/BiomeE_PS5_FIN_aCO2_annual_tile.csv")
+r_BiomeE_PS5_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod_pre/BiomeE_PS5_FIN_aCO2_annual_cohorts.csv")
+
+r_BiomeE_PS6_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod_pre/BiomeE_PS6_FIN_aCO2_annual_tile.csv")
+r_BiomeE_PS6_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod_pre/BiomeE_PS6_FIN_aCO2_annual_cohorts.csv")
+
+figBio_P0 <- BiomeE_P0_FIN_aCO2_annual_tile %>% #filter(year>510) %>%
+  slice(510+1:nrow(BiomeE_P0_FIN_aCO2_annual_tile)) %>% 
+  mutate(year = 1:450) %>%
+  ggplot() + 
+  geom_line(aes(x=year, y=plantC),col="#377EB8") + 
+  labs(x = "year", y = expression(paste("Plant C (kg C ", m^-2, ") "))) + 
+  #theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_text(size = 10)) 
+  theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_blank()) 
+figBio_P0
+
+figBA_P0 <- BiomeE_P0_FIN_aCO2_annual_cohorts %>% 
+  mutate(PFT=as.factor(PFT)) %>%
+  group_by(PFT,year) %>%
+  #summarise(BA=sum(dbh*dbh*pi/4*density/10000)) %>%
+  summarise(BA=sum(BA*density)) %>% 
+  filter(year>510) %>%
+  mutate(year = year-510) %>%
+  ggplot() + 
+  geom_line(aes(x = year, y = BA,col=PFT)) +
+  labs(x = "year", y = expression(paste("Basal area (", m^-2, " ", ha^-1, ") "))) + 
+  #theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_text(size = 10)) +
+  theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_blank()) +
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
+figBA_P0
+
+figure_freq <- figBio_P0 + figBA_P0 + figBio_PS1 + figBA_PS1 + figBio_PS2 + figBA_PS2 +
+  figBio_PS3 + figBA_PS3 +  figBio_PS4 + figBA_PS4 +  figBio_PS5 + figBA_PS5 +
+  figBio_PS6 + figBA_PS6 +
+  plot_layout(ncol = 2) + 
+  plot_layout(guides = "collect") & theme(legend.position = 'bottom')
+figure_freq
+ggsave("~/rsofun/data/figures/figure_freq.png", width = 6, height = 9, dpi=300)
+
 
 #RColorBrewer::brewer.pal(8, "Set1")
 
@@ -283,7 +340,8 @@ figWBgrowth
 figBAgrowth <- BiomeE_P0_FIN_aCO2_annual_cohorts %>% 
   mutate(PFT=as.factor(PFT)) %>%
   group_by(PFT,year) %>%
-  summarise(BAgrowth=sum(dBA*density)) %>% 
+  summarise(BAgrowth=sum(((DBH+dDBH)**2*pi/4-DBH**2*pi/4)*density/10000)) %>%
+  #summarise(BAgrowth=sum(dBA*density)) %>% 
   filter(year>510) %>%
   mutate(year = year-510) %>%
   ggplot() + 
