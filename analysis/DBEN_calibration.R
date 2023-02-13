@@ -216,6 +216,12 @@ plot_cwood_out
 
 plot_cwood_out + plot_cwood_bench
 
+plot_regrowth_out + plot_regrowth_bench + plot_biomass_out + plot_biomass_bench +
+  plot_cwood_out + plot_cwood_bench + plot_stems_out + plot_stems_bench +
+  plot_layout(ncol = 2) + 
+  plot_layout(guides = "collect") & theme(legend.position = 'bottom')
+ggsave("~/rsofun/data/figures/BiomeEP_P0_BIA_412ppm_Calibration.pdf", width = 6, height = 8, dpi=300)
+
 # BCI ####
 
 ## Regrowth curves ####

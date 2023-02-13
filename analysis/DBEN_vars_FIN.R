@@ -146,7 +146,7 @@ nc_close(cwood_ncout)
 # Dimensions: sizeclass, time
 # cohort output
 cwood_size <- BiomeE_P0_FIN_aCO2_annual_cohorts %>% 
-  mutate(dbh_bins = cut(DBH, breaks = c(0,1,5,10,20,30,40,50,60,70,80,90,100,150,200))) %>%
+  mutate(dbh_bins = cut(DBH, breaks = c(0,1,5,10,15,20,30,40,50,60,70,80,90,100,150,200),right=F)) %>%
   filter(year>510) %>%
   mutate(year = year-510) %>%
   group_by(dbh_bins,year) %>%
@@ -159,7 +159,7 @@ cwood_size <- BiomeE_P0_FIN_aCO2_annual_cohorts %>%
 # Dimensions: sizeclass, time
 # cohort output
 nstem_size <- BiomeE_P0_FIN_aCO2_annual_cohorts %>% 
-  mutate(dbh_bins = cut(DBH, breaks = c(0,1,5,10,20,30,40,50,60,70,80,90,100,150,200))) %>%
+  mutate(dbh_bins = cut(DBH, breaks = c(0,1,5,10,15,20,30,40,50,60,70,80,90,100,150,200),right=F)) %>%
   filter(year>510) %>%
   mutate(year = year-510) %>%
   group_by(dbh_bins,year) %>%

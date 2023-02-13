@@ -198,7 +198,7 @@ module datatypes
     real    :: n_deadtrees        = 0.0
     real    :: c_deadtrees        = 0.0
     real    :: m_turnover         = 0.0
-    real    :: deathratevalue
+    real    :: deathratevalue     = 0.0 ! xxx no value!
 
     !===== Nitrogen model related parameters
     real    :: NSNmax             = 0.0
@@ -795,8 +795,8 @@ contains
       cc%BA_ys        = cc%BA
       cc%Vol_ys       = cc%Volume
       cc%ABG_ys       = cc%psapw%c%c12 + cc%pwood%c%c12
-      ! cc%n_deadtrees  = 0.0
-      ! cc%c_deadtrees  = 0.0
+      !cc%n_deadtrees  = 0.0 
+      !cc%c_deadtrees  = 0.0 
       cc%m_turnover   = 0.0
     enddo
   
@@ -1211,7 +1211,7 @@ contains
       out_annual_cohorts(i)%Rauto       = cc%annualResp
       out_annual_cohorts(i)%Nupt        = cc%annualNup * 1000
       out_annual_cohorts(i)%Nfix        = cc%annualfixedN * 1000
-      out_annual_cohorts(i)%n_deadtrees = cc%n_deadtrees
+      out_annual_cohorts(i)%n_deadtrees = cc%n_deadtrees   ! dead trees/m2
       out_annual_cohorts(i)%c_deadtrees = cc%c_deadtrees
       out_annual_cohorts(i)%deathrate   = cc%deathratevalue
       ! endif
@@ -1299,7 +1299,7 @@ contains
     out_annual_tile%MaxDBH          = vegn%MaxDBH
     out_annual_tile%NPPL            = vegn%NPPL
     out_annual_tile%NPPW            = vegn%NPPW
-    out_annual_tile%n_deadtrees     = vegn%n_deadtrees
+    out_annual_tile%n_deadtrees     = vegn%n_deadtrees ! dead trees/m2
     out_annual_tile%c_deadtrees     = vegn%c_deadtrees
     out_annual_tile%m_turnover      = vegn%m_turnover
     out_annual_tile%c_turnover_time = vegn%pwood%c%c12 / vegn%NPPW

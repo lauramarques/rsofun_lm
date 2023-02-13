@@ -63,7 +63,7 @@ params_tile <- tibble(
   f_N_add      = 0.02,   # re-fill of N for sapwood
   # add calibratable params
   tf_base        = 1,
-  par_mort       = 0.3,    # param_dbh=1 param_csv=1 param_gr=1 CAI_MAX=2
+  par_mort       = 0.11,    # param_dbh=1 param_csv=1 param_gr=1 CAI_MAX=2
   par_mort_under = 1
 )
 

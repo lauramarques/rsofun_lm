@@ -257,15 +257,13 @@ g3 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   theme_classic()+labs(x = "Year", y = "CrownArea") + 
   scale_colour_discrete(labels = c("Grass","Broadleaf1","Broadleaf2","Needleleaf"))
 
-#print(g1/g2)
-
 print(g1/g2/g3)
 
-out_sc1$data[[1]]$output_annual_tile %>%
+g4 <- out_sc1$data[[1]]$output_annual_tile %>%
   ggplot() +
   geom_line(aes(x = year, y = (SapwoodC+WoodC)*0.75)) +
   theme_classic()+labs(x = "Year", y = "AGW") + geom_hline(yintercept=10, col="grey")
-
+g4
 
 ## Outputs ####
 ### P0 ####
@@ -282,35 +280,35 @@ write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/412p
 write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_PS1_BIA_aCO2_daily_cohorts.csv")
 write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS1_BIA_aCO2_hourly_tile.csv")
 
-### PS-2 (0.02 or nfrequency=50) ####
+### PS-2 (0.02 or nfrequency=75) ####
 write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS2_BIA_aCO2_annual_tile.csv")
 write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_PS2_BIA_aCO2_annual_cohorts.csv")
 write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS2_BIA_aCO2_daily_tile.csv")
 write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_PS2_BIA_aCO2_daily_cohorts.csv")
 write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS2_BIA_aCO2_hourly_tile.csv")
 
-### PS-3 (0.04 or nfrequency=25) ####
+### PS-3 (0.04 or nfrequency=50) ####
 write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS3_BIA_aCO2_annual_tile.csv")
 write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_PS3_BIA_aCO2_annual_cohorts.csv")
 write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS3_BIA_aCO2_daily_tile.csv")
 write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_PS3_BIA_aCO2_daily_cohorts.csv")
 write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS3_BIA_aCO2_hourly_tile.csv")
 
-### PS-4 (0.08 or nfrequency=12.5) ####
+### PS-4 (0.08 or nfrequency=25) ####
 write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS4_BIA_aCO2_annual_tile.csv")
 write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_PS4_BIA_aCO2_annual_cohorts.csv")
 write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS4_BIA_aCO2_daily_tile.csv")
 write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_PS4_BIA_aCO2_daily_cohorts.csv")
 write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS4_BIA_aCO2_hourly_tile.csv")
 
-### PS-5 (0.20 or nfrequency=5) ####
+### PS-5 (0.20 or nfrequency=15) ####
 write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS5_BIA_aCO2_annual_tile.csv")
 write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_PS5_BIA_aCO2_annual_cohorts.csv")
 write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS5_BIA_aCO2_daily_tile.csv")
 write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_PS5_BIA_aCO2_daily_cohorts.csv")
 write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS5_BIA_aCO2_hourly_tile.csv")
 
-### PS-6 (0.40 or nfrequency=2.5) ####
+### PS-6 (0.40 or nfrequency=10) ####
 write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS6_BIA_aCO2_annual_tile.csv")
 write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/412ppm/BiomeE_PS6_BIA_aCO2_annual_cohorts.csv")
 write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/412ppm/BiomeE_PS6_BIA_aCO2_daily_tile.csv")
@@ -382,7 +380,7 @@ params_tile <- tibble(
   f_N_add      = 0.02,   # re-fill of N for sapwood
   # add calibratable params
   tf_base        = 1,
-  par_mort       = 0.3,    # param_dbh=1 param_csv=1 param_gr=1 CAI_MAX=2
+  par_mort       = 0.15,    # param_dbh=1 param_csv=1 param_gr=1 CAI_MAX=2
   par_mort_under = 1
 )
 
@@ -399,7 +397,7 @@ params_tile <- tibble(
 params_species <- tibble(
   # species         0 1 2 3 4    ...
   lifeform      = c(9999,0,1,1,1,rep(1,11)),         # 0 for grasses; 1 for trees
-  phenotype     = c(9999,0,0,1,1,rep(1,11)),         # 0 for Deciduous; 1 for Evergreen
+  phenotype     = c(9999,0,0,0,1,rep(1,11)),         # 0 for Deciduous; 1 for Evergreen
   pt            = rep(0,16),                      # 0 for C3; 1 for C4
   # Root parameters
   alpha_FR      = rep(1.2,16),                    # Fine root turnover rate yr-1
@@ -418,21 +416,21 @@ params_species <- tibble(
   gamma_LN      = rep(70.5 ,16),                 # kgC kgN-1 yr-1
   gamma_SW      = rep(0.08,16),                  # kgC m-2 Acambium yr-1
   gamma_FR      = rep(12.0,16),                  # kgC kgN-1 yr-1 
-  tc_crit       = c(9999,10,12,0,0,rep(0,11)),    #rep(283.16,16),                # OFF degree C, converted to K in spdata
-  tc_crit_on    = c(9999,8,10,0,0,rep(15,11)), #rep(280.16,16),                # ON degree C, converted to K in spdata
-  gdd_crit      = c(9999,50,60,0,0,rep(0,11)),  #rep(280.0,16),   
+  tc_crit       = c(9999,12,15,15,0,rep(0,11)),    #rep(283.16,16),                # OFF degree C, converted to K in spdata
+  tc_crit_on    = c(9999,10,12,12,0,rep(15,11)), #rep(280.16,16),                # ON degree C, converted to K in spdata
+  gdd_crit      = c(9999,80,120,120,0,rep(0,11)),  #rep(280.0,16),   
   seedlingsize  = c(9999,0.01,0.05,0.05,0.05,rep(0.05,11)),    # initial size of seedlings #In Ensheng BiomeE: 0.05
-  LNbase         = c(9999,1.0E-3,0.8E-3,0.5E-3,0.5E-3,rep(0.5E-3,11)),  # kgN m-2 leaf, Vmax = 0.03125*LNbase !rep(0.8E-3,16), 
-  lAImax         = c(9999,2.0,3.0,3.5,3.5,rep(3.5,11)),  # maximum crown LAI !rep(3.5,16),
+  LNbase         = c(9999,1.0E-3,0.8E-3,0.7E-3,0.4E-3,rep(0.5E-3,11)),  # kgN m-2 leaf, Vmax = 0.03125*LNbase !rep(0.8E-3,16), 
+  lAImax         = c(9999,2.0,3.0,3.0,3.5,rep(3.5,11)),  # maximum crown LAI !rep(3.5,16),
   Nfixrate0     = rep(0,16),                      # 0.03 kgN kgRootC-1 yr-1
   NfixCost0     = rep(0,16),                     # 12, 24 gC/gN
   phiCSA        = rep(0.25E-4,16),                # ratio of sapwood area to leaf area
-  mortrate_d_c  = c(9999,0.05,0.025,0.02,0.02,rep(0.02,11)),  # canopy tree mortality rate, year-1 !rep(0.01,16),
+  mortrate_d_c  = c(9999,0.05,0.03,0.02,0.01,rep(0.02,11)),  # canopy tree mortality rate, year-1 !rep(0.01,16),
   mortrate_d_u  = rep(0.075,16),                  # understory tree mortality rate, year-1
   maturalage    = c(9999,0,5,5,5,rep(5,11)),        # the age that can reproduce
   fNSNmax       = rep(5,16),                      # multiplier for NSNmax as sum of potential bl and br
-  LMA           = c(9999,0.025,0.025,0.14,0.14,rep(0.14,11)),  # Leaf mass per unit area. In Ensheng rep(0.035,16)
-  rho_wood      = c(9999,120,350,300,300,rep(300,11)),         # wood density In Ensheng rep(300,16),
+  LMA           = c(9999,0.025,0.025,0.025,0.14,rep(0.14,11)),  # Leaf mass per unit area. In Ensheng rep(0.035,16)
+  rho_wood      = c(9999,120,350,350,300,rep(300,11)),         # wood density In Ensheng rep(300,16),
   alphaBM       = rep(5200,16),                   
   thetaBM       = rep(2.5,16), 
   # add calibratable params
@@ -503,7 +501,7 @@ df_harv <- tibble(year = seq(1:450), harv = c(rep(0,200),0,rep(0,249)))
 
 #df_harv %>%  ggplot(aes(year, harv)) + geom_line() + ylim(0, 1)
 
-## Define forcing data ####
+## DeBIAe forcing data ####
 biomee_forcing_BIA <- read.csv("~/Documents/Collaborations/DBEN/cru_jra_1901-2020/biomee_forcing_BIA.csv")
 biomee_forcing_BIA
 df_forcing <- biomee_forcing_BIA
@@ -567,18 +565,22 @@ g2 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   ggplot() +
   geom_line(aes(x = year, y = sumBA,col=PFT)) +
   theme_classic()+labs(x = "Year", y = "BA") + 
-  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
+  scale_colour_discrete(labels = c("Grass","Broadleaf1","Broadleaf2","Needleleaf"))
 
 g3 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   summarise(CrownArea=sum(Acrown*density/10000)) %>% mutate(PFT=as.factor(PFT)) %>%
   ggplot() +
   geom_line(aes(x = year, y = CrownArea,col=PFT)) +
   theme_classic()+labs(x = "Year", y = "CrownArea") + 
-  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
-
-#print(g1/g2)
+  scale_colour_discrete(labels = c("Grass","Broadleaf1","Broadleaf2","Needleleaf"))
 
 print(g1/g2/g3)
+
+g4 <- out_sc1$data[[1]]$output_annual_tile %>%
+  ggplot() +
+  geom_line(aes(x = year, y = (SapwoodC+WoodC)*0.75)) +
+  theme_classic()+labs(x = "Year", y = "AGW") + geom_hline(yintercept=10, col="grey")
+g4
 
 ## Outputs ####
 ### P0 ####
@@ -595,38 +597,37 @@ write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/562p
 write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_PS1_BIA_eCO2_daily_cohorts.csv")
 write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS1_BIA_eCO2_hourly_tile.csv")
 
-### PS-2 (0.02 or nfrequency=50) ####
+### PS-2 (0.02 or nfrequency=75) ####
 write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS2_BIA_eCO2_annual_tile.csv")
 write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_PS2_BIA_eCO2_annual_cohorts.csv")
 write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS2_BIA_eCO2_daily_tile.csv")
 write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_PS2_BIA_eCO2_daily_cohorts.csv")
 write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS2_BIA_eCO2_hourly_tile.csv")
 
-### PS-3 (0.04 or nfrequency=25) ####
+### PS-3 (0.04 or nfrequency=50) ####
 write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS3_BIA_eCO2_annual_tile.csv")
 write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_PS3_BIA_eCO2_annual_cohorts.csv")
 write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS3_BIA_eCO2_daily_tile.csv")
 write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_PS3_BIA_eCO2_daily_cohorts.csv")
 write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS3_BIA_eCO2_hourly_tile.csv")
 
-### PS-4 (0.08 or nfrequency=12.5) ####
+### PS-4 (0.08 or nfrequency=25) ####
 write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS4_BIA_eCO2_annual_tile.csv")
 write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_PS4_BIA_eCO2_annual_cohorts.csv")
 write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS4_BIA_eCO2_daily_tile.csv")
 write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_PS4_BIA_eCO2_daily_cohorts.csv")
 write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS4_BIA_eCO2_hourly_tile.csv")
 
-### PS-5 (0.20 or nfrequency=5) ####
+### PS-5 (0.20 or nfrequency=15) ####
 write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS5_BIA_aCO2_annual_tile.csv")
 write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_PS5_BIA_aCO2_annual_cohorts.csv")
 write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS5_BIA_aCO2_daily_tile.csv")
 write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_PS5_BIA_aCO2_daily_cohorts.csv")
 write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS5_BIA_aCO2_hourly_tile.csv")
 
-### PS-6 (0.40 or nfrequency=2.5) ####
+### PS-6 (0.40 or nfrequency=10) ####
 write.csv(out_sc1$data[[1]]$output_annual_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS6_BIA_eCO2_annual_tile.csv")
 write.csv(out_sc1$data[[1]]$output_annual_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_PS6_BIA_eCO2_annual_cohorts.csv")
 write.csv(out_sc1$data[[1]]$output_daily_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS6_BIA_eCO2_daily_tile.csv")
 write.csv(out_sc1$data[[1]]$output_daily_cohorts,"~/rsofun/data/outputs_mod/562ppm/BiomeE_PS6_BIA_eCO2_daily_cohorts.csv")
 write.csv(out_sc1$data[[1]]$output_hourly_tile,   "~/rsofun/data/outputs_mod/562ppm/BiomeE_PS6_BIA_eCO2_hourly_tile.csv")
-
