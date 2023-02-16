@@ -495,6 +495,7 @@ contains
     ! local variables
     type(cohort_type), pointer :: cc
     integer :: i
+    integer :: Days_thld = 60 ! minimum days of the growing or non-growing season
     integer :: GrassMaxL = 3   ! Maximal layers that grasses can survive
     real    :: ccNSC, ccNSN
     logical :: cc_firstday ! = .false.
@@ -523,10 +524,11 @@ contains
       !  vegn%tc_pheno > sp%tc_crit_on) .and. &
       !  (sp%lifeform == 1 .OR.(sp%lifeform == 0 .and. cc%layer<=3))
 
-      TURN_ON_life = ((sp%phenotype==0 .and. cc%status/=LEAF_ON)         &
-        .and.(cc%gdd>sp%gdd_crit .and. vegn%tc_pheno>sp%tc_crit_on) &  ! Thermal conditions
-        !.and.(vegn%thetaS>sp%betaON .and. cc%Ndm>Days_thld)         &  ! Water
-        .and.(.NOT.(sp%lifeform==0 .and. cc%layer > GrassMaxL))     &  ! If grasses, layer< 3
+      TURN_ON_life = ((sp%phenotype==0 .and. cc%status/=LEAF_ON)     &
+        .and.(cc%gdd>sp%gdd_crit .and. vegn%tc_pheno>sp%tc_crit_on)  &  ! Thermal conditions
+       !.and.(vegn%thetaS>sp%betaON .and. cc%Ndm>Days_thld)         &  ! Water
+        .and.(vegn%thetaS>sp%betaON)                                 &  ! Water
+        .and.(.NOT.(sp%lifeform==0 .and. cc%layer > GrassMaxL))      &  ! If grasses, layer< 3
          )
 
       cc_firstday = .false.
@@ -577,13 +579,11 @@ contains
 
     ! OFF of a growing season
     cohortloop3: do i = 1,vegn%n_cohorts
-
       cc => vegn%cohorts(i)
       associate (sp => spdata(cc%species) )
-      TURN_OFF_life = (sp%phenotype  == 0 .and.     &
-      cc%status == LEAF_ON .and.     &
-      cc%gdd > sp%gdd_crit+600. .and. &
-      vegn%tc_pheno < sp%tc_crit)
+      TURN_OFF_life = (sp%phenotype  == 0 .and. cc%status == LEAF_ON) .and. &
+      ((cc%gdd > sp%gdd_crit+600. .and. vegn%tc_pheno < sp%tc_crit) .or. &
+        (vegn%thetaS < sp%betaOFF))
       end associate
 
       if (TURN_OFF_life) then

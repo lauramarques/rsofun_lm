@@ -121,8 +121,8 @@ module datatypes
     real    :: tc_crit                            ! K, for turning OFF a growth season
     real    :: tc_crit_on                         ! K, for turning ON a growth season
     real    :: gdd_crit                           ! K, critical value of GDD5 for turning ON growth season
-    real    :: betaON
-    real    :: betaOFF
+    real    :: betaON                             ! Critical soil moisture for PhenoON
+    real    :: betaOFF                            ! Critical soil moisture for PhenoOFF
 
     !===== Vital rates
     real    :: maturalage                         ! the age that can reproduce
@@ -150,6 +150,8 @@ module datatypes
     integer :: ccID       = 0.0          ! cohort ID
     integer :: species    = 0.0          ! vegetation species
     real    :: gdd        = 0.0          ! for phenology
+    integer :: Ngd        = 0            ! growing days
+    integer :: Ndm        = 0            ! dormant days
     integer :: status     = 0.0          ! growth status of plant: 1 for ON, 0 for OFF
     integer :: layer      = 1.0          ! the layer of this cohort (numbered from top, top layer=1)
     integer :: firstlayer = 0.0          ! 0 = never been in the first layer; 1 = at least one year in first layer
@@ -454,8 +456,8 @@ module datatypes
   ! real :: root_r(0:MSPECIES)           = 2.9E-4
   ! real :: root_zeta(0:MSPECIES)        = 0.29 
   ! real :: Kw_root(0:MSPECIES)          = 6.3E-8 * (1000000.0/18.0)*1.e-6 ! 3.5e-09 mol /(s m2 Mpa) 
-  ! !real :: rho_N_up0(0:MSPECIES)       = 0.5 ! fraction of mineral N per hour
-  ! !real :: N_roots0(0:MSPECIES)        = 0.3 ! kgC m-2
+  ! real :: rho_N_up0(0:MSPECIES)       = 0.5 ! fraction of mineral N per hour
+  ! real :: N_roots0(0:MSPECIES)        = 0.3 ! kgC m-2
   ! real :: leaf_size(0:MSPECIES)        = 0.04 
 
   !===== Photosynthesis parameters
@@ -466,29 +468,29 @@ module datatypes
   ! real :: m_cond(0:MSPECIES)= 7.0 
   ! real :: alpha_phot(0:MSPECIES)=  0.06 
   ! real :: gamma_L(0:MSPECIES)= 0.02 
-  ! real :: gamma_LN(0:MSPECIES)= 70.5 ! 25.0  ! kgC kgN-1 yr-1
-  ! real :: gamma_SW(0:MSPECIES)= 0.08 ! 5.0e-4 ! kgC m-2 Acambium yr-1
-  ! real :: gamma_FR(0:MSPECIES)= 12.0 ! 15 !kgC kgN-1 yr-1 ! 0.6: kgC kgN-1 yr-1
+  ! real :: gamma_LN(0:MSPECIES)= 70.5 ! kgC kgN-1 yr-1
+  ! real :: gamma_SW(0:MSPECIES)= 0.08  ! kgC m-2 Acambium yr-1
+  ! real :: gamma_FR(0:MSPECIES)= 12.0 !kgC kgN-1 yr-1 ! 0.6: kgC kgN-1 yr-1
   ! real :: tc_crit(0:MSPECIES)= 283.16 ! OFF
   ! real :: tc_crit_on(0:MSPECIES)= 280.16 ! ON
   ! real :: gdd_crit(0:MSPECIES)= 280.0 ! Simulations 280, 240, 200
-    real :: betaON(0:MSPECIES)  = 0.2  ! Critical soil moisture for phenology ON
-    real :: betaOFF(0:MSPECIES) = 0.1  ! Critical soil moisture for phenology OFF
+  ! real :: betaON(0:MSPECIES)  != 0.2  ! Critical soil moisture for phenology ON
+  ! real :: betaOFF(0:MSPECIES) != 0.1  ! Critical soil moisture for phenology OFF
 
   !===== Allometry parameters
-  real :: alphaHT(0:MSPECIES)      = 36.0
-  real :: thetaHT(0:MSPECIES)      = 0.5 
-  real :: alphaCA(0:MSPECIES)      = 150.0
-  real :: thetaCA(0:MSPECIES)      = 1.5
-  ! real :: alphaBM(0:MSPECIES)      = !In Ensheng BiomeE: 5200.0
+  real :: alphaHT(0:MSPECIES)        = 36.0
+  real :: thetaHT(0:MSPECIES)        = 0.5 
+  real :: alphaCA(0:MSPECIES)        = 150.0
+  real :: thetaCA(0:MSPECIES)        = 1.5
+  ! real :: alphaBM(0:MSPECIES)      = 5200.0 !In Ensheng BiomeE: 5200.0
   ! real :: thetaBM(0:MSPECIES)      = 2.36 ! Beech (2.36); Spruce (2.30); Fir (2.45) In Ensheng BiomeE: 2.5
 
   !===== Reproduction parameters
-  ! real :: maturalage(0:MSPECIES) = 5.0  ! year
-  real :: v_seed(0:MSPECIES)       = 0.1  ! fraction of allocation to wood+seeds
-  ! real :: seedlingsize(0:MSPECIES) = 0.05 ! kgC
-  real :: prob_g(0:MSPECIES)       = 1.0
-  real :: prob_e(0:MSPECIES)       = 1.0
+  ! real :: maturalage(0:MSPECIES)     = 5.0  ! year
+  ! real :: v_seed(0:MSPECIES)         = 0.1  ! fraction of allocation to wood+seeds
+  ! real :: seedlingsize(0:MSPECIES)   = 0.05 ! kgC
+  real :: prob_g(0:MSPECIES)           = 1.0
+  real :: prob_e(0:MSPECIES)           = 1.0
 
   !===== Mortality
   ! real :: mortrate_d_c(0:MSPECIES) = 0.01 ! yearly
@@ -594,11 +596,11 @@ contains
     ! spdata%rho_N_up0   = rho_N_up0
     ! spdata%N_roots0    = N_roots0
     spdata%leaf_size     = myinterface%params_species(:)%leaf_size
-    spdata%tc_crit       = myinterface%params_species(:)%tc_crit ! In celsius !+ 273.15
-    spdata%tc_crit_on    = myinterface%params_species(:)%tc_crit_on ! In celsius !+ 273.15
+    spdata%tc_crit       = myinterface%params_species(:)%tc_crit ! + 273.15 ! C to K
+    spdata%tc_crit_on    = myinterface%params_species(:)%tc_crit_on ! + 273.15 ! C to K
     spdata%gdd_crit      = myinterface%params_species(:)%gdd_crit
-    spdata%betaON        = betaON
-    spdata%betaOFF       = betaOFF
+    spdata%betaON        = myinterface%params_species(:)%betaON !betaON
+    spdata%betaOFF       = myinterface%params_species(:)%betaOFF !betaOFF
 
     ! Plant traits
     spdata%LMA           = myinterface%params_species(:)%LMA ! leaf mass per unit area, kg C/m2
@@ -612,7 +614,7 @@ contains
     spdata%alphaBM       = myinterface%params_species(:)%alphaBM
     spdata%thetaBM       = myinterface%params_species(:)%thetaBM
     spdata%maturalage    = myinterface%params_species(:)%maturalage
-    spdata%v_seed        = v_seed
+    spdata%v_seed        = myinterface%params_species(:)%v_seed
     spdata%seedlingsize  = myinterface%params_species(:)%seedlingsize
     spdata%prob_g        = prob_g
     spdata%prob_e        = prob_e

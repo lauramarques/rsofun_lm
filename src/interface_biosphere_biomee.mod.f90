@@ -57,7 +57,9 @@ module md_interface_biomee
     real    :: gamma_FR
     real    :: tc_crit
     real    :: tc_crit_on
-    real    :: gdd_crit
+    real    :: gdd_crit   
+    real    :: betaON
+    real    :: betaOFF 
     real    :: seedlingsize
     real    :: LNbase
     real    :: laimax
@@ -67,6 +69,7 @@ module md_interface_biomee
     real    :: mortrate_d_c
     real    :: mortrate_d_u
     real    :: maturalage
+    real    :: v_seed
     real    :: fNSNmax
     real    :: LMA       ! prescribed by sps
     real    :: rho_wood  ! prescribed by sps

@@ -1,8 +1,12 @@
 # load packages
 library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(patchwork)
 library(ncdf4)
 library(ncdf4.helpers)
 library(tidyverse)
+
 
 # Read example netCDF file ####
 
@@ -21,7 +25,8 @@ dunits <- ncatt_get(example_netcdf,"BA","units")
 fillvalue <- ncatt_get(example_netcdf,"BA","_FillValue")
 
 # open a netCDF file
-var1_netcdf <- nc_open("/home/laura/rsofun/data/outputs_mod/nc_files/412ppm/BIA/BiomeEP_BAgrowth_P0_BIA.nc")
+var1_netcdf <- nc_open("/home/laura/rsofun/data/outputs_mod/nc_files/412ppm/BIA/BiomeEP_BAgrowth_P0_BIA_412ppm.nc")
+var1_netcdf <- nc_open("/home/laura/rsofun/data/outputs_mod/nc_files/412ppm/BIA/BiomeEP_nbp_P0_BIA_412ppm.nc")
 var1_netcdf
 attributes(var1_netcdf$var)
 attributes(var1_netcdf$dim)
