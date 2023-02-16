@@ -84,21 +84,21 @@ figcveg <- BiomeE_P0_BCI_aCO2_annual_cohorts %>%
   scale_colour_discrete(labels = c("Grasses","Tilia cordata","Betula pendula","Picea abies"))
 figcveg
 
-## Aboveground biomass ####
-# AGB
+## Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-figAGB <- BiomeE_P0_BCI_aCO2_annual_tile %>%
+figAGcwood <- BiomeE_P0_BCI_aCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_P0_BCI_aCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB)  %>%
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood)  %>%
   ggplot() + 
-  geom_line(aes(x = year, y = AGB),col="#377EB8") +
-  labs(x = "year", y = expression(paste("Aboveground biomass (kg C ", m^-2, ") "))) + 
+  geom_line(aes(x = year, y = AGcwood),col="#377EB8") +
+  labs(x = "year", y = expression(paste("Aboveground woody biomass (kg C ", m^-2, ") "))) + 
   theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_text(size = 10))
-figAGB
+figAGcwood
 
 ## Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -492,21 +492,21 @@ figcveg <- BiomeE_P0_BCI_eCO2_annual_cohorts %>%
   scale_colour_discrete(labels = c("Grasses","Tilia cordata","Betula pendula","Picea abies"))
 figcveg
 
-## Aboveground biomass ####
-# AGB
+## Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-figAGB <- BiomeE_P0_BCI_eCO2_annual_tile %>%
+figAGcwood <- BiomeE_P0_BCI_eCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_P0_BCI_eCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB)  %>%
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood)  %>%
   ggplot() + 
-  geom_line(aes(x = year, y = AGB),col="#377EB8") +
-  labs(x = "year", y = expression(paste("Aboveground biomass (kg C ", m^-2, ") "))) + 
+  geom_line(aes(x = year, y = AGcwood),col="#377EB8") +
+  labs(x = "year", y = expression(paste("Aboveground woody biomass (kg C ", m^-2, ") "))) + 
   theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_text(size = 10))
-figAGB
+figAGcwood
 
 ## Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -896,21 +896,21 @@ figcveg <- BiomeE_PS1_BCI_aCO2_annual_cohorts %>%
   scale_colour_discrete(labels = c("Grasses","Tilia cordata","Betula pendula","Picea abies"))
 figcveg
 
-## Aboveground biomass ####
-# AGB
+## Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-figAGB <- BiomeE_PS1_BCI_aCO2_annual_tile %>%
+figAGcwood <- BiomeE_PS1_BCI_aCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS1_BCI_aCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB)  %>%
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood)  %>%
   ggplot() + 
-  geom_line(aes(x = year, y = AGB),col="#377EB8") +
-  labs(x = "year", y = expression(paste("Aboveground biomass (kg C ", m^-2, ") "))) + 
+  geom_line(aes(x = year, y = AGcwood),col="#377EB8") +
+  labs(x = "year", y = expression(paste("Aboveground woody biomass (kg C ", m^-2, ") "))) + 
   theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_text(size = 10))
-figAGB
+figAGcwood
 
 ## Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -1278,21 +1278,21 @@ figcveg <- BiomeE_PS2_BCI_aCO2_annual_cohorts %>%
   scale_colour_discrete(labels = c("Grasses","Tilia cordata","Betula pendula","Picea abies"))
 figcveg
 
-## Aboveground biomass ####
-# AGB
+## Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-figAGB <- BiomeE_PS2_BCI_aCO2_annual_tile %>%
+figAGcwood <- BiomeE_PS2_BCI_aCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS2_BCI_aCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB)  %>%
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood)  %>%
   ggplot() + 
-  geom_line(aes(x = year, y = AGB),col="#377EB8") +
-  labs(x = "year", y = expression(paste("Aboveground biomass (kg C ", m^-2, ") "))) + 
+  geom_line(aes(x = year, y = AGcwood),col="#377EB8") +
+  labs(x = "year", y = expression(paste("Aboveground woody biomass (kg C ", m^-2, ") "))) + 
   theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_text(size = 10))
-figAGB
+figAGcwood
 
 ## Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -1660,21 +1660,21 @@ figcveg <- BiomeE_PS3_BCI_aCO2_annual_cohorts %>%
   scale_colour_discrete(labels = c("Grasses","Tilia cordata","Betula pendula","Picea abies"))
 figcveg
 
-## Aboveground biomass ####
-# AGB
+## Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-figAGB <- BiomeE_PS3_BCI_aCO2_annual_tile %>%
+figAGcwood <- BiomeE_PS3_BCI_aCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS3_BCI_aCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB)  %>%
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood)  %>%
   ggplot() + 
-  geom_line(aes(x = year, y = AGB),col="#377EB8") +
-  labs(x = "year", y = expression(paste("Aboveground biomass (kg C ", m^-2, ") "))) + 
+  geom_line(aes(x = year, y = AGcwood),col="#377EB8") +
+  labs(x = "year", y = expression(paste("Aboveground woody biomass (kg C ", m^-2, ") "))) + 
   theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_text(size = 10))
-figAGB
+figAGcwood
 
 ## Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -2042,21 +2042,21 @@ figcveg <- BiomeE_PS4_BCI_aCO2_annual_cohorts %>%
   scale_colour_discrete(labels = c("Grasses","Tilia cordata","Betula pendula","Picea abies"))
 figcveg
 
-## Aboveground biomass ####
-# AGB
+## Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-figAGB <- BiomeE_PS4_BCI_aCO2_annual_tile %>%
+figAGcwood <- BiomeE_PS4_BCI_aCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS4_BCI_aCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB)  %>%
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood)  %>%
   ggplot() + 
-  geom_line(aes(x = year, y = AGB),col="#377EB8") +
-  labs(x = "year", y = expression(paste("Aboveground biomass (kg C ", m^-2, ") "))) + 
+  geom_line(aes(x = year, y = AGcwood),col="#377EB8") +
+  labs(x = "year", y = expression(paste("Aboveground woody biomass (kg C ", m^-2, ") "))) + 
   theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_text(size = 10))
-figAGB
+figAGcwood
 
 ## Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -2424,21 +2424,21 @@ figcveg <- BiomeE_PS5_BCI_aCO2_annual_cohorts %>%
   scale_colour_discrete(labels = c("Grasses","Tilia cordata","Betula pendula","Picea abies"))
 figcveg
 
-## Aboveground biomass ####
-# AGB
+## Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-figAGB <- BiomeE_PS5_BCI_aCO2_annual_tile %>%
+figAGcwood <- BiomeE_PS5_BCI_aCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS5_BCI_aCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB)  %>%
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood)  %>%
   ggplot() + 
-  geom_line(aes(x = year, y = AGB),col="#377EB8") +
-  labs(x = "year", y = expression(paste("Aboveground biomass (kg C ", m^-2, ") "))) + 
+  geom_line(aes(x = year, y = AGcwood),col="#377EB8") +
+  labs(x = "year", y = expression(paste("Aboveground woody biomass (kg C ", m^-2, ") "))) + 
   theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_text(size = 10))
-figAGB
+figAGcwood
 
 ## Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -2806,21 +2806,21 @@ figcveg <- BiomeE_PS6_BCI_aCO2_annual_cohorts %>%
   scale_colour_discrete(labels = c("Grasses","Tilia cordata","Betula pendula","Picea abies"))
 figcveg
 
-## Aboveground biomass ####
-# AGB
+## Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-figAGB <- BiomeE_PS6_BCI_aCO2_annual_tile %>%
+figAGcwood <- BiomeE_PS6_BCI_aCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS6_BCI_aCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB)  %>%
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood)  %>%
   ggplot() + 
-  geom_line(aes(x = year, y = AGB),col="#377EB8") +
-  labs(x = "year", y = expression(paste("Aboveground biomass (kg C ", m^-2, ") "))) + 
+  geom_line(aes(x = year, y = AGcwood),col="#377EB8") +
+  labs(x = "year", y = expression(paste("Aboveground woody biomass (kg C ", m^-2, ") "))) + 
   theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_text(size = 10))
-figAGB
+figAGcwood
 
 ## Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -3191,21 +3191,21 @@ figcveg <- BiomeE_PS1_BCI_eCO2_annual_cohorts %>%
   scale_colour_discrete(labels = c("Grasses","Tilia cordata","Betula pendula","Picea abies"))
 figcveg
 
-## Aboveground biomass ####
-# AGB
+## Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-figAGB <- BiomeE_PS1_BCI_eCO2_annual_tile %>%
+figAGcwood <- BiomeE_PS1_BCI_eCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS1_BCI_eCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB)  %>%
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood)  %>%
   ggplot() + 
-  geom_line(aes(x = year, y = AGB),col="#377EB8") +
-  labs(x = "year", y = expression(paste("Aboveground biomass (kg C ", m^-2, ") "))) + 
+  geom_line(aes(x = year, y = AGcwood),col="#377EB8") +
+  labs(x = "year", y = expression(paste("Aboveground woody biomass (kg C ", m^-2, ") "))) + 
   theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_text(size = 10))
-figAGB
+figAGcwood
 
 ## Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -3573,21 +3573,21 @@ figcveg <- BiomeE_PS2_BCI_eCO2_annual_cohorts %>%
   scale_colour_discrete(labels = c("Grasses","Tilia cordata","Betula pendula","Picea abies"))
 figcveg
 
-## Aboveground biomass ####
-# AGB
+## Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-figAGB <- BiomeE_PS2_BCI_eCO2_annual_tile %>%
+figAGcwood <- BiomeE_PS2_BCI_eCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS2_BCI_eCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB)  %>%
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood)  %>%
   ggplot() + 
-  geom_line(aes(x = year, y = AGB),col="#377EB8") +
-  labs(x = "year", y = expression(paste("Aboveground biomass (kg C ", m^-2, ") "))) + 
+  geom_line(aes(x = year, y = AGcwood),col="#377EB8") +
+  labs(x = "year", y = expression(paste("Aboveground woody biomass (kg C ", m^-2, ") "))) + 
   theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_text(size = 10))
-figAGB
+figAGcwood
 
 ## Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -3955,21 +3955,21 @@ figcveg <- BiomeE_PS3_BCI_eCO2_annual_cohorts %>%
   scale_colour_discrete(labels = c("Grasses","Tilia cordata","Betula pendula","Picea abies"))
 figcveg
 
-## Aboveground biomass ####
-# AGB
+## Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-figAGB <- BiomeE_PS3_BCI_eCO2_annual_tile %>%
+figAGcwood <- BiomeE_PS3_BCI_eCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS3_BCI_eCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB)  %>%
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood)  %>%
   ggplot() + 
-  geom_line(aes(x = year, y = AGB),col="#377EB8") +
-  labs(x = "year", y = expression(paste("Aboveground biomass (kg C ", m^-2, ") "))) + 
+  geom_line(aes(x = year, y = AGcwood),col="#377EB8") +
+  labs(x = "year", y = expression(paste("Aboveground woody biomass (kg C ", m^-2, ") "))) + 
   theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_text(size = 10))
-figAGB
+figAGcwood
 
 ## Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -4337,21 +4337,21 @@ figcveg <- BiomeE_PS4_BCI_eCO2_annual_cohorts %>%
   scale_colour_discrete(labels = c("Grasses","Tilia cordata","Betula pendula","Picea abies"))
 figcveg
 
-## Aboveground biomass ####
-# AGB
+## Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-figAGB <- BiomeE_PS4_BCI_eCO2_annual_tile %>%
+figAGcwood <- BiomeE_PS4_BCI_eCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS4_BCI_eCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB)  %>%
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood)  %>%
   ggplot() + 
-  geom_line(aes(x = year, y = AGB),col="#377EB8") +
-  labs(x = "year", y = expression(paste("Aboveground biomass (kg C ", m^-2, ") "))) + 
+  geom_line(aes(x = year, y = AGcwood),col="#377EB8") +
+  labs(x = "year", y = expression(paste("Aboveground woody biomass (kg C ", m^-2, ") "))) + 
   theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_text(size = 10))
-figAGB
+figAGcwood
 
 ## Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -4719,21 +4719,21 @@ figcveg <- BiomeE_PS5_BCI_eCO2_annual_cohorts %>%
   scale_colour_discrete(labels = c("Grasses","Tilia cordata","Betula pendula","Picea abies"))
 figcveg
 
-## Aboveground biomass ####
-# AGB
+## Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-figAGB <- BiomeE_PS5_BCI_eCO2_annual_tile %>%
+figAGcwood <- BiomeE_PS5_BCI_eCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS5_BCI_eCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB)  %>%
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood)  %>%
   ggplot() + 
-  geom_line(aes(x = year, y = AGB),col="#377EB8") +
-  labs(x = "year", y = expression(paste("Aboveground biomass (kg C ", m^-2, ") "))) + 
+  geom_line(aes(x = year, y = AGcwood),col="#377EB8") +
+  labs(x = "year", y = expression(paste("Aboveground woody biomass (kg C ", m^-2, ") "))) + 
   theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_text(size = 10))
-figAGB
+figAGcwood
 
 ## Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -5101,21 +5101,21 @@ figcveg <- BiomeE_PS6_BCI_eCO2_annual_cohorts %>%
   scale_colour_discrete(labels = c("Grasses","Tilia cordata","Betula pendula","Picea abies"))
 figcveg
 
-## Aboveground biomass ####
-# AGB
+## Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-figAGB <- BiomeE_PS6_BCI_eCO2_annual_tile %>%
+figAGcwood <- BiomeE_PS6_BCI_eCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS6_BCI_eCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB)  %>%
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood)  %>%
   ggplot() + 
-  geom_line(aes(x = year, y = AGB),col="#377EB8") +
-  labs(x = "year", y = expression(paste("Aboveground biomass (kg C ", m^-2, ") "))) + 
+  geom_line(aes(x = year, y = AGcwood),col="#377EB8") +
+  labs(x = "year", y = expression(paste("Aboveground woody biomass (kg C ", m^-2, ") "))) + 
   theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_text(size = 10))
-figAGB
+figAGcwood
 
 ## Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches

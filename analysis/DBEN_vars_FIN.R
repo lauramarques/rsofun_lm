@@ -60,35 +60,35 @@ cveg_ncout
 # close the file, writing data to disk
 nc_close(cveg_ncout)
 
-# 2. Aboveground biomass ####
-# AGB
+# 2. Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-AGB <- BiomeE_P0_FIN_aCO2_annual_tile %>%
+AGcwood <- BiomeE_P0_FIN_aCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_P0_FIN_aCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB) 
-AGB_wid <- AGB %>% select(-year)
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood) 
+AGcwood_wid <- AGcwood %>% select(-year)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
-                 "BiomeEP_AGB_P0_FIN_412ppm", ".nc", sep="")
+                 "BiomeEP_AGcwood_P0_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 # define variables
-AGB_var <- ncvar_def("AGB","kg C m-2",list(time_dim),-999,
-                     "Aboveground biomass",prec="single")
+AGcwood_var <- ncvar_def("AGcwood","kg C m-2",list(time_dim),-999,
+                     "Aboveground woody biomass",prec="single")
 # create netCDF file and put arrays
-AGB_ncout <- nc_create(ncfname,list(AGB_var),force_v4=TRUE)
+AGcwood_ncout <- nc_create(ncfname,list(AGcwood_var),force_v4=TRUE)
 # put variables
-AGB_array <- simplify2array(AGB_wid)
-ncvar_put(AGB_ncout,AGB_var,AGB_array)
+AGcwood_array <- simplify2array(AGcwood_wid)
+ncvar_put(AGcwood_ncout,AGcwood_var,AGcwood_array)
 # Get a summary of the created file
-AGB_ncout
+AGcwood_ncout
 # close the file, writing data to disk
-nc_close(AGB_ncout)
+nc_close(AGcwood_ncout)
 
 # 3. Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -141,13 +141,13 @@ cwood_size <- BiomeE_P0_FIN_aCO2_annual_cohorts %>%
   summarise(cwood_size=sum((sapwC+woodC)*density/10000)) %>% ungroup()
 cwood_size_wid <- cwood_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = cwood_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_cwood_size_P0_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -177,13 +177,13 @@ nstem_size <- BiomeE_P0_FIN_aCO2_annual_cohorts %>%
   summarise(nstem_size=sum(density)) %>% ungroup()
 nstem_size_wid <- nstem_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = nstem_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_nstem_size_P0_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -445,13 +445,13 @@ cmort <- BiomeE_P0_FIN_aCO2_annual_cohorts %>%
   summarise(cmort=sum(c_deadtrees)) %>% ungroup()
 cmort_wid <- cmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = cmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_cmort_P0_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -489,13 +489,13 @@ stemmort <- BiomeE_P0_FIN_aCO2_annual_cohorts %>%
   summarise(stemmort=sum(deathrate*density/10000)) %>% ungroup()
 stemmort_wid <- stemmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = stemmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_stemmort_P0_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -665,35 +665,35 @@ cveg_ncout
 # close the file, writing data to disk
 nc_close(cveg_ncout)
 
-# 2. Aboveground biomass ####
-# AGB
+# 2. Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-AGB <- BiomeE_PS1_FIN_aCO2_annual_tile %>%
+AGcwood <- BiomeE_PS1_FIN_aCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS1_FIN_aCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB) 
-AGB_wid <- AGB %>% select(-year)
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood) 
+AGcwood_wid <- AGcwood %>% select(-year)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
-                 "BiomeEP_AGB_PS1_FIN_412ppm", ".nc", sep="")
+                 "BiomeEP_AGcwood_PS1_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 # define variables
-AGB_var <- ncvar_def("AGB","kg C m-2",list(time_dim),-999,
-                     "Aboveground biomass",prec="single")
+AGcwood_var <- ncvar_def("AGcwood","kg C m-2",list(time_dim),-999,
+                     "Aboveground woody biomass",prec="single")
 # create netCDF file and put arrays
-AGB_ncout <- nc_create(ncfname,list(AGB_var),force_v4=TRUE)
+AGcwood_ncout <- nc_create(ncfname,list(AGcwood_var),force_v4=TRUE)
 # put variables
-AGB_array <- simplify2array(AGB_wid)
-ncvar_put(AGB_ncout,AGB_var,AGB_array)
+AGcwood_array <- simplify2array(AGcwood_wid)
+ncvar_put(AGcwood_ncout,AGcwood_var,AGcwood_array)
 # Get a summary of the created file
-AGB_ncout
+AGcwood_ncout
 # close the file, writing data to disk
-nc_close(AGB_ncout)
+nc_close(AGcwood_ncout)
 
 # 3. Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -746,13 +746,13 @@ cwood_size <- BiomeE_PS1_FIN_aCO2_annual_cohorts %>%
   summarise(cwood_size=sum((sapwC+woodC)*density/10000)) %>% ungroup()
 cwood_size_wid <- cwood_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = cwood_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_cwood_size_PS1_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -782,13 +782,13 @@ nstem_size <- BiomeE_PS1_FIN_aCO2_annual_cohorts %>%
   summarise(nstem_size=sum(density)) %>% ungroup()
 nstem_size_wid <- nstem_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = nstem_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_nstem_size_PS1_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -1050,13 +1050,13 @@ cmort <- BiomeE_PS1_FIN_aCO2_annual_cohorts %>%
   summarise(cmort=sum(c_deadtrees)) %>% ungroup()
 cmort_wid <- cmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = cmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_cmort_PS1_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -1094,13 +1094,13 @@ stemmort <- BiomeE_PS1_FIN_aCO2_annual_cohorts %>%
   summarise(stemmort=sum(deathrate*density/10000)) %>% ungroup()
 stemmort_wid <- stemmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = stemmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_stemmort_PS1_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -1270,35 +1270,35 @@ cveg_ncout
 # close the file, writing data to disk
 nc_close(cveg_ncout)
 
-# 2. Aboveground biomass ####
-# AGB
+# 2. Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-AGB <- BiomeE_PS2_FIN_aCO2_annual_tile %>%
+AGcwood <- BiomeE_PS2_FIN_aCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS2_FIN_aCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB) 
-AGB_wid <- AGB %>% select(-year)
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood) 
+AGcwood_wid <- AGcwood %>% select(-year)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
-                 "BiomeEP_AGB_PS2_FIN_412ppm", ".nc", sep="")
+                 "BiomeEP_AGcwood_PS2_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 # define variables
-AGB_var <- ncvar_def("AGB","kg C m-2",list(time_dim),-999,
-                     "Aboveground biomass",prec="single")
+AGcwood_var <- ncvar_def("AGcwood","kg C m-2",list(time_dim),-999,
+                     "Aboveground woody biomass",prec="single")
 # create netCDF file and put arrays
-AGB_ncout <- nc_create(ncfname,list(AGB_var),force_v4=TRUE)
+AGcwood_ncout <- nc_create(ncfname,list(AGcwood_var),force_v4=TRUE)
 # put variables
-AGB_array <- simplify2array(AGB_wid)
-ncvar_put(AGB_ncout,AGB_var,AGB_array)
+AGcwood_array <- simplify2array(AGcwood_wid)
+ncvar_put(AGcwood_ncout,AGcwood_var,AGcwood_array)
 # Get a summary of the created file
-AGB_ncout
+AGcwood_ncout
 # close the file, writing data to disk
-nc_close(AGB_ncout)
+nc_close(AGcwood_ncout)
 
 # 3. Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -1351,13 +1351,13 @@ cwood_size <- BiomeE_PS2_FIN_aCO2_annual_cohorts %>%
   summarise(cwood_size=sum((sapwC+woodC)*density/10000)) %>% ungroup()
 cwood_size_wid <- cwood_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = cwood_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_cwood_size_PS2_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -1387,13 +1387,13 @@ nstem_size <- BiomeE_PS2_FIN_aCO2_annual_cohorts %>%
   summarise(nstem_size=sum(density)) %>% ungroup()
 nstem_size_wid <- nstem_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = nstem_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_nstem_size_PS2_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -1655,13 +1655,13 @@ cmort <- BiomeE_PS2_FIN_aCO2_annual_cohorts %>%
   summarise(cmort=sum(c_deadtrees)) %>% ungroup()
 cmort_wid <- cmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = cmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_cmort_PS2_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -1699,13 +1699,13 @@ stemmort <- BiomeE_PS2_FIN_aCO2_annual_cohorts %>%
   summarise(stemmort=sum(deathrate*density/10000)) %>% ungroup()
 stemmort_wid <- stemmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = stemmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_stemmort_PS2_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -1875,35 +1875,35 @@ cveg_ncout
 # close the file, writing data to disk
 nc_close(cveg_ncout)
 
-# 2. Aboveground biomass ####
-# AGB
+# 2. Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-AGB <- BiomeE_PS3_FIN_aCO2_annual_tile %>%
+AGcwood <- BiomeE_PS3_FIN_aCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS3_FIN_aCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB) 
-AGB_wid <- AGB %>% select(-year)
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood) 
+AGcwood_wid <- AGcwood %>% select(-year)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
-                 "BiomeEP_AGB_PS3_FIN_412ppm", ".nc", sep="")
+                 "BiomeEP_AGcwood_PS3_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 # define variables
-AGB_var <- ncvar_def("AGB","kg C m-2",list(time_dim),-999,
-                     "Aboveground biomass",prec="single")
+AGcwood_var <- ncvar_def("AGcwood","kg C m-2",list(time_dim),-999,
+                     "Aboveground woody biomass",prec="single")
 # create netCDF file and put arrays
-AGB_ncout <- nc_create(ncfname,list(AGB_var),force_v4=TRUE)
+AGcwood_ncout <- nc_create(ncfname,list(AGcwood_var),force_v4=TRUE)
 # put variables
-AGB_array <- simplify2array(AGB_wid)
-ncvar_put(AGB_ncout,AGB_var,AGB_array)
+AGcwood_array <- simplify2array(AGcwood_wid)
+ncvar_put(AGcwood_ncout,AGcwood_var,AGcwood_array)
 # Get a summary of the created file
-AGB_ncout
+AGcwood_ncout
 # close the file, writing data to disk
-nc_close(AGB_ncout)
+nc_close(AGcwood_ncout)
 
 # 3. Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -1956,13 +1956,13 @@ cwood_size <- BiomeE_PS3_FIN_aCO2_annual_cohorts %>%
   summarise(cwood_size=sum((sapwC+woodC)*density/10000)) %>% ungroup()
 cwood_size_wid <- cwood_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = cwood_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_cwood_size_PS3_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -1992,13 +1992,13 @@ nstem_size <- BiomeE_PS3_FIN_aCO2_annual_cohorts %>%
   summarise(nstem_size=sum(density)) %>% ungroup()
 nstem_size_wid <- nstem_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = nstem_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_nstem_size_PS3_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -2260,13 +2260,13 @@ cmort <- BiomeE_PS3_FIN_aCO2_annual_cohorts %>%
   summarise(cmort=sum(c_deadtrees)) %>% ungroup()
 cmort_wid <- cmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = cmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_cmort_PS3_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -2304,13 +2304,13 @@ stemmort <- BiomeE_PS3_FIN_aCO2_annual_cohorts %>%
   summarise(stemmort=sum(deathrate*density/10000)) %>% ungroup()
 stemmort_wid <- stemmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = stemmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_stemmort_PS3_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -2480,35 +2480,35 @@ cveg_ncout
 # close the file, writing data to disk
 nc_close(cveg_ncout)
 
-# 2. Aboveground biomass ####
-# AGB
+# 2. Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-AGB <- BiomeE_PS4_FIN_aCO2_annual_tile %>%
+AGcwood <- BiomeE_PS4_FIN_aCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS4_FIN_aCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB) 
-AGB_wid <- AGB %>% select(-year)
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood) 
+AGcwood_wid <- AGcwood %>% select(-year)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
-                 "BiomeEP_AGB_PS4_FIN_412ppm", ".nc", sep="")
+                 "BiomeEP_AGcwood_PS4_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 # define variables
-AGB_var <- ncvar_def("AGB","kg C m-2",list(time_dim),-999,
-                     "Aboveground biomass",prec="single")
+AGcwood_var <- ncvar_def("AGcwood","kg C m-2",list(time_dim),-999,
+                     "Aboveground woody biomass",prec="single")
 # create netCDF file and put arrays
-AGB_ncout <- nc_create(ncfname,list(AGB_var),force_v4=TRUE)
+AGcwood_ncout <- nc_create(ncfname,list(AGcwood_var),force_v4=TRUE)
 # put variables
-AGB_array <- simplify2array(AGB_wid)
-ncvar_put(AGB_ncout,AGB_var,AGB_array)
+AGcwood_array <- simplify2array(AGcwood_wid)
+ncvar_put(AGcwood_ncout,AGcwood_var,AGcwood_array)
 # Get a summary of the created file
-AGB_ncout
+AGcwood_ncout
 # close the file, writing data to disk
-nc_close(AGB_ncout)
+nc_close(AGcwood_ncout)
 
 # 3. Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -2561,13 +2561,13 @@ cwood_size <- BiomeE_PS4_FIN_aCO2_annual_cohorts %>%
   summarise(cwood_size=sum((sapwC+woodC)*density/10000)) %>% ungroup()
 cwood_size_wid <- cwood_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = cwood_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_cwood_size_PS4_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -2597,13 +2597,13 @@ nstem_size <- BiomeE_PS4_FIN_aCO2_annual_cohorts %>%
   summarise(nstem_size=sum(density)) %>% ungroup()
 nstem_size_wid <- nstem_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = nstem_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_nstem_size_PS4_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -2865,13 +2865,13 @@ cmort <- BiomeE_PS4_FIN_aCO2_annual_cohorts %>%
   summarise(cmort=sum(c_deadtrees)) %>% ungroup()
 cmort_wid <- cmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = cmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_cmort_PS4_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -2909,13 +2909,13 @@ stemmort <- BiomeE_PS4_FIN_aCO2_annual_cohorts %>%
   summarise(stemmort=sum(deathrate*density/10000)) %>% ungroup()
 stemmort_wid <- stemmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = stemmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_stemmort_PS4_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -3085,35 +3085,35 @@ cveg_ncout
 # close the file, writing data to disk
 nc_close(cveg_ncout)
 
-# 2. Aboveground biomass ####
-# AGB
+# 2. Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-AGB <- BiomeE_PS5_FIN_aCO2_annual_tile %>%
+AGcwood <- BiomeE_PS5_FIN_aCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS5_FIN_aCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB) 
-AGB_wid <- AGB %>% select(-year)
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood) 
+AGcwood_wid <- AGcwood %>% select(-year)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
-                 "BiomeEP_AGB_PS5_FIN_412ppm", ".nc", sep="")
+                 "BiomeEP_AGcwood_PS5_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 # define variables
-AGB_var <- ncvar_def("AGB","kg C m-2",list(time_dim),-999,
-                     "Aboveground biomass",prec="single")
+AGcwood_var <- ncvar_def("AGcwood","kg C m-2",list(time_dim),-999,
+                     "Aboveground woody biomass",prec="single")
 # create netCDF file and put arrays
-AGB_ncout <- nc_create(ncfname,list(AGB_var),force_v4=TRUE)
+AGcwood_ncout <- nc_create(ncfname,list(AGcwood_var),force_v4=TRUE)
 # put variables
-AGB_array <- simplify2array(AGB_wid)
-ncvar_put(AGB_ncout,AGB_var,AGB_array)
+AGcwood_array <- simplify2array(AGcwood_wid)
+ncvar_put(AGcwood_ncout,AGcwood_var,AGcwood_array)
 # Get a summary of the created file
-AGB_ncout
+AGcwood_ncout
 # close the file, writing data to disk
-nc_close(AGB_ncout)
+nc_close(AGcwood_ncout)
 
 # 3. Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -3166,13 +3166,13 @@ cwood_size <- BiomeE_PS5_FIN_aCO2_annual_cohorts %>%
   summarise(cwood_size=sum((sapwC+woodC)*density/10000)) %>% ungroup()
 cwood_size_wid <- cwood_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = cwood_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_cwood_size_PS5_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -3202,13 +3202,13 @@ nstem_size <- BiomeE_PS5_FIN_aCO2_annual_cohorts %>%
   summarise(nstem_size=sum(density)) %>% ungroup()
 nstem_size_wid <- nstem_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = nstem_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_nstem_size_PS5_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -3470,13 +3470,13 @@ cmort <- BiomeE_PS5_FIN_aCO2_annual_cohorts %>%
   summarise(cmort=sum(c_deadtrees)) %>% ungroup()
 cmort_wid <- cmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = cmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_cmort_PS5_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -3514,13 +3514,13 @@ stemmort <- BiomeE_PS5_FIN_aCO2_annual_cohorts %>%
   summarise(stemmort=sum(deathrate*density/10000)) %>% ungroup()
 stemmort_wid <- stemmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = stemmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_stemmort_PS5_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -3690,35 +3690,35 @@ cveg_ncout
 # close the file, writing data to disk
 nc_close(cveg_ncout)
 
-# 2. Aboveground biomass ####
-# AGB
+# 2. Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-AGB <- BiomeE_PS6_FIN_aCO2_annual_tile %>%
+AGcwood <- BiomeE_PS6_FIN_aCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS6_FIN_aCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB) 
-AGB_wid <- AGB %>% select(-year)
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood) 
+AGcwood_wid <- AGcwood %>% select(-year)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
-                 "BiomeEP_AGB_PS6_FIN_412ppm", ".nc", sep="")
+                 "BiomeEP_AGcwood_PS6_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 # define variables
-AGB_var <- ncvar_def("AGB","kg C m-2",list(time_dim),-999,
-                     "Aboveground biomass",prec="single")
+AGcwood_var <- ncvar_def("AGcwood","kg C m-2",list(time_dim),-999,
+                     "Aboveground woody biomass",prec="single")
 # create netCDF file and put arrays
-AGB_ncout <- nc_create(ncfname,list(AGB_var),force_v4=TRUE)
+AGcwood_ncout <- nc_create(ncfname,list(AGcwood_var),force_v4=TRUE)
 # put variables
-AGB_array <- simplify2array(AGB_wid)
-ncvar_put(AGB_ncout,AGB_var,AGB_array)
+AGcwood_array <- simplify2array(AGcwood_wid)
+ncvar_put(AGcwood_ncout,AGcwood_var,AGcwood_array)
 # Get a summary of the created file
-AGB_ncout
+AGcwood_ncout
 # close the file, writing data to disk
-nc_close(AGB_ncout)
+nc_close(AGcwood_ncout)
 
 # 3. Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -3771,13 +3771,13 @@ cwood_size <- BiomeE_PS6_FIN_aCO2_annual_cohorts %>%
   summarise(cwood_size=sum((sapwC+woodC)*density/10000)) %>% ungroup()
 cwood_size_wid <- cwood_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = cwood_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_cwood_size_PS6_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -3807,13 +3807,13 @@ nstem_size <- BiomeE_PS6_FIN_aCO2_annual_cohorts %>%
   summarise(nstem_size=sum(density)) %>% ungroup()
 nstem_size_wid <- nstem_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = nstem_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_nstem_size_PS6_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -4075,13 +4075,13 @@ cmort <- BiomeE_PS6_FIN_aCO2_annual_cohorts %>%
   summarise(cmort=sum(c_deadtrees)) %>% ungroup()
 cmort_wid <- cmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = cmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_cmort_PS6_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -4119,13 +4119,13 @@ stemmort <- BiomeE_PS6_FIN_aCO2_annual_cohorts %>%
   summarise(stemmort=sum(deathrate*density/10000)) %>% ungroup()
 stemmort_wid <- stemmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = stemmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/412ppm/FIN/", 
                  "BiomeEP_stemmort_PS6_FIN_412ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -4299,35 +4299,35 @@ cveg_ncout
 # close the file, writing data to disk
 nc_close(cveg_ncout)
 
-# 2. Aboveground biomass ####
-# AGB
+# 2. Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-AGB <- BiomeE_P0_FIN_eCO2_annual_tile %>%
+AGcwood <- BiomeE_P0_FIN_eCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_P0_FIN_eCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB) 
-AGB_wid <- AGB %>% select(-year)
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood) 
+AGcwood_wid <- AGcwood %>% select(-year)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
-                 "BiomeEP_AGB_P0_FIN_562ppm", ".nc", sep="")
+                 "BiomeEP_AGcwood_P0_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 # define variables
-AGB_var <- ncvar_def("AGB","kg C m-2",list(time_dim),-999,
-                     "Aboveground biomass",prec="single")
+AGcwood_var <- ncvar_def("AGcwood","kg C m-2",list(time_dim),-999,
+                     "Aboveground woody biomass",prec="single")
 # create netCDF file and put arrays
-AGB_ncout <- nc_create(ncfname,list(AGB_var),force_v4=TRUE)
+AGcwood_ncout <- nc_create(ncfname,list(AGcwood_var),force_v4=TRUE)
 # put variables
-AGB_array <- simplify2array(AGB_wid)
-ncvar_put(AGB_ncout,AGB_var,AGB_array)
+AGcwood_array <- simplify2array(AGcwood_wid)
+ncvar_put(AGcwood_ncout,AGcwood_var,AGcwood_array)
 # Get a summary of the created file
-AGB_ncout
+AGcwood_ncout
 # close the file, writing data to disk
-nc_close(AGB_ncout)
+nc_close(AGcwood_ncout)
 
 # 3. Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -4380,13 +4380,13 @@ cwood_size <- BiomeE_P0_FIN_eCO2_annual_cohorts %>%
   summarise(cwood_size=sum((sapwC+woodC)*density/10000)) %>% ungroup()
 cwood_size_wid <- cwood_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = cwood_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cwood_size_P0_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -4416,13 +4416,13 @@ nstem_size <- BiomeE_P0_FIN_eCO2_annual_cohorts %>%
   summarise(nstem_size=sum(density)) %>% ungroup()
 nstem_size_wid <- nstem_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = nstem_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_nstem_size_P0_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -4684,13 +4684,13 @@ cmort <- BiomeE_P0_FIN_eCO2_annual_cohorts %>%
   summarise(cmort=sum(c_deadtrees)) %>% ungroup()
 cmort_wid <- cmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = cmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cmort_P0_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -4728,13 +4728,13 @@ stemmort <- BiomeE_P0_FIN_eCO2_annual_cohorts %>%
   summarise(stemmort=sum(deathrate*density/10000)) %>% ungroup()
 stemmort_wid <- stemmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = stemmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_stemmort_P0_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -4904,35 +4904,35 @@ cveg_ncout
 # close the file, writing data to disk
 nc_close(cveg_ncout)
 
-# 2. Aboveground biomass ####
-# AGB
+# 2. Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-AGB <- BiomeE_PS1_FIN_eCO2_annual_tile %>%
+AGcwood <- BiomeE_PS1_FIN_eCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS1_FIN_eCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB) 
-AGB_wid <- AGB %>% select(-year)
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood) 
+AGcwood_wid <- AGcwood %>% select(-year)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
-                 "BiomeEP_AGB_PS1_FIN_562ppm", ".nc", sep="")
+                 "BiomeEP_AGcwood_PS1_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 # define variables
-AGB_var <- ncvar_def("AGB","kg C m-2",list(time_dim),-999,
-                     "Aboveground biomass",prec="single")
+AGcwood_var <- ncvar_def("AGcwood","kg C m-2",list(time_dim),-999,
+                     "Aboveground woody biomass",prec="single")
 # create netCDF file and put arrays
-AGB_ncout <- nc_create(ncfname,list(AGB_var),force_v4=TRUE)
+AGcwood_ncout <- nc_create(ncfname,list(AGcwood_var),force_v4=TRUE)
 # put variables
-AGB_array <- simplify2array(AGB_wid)
-ncvar_put(AGB_ncout,AGB_var,AGB_array)
+AGcwood_array <- simplify2array(AGcwood_wid)
+ncvar_put(AGcwood_ncout,AGcwood_var,AGcwood_array)
 # Get a summary of the created file
-AGB_ncout
+AGcwood_ncout
 # close the file, writing data to disk
-nc_close(AGB_ncout)
+nc_close(AGcwood_ncout)
 
 # 3. Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -4985,13 +4985,13 @@ cwood_size <- BiomeE_PS1_FIN_eCO2_annual_cohorts %>%
   summarise(cwood_size=sum((sapwC+woodC)*density/10000)) %>% ungroup()
 cwood_size_wid <- cwood_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = cwood_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cwood_size_PS1_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -5021,13 +5021,13 @@ nstem_size <- BiomeE_PS1_FIN_eCO2_annual_cohorts %>%
   summarise(nstem_size=sum(density)) %>% ungroup()
 nstem_size_wid <- nstem_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = nstem_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_nstem_size_PS1_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -5289,13 +5289,13 @@ cmort <- BiomeE_PS1_FIN_eCO2_annual_cohorts %>%
   summarise(cmort=sum(c_deadtrees)) %>% ungroup()
 cmort_wid <- cmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = cmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cmort_PS1_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -5333,13 +5333,13 @@ stemmort <- BiomeE_PS1_FIN_eCO2_annual_cohorts %>%
   summarise(stemmort=sum(deathrate*density/10000)) %>% ungroup()
 stemmort_wid <- stemmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = stemmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_stemmort_PS1_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -5509,35 +5509,35 @@ cveg_ncout
 # close the file, writing data to disk
 nc_close(cveg_ncout)
 
-# 2. Aboveground biomass ####
-# AGB
+# 2. Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-AGB <- BiomeE_PS2_FIN_eCO2_annual_tile %>%
+AGcwood <- BiomeE_PS2_FIN_eCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS2_FIN_eCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB) 
-AGB_wid <- AGB %>% select(-year)
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood) 
+AGcwood_wid <- AGcwood %>% select(-year)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
-                 "BiomeEP_AGB_PS2_FIN_562ppm", ".nc", sep="")
+                 "BiomeEP_AGcwood_PS2_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 # define variables
-AGB_var <- ncvar_def("AGB","kg C m-2",list(time_dim),-999,
-                     "Aboveground biomass",prec="single")
+AGcwood_var <- ncvar_def("AGcwood","kg C m-2",list(time_dim),-999,
+                     "Aboveground woody biomass",prec="single")
 # create netCDF file and put arrays
-AGB_ncout <- nc_create(ncfname,list(AGB_var),force_v4=TRUE)
+AGcwood_ncout <- nc_create(ncfname,list(AGcwood_var),force_v4=TRUE)
 # put variables
-AGB_array <- simplify2array(AGB_wid)
-ncvar_put(AGB_ncout,AGB_var,AGB_array)
+AGcwood_array <- simplify2array(AGcwood_wid)
+ncvar_put(AGcwood_ncout,AGcwood_var,AGcwood_array)
 # Get a summary of the created file
-AGB_ncout
+AGcwood_ncout
 # close the file, writing data to disk
-nc_close(AGB_ncout)
+nc_close(AGcwood_ncout)
 
 # 3. Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -5590,13 +5590,13 @@ cwood_size <- BiomeE_PS2_FIN_eCO2_annual_cohorts %>%
   summarise(cwood_size=sum((sapwC+woodC)*density/10000)) %>% ungroup()
 cwood_size_wid <- cwood_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = cwood_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cwood_size_PS2_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -5626,13 +5626,13 @@ nstem_size <- BiomeE_PS2_FIN_eCO2_annual_cohorts %>%
   summarise(nstem_size=sum(density)) %>% ungroup()
 nstem_size_wid <- nstem_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = nstem_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_nstem_size_PS2_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -5894,13 +5894,13 @@ cmort <- BiomeE_PS2_FIN_eCO2_annual_cohorts %>%
   summarise(cmort=sum(c_deadtrees)) %>% ungroup()
 cmort_wid <- cmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = cmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cmort_PS2_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -5938,13 +5938,13 @@ stemmort <- BiomeE_PS2_FIN_eCO2_annual_cohorts %>%
   summarise(stemmort=sum(deathrate*density/10000)) %>% ungroup()
 stemmort_wid <- stemmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = stemmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_stemmort_PS2_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -6114,35 +6114,35 @@ cveg_ncout
 # close the file, writing data to disk
 nc_close(cveg_ncout)
 
-# 2. Aboveground biomass ####
-# AGB
+# 2. Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-AGB <- BiomeE_PS3_FIN_eCO2_annual_tile %>%
+AGcwood <- BiomeE_PS3_FIN_eCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS3_FIN_eCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB) 
-AGB_wid <- AGB %>% select(-year)
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood) 
+AGcwood_wid <- AGcwood %>% select(-year)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
-                 "BiomeEP_AGB_PS3_FIN_562ppm", ".nc", sep="")
+                 "BiomeEP_AGcwood_PS3_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 # define variables
-AGB_var <- ncvar_def("AGB","kg C m-2",list(time_dim),-999,
-                     "Aboveground biomass",prec="single")
+AGcwood_var <- ncvar_def("AGcwood","kg C m-2",list(time_dim),-999,
+                     "Aboveground woody biomass",prec="single")
 # create netCDF file and put arrays
-AGB_ncout <- nc_create(ncfname,list(AGB_var),force_v4=TRUE)
+AGcwood_ncout <- nc_create(ncfname,list(AGcwood_var),force_v4=TRUE)
 # put variables
-AGB_array <- simplify2array(AGB_wid)
-ncvar_put(AGB_ncout,AGB_var,AGB_array)
+AGcwood_array <- simplify2array(AGcwood_wid)
+ncvar_put(AGcwood_ncout,AGcwood_var,AGcwood_array)
 # Get a summary of the created file
-AGB_ncout
+AGcwood_ncout
 # close the file, writing data to disk
-nc_close(AGB_ncout)
+nc_close(AGcwood_ncout)
 
 # 3. Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -6195,13 +6195,13 @@ cwood_size <- BiomeE_PS3_FIN_eCO2_annual_cohorts %>%
   summarise(cwood_size=sum((sapwC+woodC)*density/10000)) %>% ungroup()
 cwood_size_wid <- cwood_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = cwood_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cwood_size_PS3_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -6231,13 +6231,13 @@ nstem_size <- BiomeE_PS3_FIN_eCO2_annual_cohorts %>%
   summarise(nstem_size=sum(density)) %>% ungroup()
 nstem_size_wid <- nstem_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = nstem_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_nstem_size_PS3_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -6499,13 +6499,13 @@ cmort <- BiomeE_PS3_FIN_eCO2_annual_cohorts %>%
   summarise(cmort=sum(c_deadtrees)) %>% ungroup()
 cmort_wid <- cmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = cmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cmort_PS3_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -6543,13 +6543,13 @@ stemmort <- BiomeE_PS3_FIN_eCO2_annual_cohorts %>%
   summarise(stemmort=sum(deathrate*density/10000)) %>% ungroup()
 stemmort_wid <- stemmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = stemmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_stemmort_PS3_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -6719,35 +6719,35 @@ cveg_ncout
 # close the file, writing data to disk
 nc_close(cveg_ncout)
 
-# 2. Aboveground biomass ####
-# AGB
+# 2. Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-AGB <- BiomeE_PS4_FIN_eCO2_annual_tile %>%
+AGcwood <- BiomeE_PS4_FIN_eCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS4_FIN_eCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB) 
-AGB_wid <- AGB %>% select(-year)
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood) 
+AGcwood_wid <- AGcwood %>% select(-year)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
-                 "BiomeEP_AGB_PS4_FIN_562ppm", ".nc", sep="")
+                 "BiomeEP_AGcwood_PS4_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 # define variables
-AGB_var <- ncvar_def("AGB","kg C m-2",list(time_dim),-999,
-                     "Aboveground biomass",prec="single")
+AGcwood_var <- ncvar_def("AGcwood","kg C m-2",list(time_dim),-999,
+                     "Aboveground woody biomass",prec="single")
 # create netCDF file and put arrays
-AGB_ncout <- nc_create(ncfname,list(AGB_var),force_v4=TRUE)
+AGcwood_ncout <- nc_create(ncfname,list(AGcwood_var),force_v4=TRUE)
 # put variables
-AGB_array <- simplify2array(AGB_wid)
-ncvar_put(AGB_ncout,AGB_var,AGB_array)
+AGcwood_array <- simplify2array(AGcwood_wid)
+ncvar_put(AGcwood_ncout,AGcwood_var,AGcwood_array)
 # Get a summary of the created file
-AGB_ncout
+AGcwood_ncout
 # close the file, writing data to disk
-nc_close(AGB_ncout)
+nc_close(AGcwood_ncout)
 
 # 3. Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -6800,13 +6800,13 @@ cwood_size <- BiomeE_PS4_FIN_eCO2_annual_cohorts %>%
   summarise(cwood_size=sum((sapwC+woodC)*density/10000)) %>% ungroup()
 cwood_size_wid <- cwood_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = cwood_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cwood_size_PS4_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -6836,13 +6836,13 @@ nstem_size <- BiomeE_PS4_FIN_eCO2_annual_cohorts %>%
   summarise(nstem_size=sum(density)) %>% ungroup()
 nstem_size_wid <- nstem_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = nstem_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_nstem_size_PS4_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -7104,13 +7104,13 @@ cmort <- BiomeE_PS4_FIN_eCO2_annual_cohorts %>%
   summarise(cmort=sum(c_deadtrees)) %>% ungroup()
 cmort_wid <- cmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = cmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cmort_PS4_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -7148,13 +7148,13 @@ stemmort <- BiomeE_PS4_FIN_eCO2_annual_cohorts %>%
   summarise(stemmort=sum(deathrate*density/10000)) %>% ungroup()
 stemmort_wid <- stemmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = stemmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_stemmort_PS4_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -7324,35 +7324,35 @@ cveg_ncout
 # close the file, writing data to disk
 nc_close(cveg_ncout)
 
-# 2. Aboveground biomass ####
-# AGB
+# 2. Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-AGB <- BiomeE_PS5_FIN_eCO2_annual_tile %>%
+AGcwood <- BiomeE_PS5_FIN_eCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS5_FIN_eCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB) 
-AGB_wid <- AGB %>% select(-year)
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood) 
+AGcwood_wid <- AGcwood %>% select(-year)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
-                 "BiomeEP_AGB_PS5_FIN_562ppm", ".nc", sep="")
+                 "BiomeEP_AGcwood_PS5_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 # define variables
-AGB_var <- ncvar_def("AGB","kg C m-2",list(time_dim),-999,
-                     "Aboveground biomass",prec="single")
+AGcwood_var <- ncvar_def("AGcwood","kg C m-2",list(time_dim),-999,
+                     "Aboveground woody biomass",prec="single")
 # create netCDF file and put arrays
-AGB_ncout <- nc_create(ncfname,list(AGB_var),force_v4=TRUE)
+AGcwood_ncout <- nc_create(ncfname,list(AGcwood_var),force_v4=TRUE)
 # put variables
-AGB_array <- simplify2array(AGB_wid)
-ncvar_put(AGB_ncout,AGB_var,AGB_array)
+AGcwood_array <- simplify2array(AGcwood_wid)
+ncvar_put(AGcwood_ncout,AGcwood_var,AGcwood_array)
 # Get a summary of the created file
-AGB_ncout
+AGcwood_ncout
 # close the file, writing data to disk
-nc_close(AGB_ncout)
+nc_close(AGcwood_ncout)
 
 # 3. Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -7405,13 +7405,13 @@ cwood_size <- BiomeE_PS5_FIN_eCO2_annual_cohorts %>%
   summarise(cwood_size=sum((sapwC+woodC)*density/10000)) %>% ungroup()
 cwood_size_wid <- cwood_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = cwood_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cwood_size_PS5_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -7441,13 +7441,13 @@ nstem_size <- BiomeE_PS5_FIN_eCO2_annual_cohorts %>%
   summarise(nstem_size=sum(density)) %>% ungroup()
 nstem_size_wid <- nstem_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = nstem_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_nstem_size_PS5_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -7709,13 +7709,13 @@ cmort <- BiomeE_PS5_FIN_eCO2_annual_cohorts %>%
   summarise(cmort=sum(c_deadtrees)) %>% ungroup()
 cmort_wid <- cmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = cmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cmort_PS5_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -7753,13 +7753,13 @@ stemmort <- BiomeE_PS5_FIN_eCO2_annual_cohorts %>%
   summarise(stemmort=sum(deathrate*density/10000)) %>% ungroup()
 stemmort_wid <- stemmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = stemmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_stemmort_PS5_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -7929,35 +7929,35 @@ cveg_ncout
 # close the file, writing data to disk
 nc_close(cveg_ncout)
 
-# 2. Aboveground biomass ####
-# AGB
+# 2. Aboveground woody biomass ####
+# AGcwood
 # Units: kg C m-2
 # Timestep: annual
 # Dimensions: time
 # tile output
-AGB <- BiomeE_PS6_FIN_eCO2_annual_tile %>%
+AGcwood <- BiomeE_PS6_FIN_eCO2_annual_tile %>%
   slice(510+1:nrow(BiomeE_PS6_FIN_eCO2_annual_tile)) %>% 
-  mutate(year = 1:450, AGB = NSC+leafC+(SapwoodC+WoodC)*0.75) %>%
-  select(year, AGB) 
-AGB_wid <- AGB %>% select(-year)
+  mutate(year = 1:450, AGcwood = (SapwoodC+WoodC)*0.75) %>%
+  select(year, AGcwood) 
+AGcwood_wid <- AGcwood %>% select(-year)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
-                 "BiomeEP_AGB_PS6_FIN_562ppm", ".nc", sep="")
+                 "BiomeEP_AGcwood_PS6_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 # define variables
-AGB_var <- ncvar_def("AGB","kg C m-2",list(time_dim),-999,
-                     "Aboveground biomass",prec="single")
+AGcwood_var <- ncvar_def("AGcwood","kg C m-2",list(time_dim),-999,
+                     "Aboveground woody biomass",prec="single")
 # create netCDF file and put arrays
-AGB_ncout <- nc_create(ncfname,list(AGB_var),force_v4=TRUE)
+AGcwood_ncout <- nc_create(ncfname,list(AGcwood_var),force_v4=TRUE)
 # put variables
-AGB_array <- simplify2array(AGB_wid)
-ncvar_put(AGB_ncout,AGB_var,AGB_array)
+AGcwood_array <- simplify2array(AGcwood_wid)
+ncvar_put(AGcwood_ncout,AGcwood_var,AGcwood_array)
 # Get a summary of the created file
-AGB_ncout
+AGcwood_ncout
 # close the file, writing data to disk
-nc_close(AGB_ncout)
+nc_close(AGcwood_ncout)
 
 # 3. Carbon mass in wood by PFT ####
 # cwood = Stem, coarse roots, branches
@@ -8010,13 +8010,13 @@ cwood_size <- BiomeE_PS6_FIN_eCO2_annual_cohorts %>%
   summarise(cwood_size=sum((sapwC+woodC)*density/10000)) %>% ungroup()
 cwood_size_wid <- cwood_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = cwood_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cwood_size_PS6_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -8046,13 +8046,13 @@ nstem_size <- BiomeE_PS6_FIN_eCO2_annual_cohorts %>%
   summarise(nstem_size=sum(density)) %>% ungroup()
 nstem_size_wid <- nstem_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = nstem_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_nstem_size_PS6_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -8314,13 +8314,13 @@ cmort <- BiomeE_PS6_FIN_eCO2_annual_cohorts %>%
   summarise(cmort=sum(c_deadtrees)) %>% ungroup()
 cmort_wid <- cmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = cmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cmort_PS6_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables
@@ -8358,13 +8358,13 @@ stemmort <- BiomeE_PS6_FIN_eCO2_annual_cohorts %>%
   summarise(stemmort=sum(deathrate*density/10000)) %>% ungroup()
 stemmort_wid <- stemmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = stemmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year)
+  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_stemmort_PS6_FIN_562ppm", ".nc", sep="")
 # define dimensions
 time <- as.array(seq(1,450,1))
-sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60))
+sizeclass <- as.array(c(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250))
 time_dim <- ncdim_def("time","years",as.double(time)) 
 sizeclass_dim <- ncdim_def("sizeclass","cm",as.double(sizeclass)) 
 # define variables

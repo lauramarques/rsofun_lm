@@ -10,7 +10,7 @@ library(sjPlot)
 library(ggeffects)
 library(patchwork)
 
-# Ensheng simulations ####
+# P0 Ensheng simulations ####
 p0_FIN_co2A_out_annual_tile    <- read.csv("/home/laura/Documents/Collaborations/DBEN/Ensheng/DBEN-BiomeE/BiomeE_FIN/BiomeE_P0_FIN_aCO2_Ecosystem_yearly.csv")
 p0_FIN_co2A_out_annual_cohorts <- read.csv("/home/laura/Documents/Collaborations/DBEN/Ensheng/DBEN-BiomeE/BiomeE_FIN/BiomeE_P0_FIN_aCO2_Cohort_yearly.csv")
 
@@ -68,6 +68,225 @@ p0_BCI_co2A_out_annual_cohorts %>% #
   geom_line(aes(x = yr, y = sumBA,col=PFT)) +
   labs(x = "t", y = expression(paste("Basal area (", m^-2, " ", ha^-1, ") "))) + 
   theme_classic()
+
+# PS Ensheng simulations ####
+pS1_FIN_co2A_out_annual_tile    <- read.csv("/home/laura/Documents/Collaborations/DBEN/Ensheng/DBEN-BiomeE/BiomeE_FIN/BiomeE_PS_FIN_aCO2_01_Ecosystem_yearly.csv")
+pS1_FIN_co2A_out_annual_cohorts <- read.csv("/home/laura/Documents/Collaborations/DBEN/Ensheng/DBEN-BiomeE/BiomeE_FIN/BiomeE_PS_FIN_aCO2_01_Cohort_yearly.csv")
+pS2_FIN_co2A_out_annual_tile    <- read.csv("/home/laura/Documents/Collaborations/DBEN/Ensheng/DBEN-BiomeE/BiomeE_FIN/BiomeE_PS_FIN_aCO2_02_Ecosystem_yearly.csv")
+pS2_FIN_co2A_out_annual_cohorts <- read.csv("/home/laura/Documents/Collaborations/DBEN/Ensheng/DBEN-BiomeE/BiomeE_FIN/BiomeE_PS_FIN_aCO2_02_Cohort_yearly.csv")
+pS3_FIN_co2A_out_annual_tile    <- read.csv("/home/laura/Documents/Collaborations/DBEN/Ensheng/DBEN-BiomeE/BiomeE_FIN/BiomeE_PS_FIN_aCO2_04_Ecosystem_yearly.csv")
+pS3_FIN_co2A_out_annual_cohorts <- read.csv("/home/laura/Documents/Collaborations/DBEN/Ensheng/DBEN-BiomeE/BiomeE_FIN/BiomeE_PS_FIN_aCO2_04_Cohort_yearly.csv")
+pS4_FIN_co2A_out_annual_tile    <- read.csv("/home/laura/Documents/Collaborations/DBEN/Ensheng/DBEN-BiomeE/BiomeE_FIN/BiomeE_PS_FIN_aCO2_08_Ecosystem_yearly.csv")
+pS4_FIN_co2A_out_annual_cohorts <- read.csv("/home/laura/Documents/Collaborations/DBEN/Ensheng/DBEN-BiomeE/BiomeE_FIN/BiomeE_PS_FIN_aCO2_08_Cohort_yearly.csv")
+pS5_FIN_co2A_out_annual_tile    <- read.csv("/home/laura/Documents/Collaborations/DBEN/Ensheng/DBEN-BiomeE/BiomeE_FIN/BiomeE_PS_FIN_aCO2_20_Ecosystem_yearly.csv")
+pS5_FIN_co2A_out_annual_cohorts <- read.csv("/home/laura/Documents/Collaborations/DBEN/Ensheng/DBEN-BiomeE/BiomeE_FIN/BiomeE_PS_FIN_aCO2_20_Cohort_yearly.csv")
+pS6_FIN_co2A_out_annual_tile    <- read.csv("/home/laura/Documents/Collaborations/DBEN/Ensheng/DBEN-BiomeE/BiomeE_FIN/BiomeE_PS_FIN_aCO2_40_Ecosystem_yearly.csv")
+pS6_FIN_co2A_out_annual_cohorts <- read.csv("/home/laura/Documents/Collaborations/DBEN/Ensheng/DBEN-BiomeE/BiomeE_FIN/BiomeE_PS_FIN_aCO2_40_Cohort_yearly.csv")
+
+# Crown area PS ####
+figCA0 <- p0_FIN_co2A_out_annual_cohorts %>% 
+  group_by(PFT,yr) %>%
+  summarise(CrownArea=sum(Acrown*Density/10000)) %>% 
+  mutate(PFT=as.factor(PFT)) %>%
+  ggplot() + 
+  geom_line(aes(x = yr, y = CrownArea,col=PFT)) +
+  scale_y_continuous(limits=c(0,3), breaks = seq(0,3,1)) +
+  labs(x = "t", y = expression(paste("Crown area (", m^-2, " ", m^-2, ") "))) + 
+  theme_classic() + theme(axis.title = element_blank()) +
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
+figCA0
+figCA1 <- pS1_FIN_co2A_out_annual_cohorts %>% 
+  group_by(PFT,yr) %>%
+  summarise(CrownArea=sum(Acrown*Density/10000)) %>% 
+  mutate(PFT=as.factor(PFT)) %>%
+  ggplot() + 
+  geom_line(aes(x = yr, y = CrownArea,col=PFT)) +
+  scale_y_continuous(limits=c(0,3), breaks = seq(0,3,1)) +
+  labs(x = "t", y = expression(paste("Crown area (", m^-2, " ", m^-2, ") "))) + 
+  theme_classic() + theme(axis.title = element_blank()) +
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
+figCA1
+figCA2 <- pS2_FIN_co2A_out_annual_cohorts %>% 
+  group_by(PFT,yr) %>%
+  summarise(CrownArea=sum(Acrown*Density/10000)) %>% 
+  mutate(PFT=as.factor(PFT)) %>%
+  ggplot() + 
+  geom_line(aes(x = yr, y = CrownArea,col=PFT)) +
+  scale_y_continuous(limits=c(0,3), breaks = seq(0,3,1)) +
+  labs(x = "t", y = expression(paste("Crown area (", m^-2, " ", m^-2, ") "))) + 
+  theme_classic() + theme(axis.title = element_blank()) +
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
+figCA2
+figCA3 <- pS3_FIN_co2A_out_annual_cohorts %>% 
+  group_by(PFT,yr) %>%
+  summarise(CrownArea=sum(Acrown*Density/10000)) %>% 
+  mutate(PFT=as.factor(PFT)) %>%
+  ggplot() + 
+  geom_line(aes(x = yr, y = CrownArea,col=PFT)) +
+  scale_y_continuous(limits=c(0,3), breaks = seq(0,3,1)) +
+  labs(x = "t", y = expression(paste("CA (", m^-2, " ", m^-2, ") "))) + 
+  theme_classic() +
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
+figCA3
+figCA4 <- pS4_FIN_co2A_out_annual_cohorts %>% 
+  group_by(PFT,yr) %>%
+  summarise(CrownArea=sum(Acrown*Density/10000)) %>% 
+  mutate(PFT=as.factor(PFT)) %>%
+  ggplot() + 
+  geom_line(aes(x = yr, y = CrownArea,col=PFT)) +
+  scale_y_continuous(limits=c(0,3), breaks = seq(0,3,1)) +
+  labs(x = "t", y = expression(paste("Crown area (", m^-2, " ", m^-2, ") "))) + 
+  theme_classic() + theme(axis.title = element_blank()) +
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
+figCA4
+figCA5 <- pS5_FIN_co2A_out_annual_cohorts %>% 
+  group_by(PFT,yr) %>%
+  summarise(CrownArea=sum(Acrown*Density/10000)) %>% 
+  mutate(PFT=as.factor(PFT)) %>%
+  ggplot() + 
+  geom_line(aes(x = yr, y = CrownArea,col=PFT)) +
+  scale_y_continuous(limits=c(0,3), breaks = seq(0,3,1)) +
+  labs(x = "t", y = expression(paste("Crown area (", m^-2, " ", m^-2, ") "))) + 
+  theme_classic() + theme(axis.title = element_blank()) +
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
+figCA5
+figCA6 <- pS6_FIN_co2A_out_annual_cohorts %>% 
+  group_by(PFT,yr) %>%
+  summarise(CrownArea=sum(Acrown*Density/10000)) %>% 
+  mutate(PFT=as.factor(PFT)) %>%
+  ggplot() + 
+  geom_line(aes(x = yr, y = CrownArea,col=PFT)) +
+  scale_y_continuous(limits=c(0,3), breaks = seq(0,3,1)) +
+  labs(x = "t", y = expression(paste("Crown area (", m^-2, " ", m^-2, ") "))) + 
+  theme_classic() + theme(axis.title = element_blank()) +
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
+figCA6
+
+figCABiomeE <- figCA0  + figCA1  + figCA2  + figCA3 +
+   figCA4  + figCA5  + figCA6  +
+  plot_layout(ncol = 1) + 
+  plot_annotation(title = 'BiomeE outputs (by Ensheng)') +
+  plot_layout(guides = "collect") & theme(legend.position = 'bottom')
+figCABiomeE
+ggsave("/home/laura/Documents/Collaborations/DBEN/Ensheng/BiomeE_FIN_CA.pdf", width = 5, height = 10, dpi=300)
+
+# PS BiomeEP simulations ####
+BiomeE_P0_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_P0_FIN_aCO2_annual_tile.csv")
+BiomeE_P0_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_P0_FIN_aCO2_annual_cohorts.csv")
+BiomeE_PS1_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS1_FIN_aCO2_annual_tile.csv")
+BiomeE_PS1_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS1_FIN_aCO2_annual_cohorts.csv")
+BiomeE_PS2_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS2_FIN_aCO2_annual_tile.csv")
+BiomeE_PS2_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS2_FIN_aCO2_annual_cohorts.csv")
+BiomeE_PS3_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS3_FIN_aCO2_annual_tile.csv")
+BiomeE_PS3_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS3_FIN_aCO2_annual_cohorts.csv")
+BiomeE_PS4_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS4_FIN_aCO2_annual_tile.csv")
+BiomeE_PS4_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS4_FIN_aCO2_annual_cohorts.csv")
+BiomeE_PS5_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS5_FIN_aCO2_annual_tile.csv")
+BiomeE_PS5_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS5_FIN_aCO2_annual_cohorts.csv")
+BiomeE_PS6_FIN_aCO2_annual_tile    <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS6_FIN_aCO2_annual_tile.csv")
+BiomeE_PS6_FIN_aCO2_annual_cohorts <- read.csv("~/rsofun/data/outputs_mod/412ppm/BiomeE_PS6_FIN_aCO2_annual_cohorts.csv")
+
+# Crown area PS ####
+figCA0 <- BiomeE_P0_FIN_aCO2_annual_cohorts %>% 
+  mutate(PFT=as.factor(PFT)) %>%
+  group_by(PFT,year) %>%
+  summarise(CA=sum(Acrown*density/10000)) %>% 
+  filter(year>510) %>%
+  mutate(year = year-510) %>%
+  ggplot() + 
+  geom_line(aes(x = year, y = CA,col=PFT)) +
+  scale_y_continuous(limits=c(0,3), breaks = seq(0,3,1)) +
+  labs(x = "t", y = expression(paste("Crown area (", m^-2, " ", m^-2, ") "))) + 
+  theme_classic() + theme(axis.title = element_blank()) +
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
+figCA0
+
+figCA1 <- BiomeE_PS1_FIN_aCO2_annual_cohorts %>% 
+  mutate(PFT=as.factor(PFT)) %>%
+  group_by(PFT,year) %>%
+  summarise(CA=sum(Acrown*density/10000)) %>% 
+  filter(year>510) %>%
+  mutate(year = year-510) %>%
+  ggplot() + 
+  geom_line(aes(x = year, y = CA,col=PFT)) +
+  scale_y_continuous(limits=c(0,3), breaks = seq(0,3,1)) +
+  labs(x = "t", y = expression(paste("Crown area (", m^-2, " ", m^-2, ") "))) + 
+  theme_classic() + theme(axis.title = element_blank()) +
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
+figCA1
+figCA2 <- BiomeE_PS2_FIN_aCO2_annual_cohorts %>% 
+  mutate(PFT=as.factor(PFT)) %>%
+  group_by(PFT,year) %>%
+  summarise(CA=sum(Acrown*density/10000)) %>% 
+  filter(year>510) %>%
+  mutate(year = year-510) %>%
+  ggplot() + 
+  geom_line(aes(x = year, y = CA,col=PFT)) +
+  scale_y_continuous(limits=c(0,3), breaks = seq(0,3,1)) +
+  labs(x = "t", y = expression(paste("Crown area (", m^-2, " ", m^-2, ") "))) + 
+  theme_classic() + theme(axis.title = element_blank()) +
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
+figCA2
+figCA3 <- BiomeE_PS3_FIN_aCO2_annual_cohorts %>% 
+  mutate(PFT=as.factor(PFT)) %>%
+  group_by(PFT,year) %>%
+  summarise(CA=sum(Acrown*density/10000)) %>% 
+  filter(year>510) %>%
+  mutate(year = year-510) %>%
+  ggplot() + 
+  geom_line(aes(x = year, y = CA,col=PFT)) +
+  scale_y_continuous(limits=c(0,3), breaks = seq(0,3,1)) +
+  labs(x = "t", y = expression(paste("CA (", m^-2, " ", m^-2, ") "))) + 
+  theme_classic() +
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
+figCA3
+figCA4 <- BiomeE_PS4_FIN_aCO2_annual_cohorts %>% 
+  mutate(PFT=as.factor(PFT)) %>%
+  group_by(PFT,year) %>%
+  summarise(CA=sum(Acrown*density/10000)) %>% 
+  filter(year>510) %>%
+  mutate(year = year-510) %>%
+  ggplot() + 
+  geom_line(aes(x = year, y = CA,col=PFT)) +
+  scale_y_continuous(limits=c(0,3), breaks = seq(0,3,1)) +
+  labs(x = "t", y = expression(paste("Crown area (", m^-2, " ", m^-2, ") "))) + 
+  theme_classic() + theme(axis.title = element_blank()) +
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
+figCA4
+figCA5 <- BiomeE_PS5_FIN_aCO2_annual_cohorts %>% 
+  mutate(PFT=as.factor(PFT)) %>%
+  group_by(PFT,year) %>%
+  summarise(CA=sum(Acrown*density/10000)) %>% 
+  filter(year>510) %>%
+  mutate(year = year-510) %>%
+  ggplot() + 
+  geom_line(aes(x = year, y = CA,col=PFT)) +
+  scale_y_continuous(limits=c(0,3), breaks = seq(0,3,1)) +
+  labs(x = "t", y = expression(paste("Crown area (", m^-2, " ", m^-2, ") "))) + 
+  theme_classic() + theme(axis.title = element_blank()) +
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
+figCA5
+figCA6 <- BiomeE_PS6_FIN_aCO2_annual_cohorts %>% 
+  mutate(PFT=as.factor(PFT)) %>%
+  group_by(PFT,year) %>%
+  summarise(CA=sum(Acrown*density/10000)) %>% 
+  filter(year>510) %>%
+  mutate(year = year-510) %>%
+  ggplot() + 
+  geom_line(aes(x = year, y = CA,col=PFT)) +
+  scale_y_continuous(limits=c(0,3), breaks = seq(0,3,1)) +
+  labs(x = "t", y = expression(paste("Crown area (", m^-2, " ", m^-2, ") "))) + 
+  theme_classic() + theme(axis.title = element_blank()) +
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
+figCA6
+
+figCABiomeEP <- figCA0  + figCA1  + figCA2  + figCA3 +
+  figCA4  + figCA5  + figCA6  +
+  plot_layout(ncol = 1) + 
+  plot_annotation(title = 'BiomeEP outputs') +
+  plot_layout(guides = "collect") & theme(legend.position = 'bottom')
+figCABiomeEP
+ggsave("/home/laura/Documents/Collaborations/DBEN/Ensheng/BiomeEP_FIN_CA.pdf", width = 5, height = 10, dpi=300)
 
 # All plots ####
 # Plant C (Biomass) ####
@@ -178,7 +397,7 @@ fig2c <- p0_FIN_co2A_out_annual_cohorts %>% #filter(year>510) %>%
   mutate(PFT=as.factor(PFT)) %>%
   ggplot() + 
   geom_line(aes(x = yr, y = LeafArea,col=PFT)) +
-  labs(x = "t", y = expression(paste("LEaf area (", m^-2, " ", m^-2, ") "))) + 
+  labs(x = "t", y = expression(paste("Leaf area (", m^-2, " ", m^-2, ") "))) + 
   theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                      axis.text = element_text(size = 10),axis.title = element_text(size = 10),
                      legend.text = element_text(size = 9),legend.title = element_text(size = 9),
