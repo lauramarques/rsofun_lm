@@ -573,8 +573,6 @@ contains
 
     enddo cohortloop2
 
-    !if (TURN_ON_life) call relayer_cohorts( vegn )
-
     if (cc_firstday) call relayer_cohorts(vegn)
 
     ! OFF of a growing season
