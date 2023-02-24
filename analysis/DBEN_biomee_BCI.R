@@ -107,26 +107,23 @@ params_species <- tibble(
   betaON        = c(9999,0.2,0.9,0,0,rep(0,11)),     
   betaOFF       = c(9999,0.1,0.9,0,0,rep(0,11)),     
   seedlingsize  = c(9999,0.02,0.05,0.05,0.05,rep(0.05,11)),    
-  LNbase        = c(9999,0.7E-3,0.7E-3,0.8E-3,0.6E-3,rep(0.5E-3,11)),  
-  #lAImax        = c(9999,2.5,3.5,3.8,4.0,rep(3.5,11)),  
-  lAImax         = c(9999,2.0,3.0,3.5,3.5,rep(3.5,11)), 
+  LNbase        = c(9999,0.7E-3,0.7E-3,0.8E-3,0.6E-3,rep(0.5E-3,11)), 
+  lAImax         = c(9999,2.0,3.0,3.5,3.5,rep(3.5,11)), # c(9999,2.5,3.5,3.8,4.0,rep(3.5,11)),
   Nfixrate0     = rep(0,16),                     
   NfixCost0     = rep(0,16),                    
   phiCSA        = rep(0.25E-4,16),                
   mortrate_d_c  = c(9999,0.2,0.02,0.04,0.02,rep(0.02,11)), 
   mortrate_d_u  = rep(0.075,16),                
   maturalage    = c(9999,0,5,5,5,rep(5,11)),       
-  v_seed        = c(9999,0.1,0.1,0.1,0.1,rep(0.1,11)),     
+  v_seed        = c(9999,0.1,0.1,0.1,0.1,rep(0.1,11)),   # c(9999,0.3,0.1,0.1,0.1,rep(0.1,11)), 
   fNSNmax       = rep(5,16),                      
-  #LMA           = c(9999,0.02,0.03,0.07,0.12,rep(0.12,11)),  
-  LMA           = c(9999,0.025,0.025,0.14,0.14,rep(0.14,11)), 
-  #rho_wood      = c(9999,80,320,350,320,rep(300,11)), 
-  rho_wood      = c(9999,120,350,300,300,rep(300,11)),    
+  LMA           = c(9999,0.025,0.025,0.14,0.14,rep(0.14,11)), # c(9999,0.02,0.03,0.07,0.12,rep(0.14,11)), 
+  rho_wood      = c(9999,120,350,300,300,rep(300,11)), # c(9999,80,320,350,320,rep(300,11)),
   alphaBM       = rep(5200,16),                   
   thetaBM       = rep(2.5,16), 
   # add calibratable params
   kphio         = rep(0.05,16),
-  phiRL         = rep(3.5,16),               
+  phiRL         = rep(3.5,16),    # c(9999,1.5,1.2,1.5,1.5,rep(1.5,11)),           
   LAI_light     = rep(3.5,16)                
 ) 
 
@@ -263,14 +260,14 @@ g3 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   ggplot() +
   geom_line(aes(x = year, y = CrownArea,col=PFT)) +
   theme_classic()+labs(x = "Year", y = "CrownArea") + 
-  scale_colour_discrete(labels = c("Grass","Broadleaf1","Broadleaf2","Needleleaf"))
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
 
 g4 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   summarise(npp=sum(NPP*density/10000)) %>% mutate(PFT=as.factor(PFT)) %>%
   ggplot() +
   geom_line(aes(x = year, y = npp,col=PFT)) +
   theme_classic()+labs(x = "Year", y = "NPP") + 
-  scale_colour_discrete(labels = c("Grass","Broadleaf1","Broadleaf2","Needleleaf"))
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
 
 g5 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   summarise(BAgrowth=sum(((DBH+dDBH)**2*pi/4-DBH**2*pi/4)*density/10000)) %>%
@@ -278,7 +275,7 @@ g5 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   ggplot() +
   geom_line(aes(x = year, y = BAgrowth,col=PFT)) +
   theme_classic()+labs(x = "Year", y = "BAgrowth") + 
-  scale_colour_discrete(labels = c("Grass","Broadleaf1","Broadleaf2","Needleleaf"))
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
 
 print(g1/g2/g3/g4/g5)
 
@@ -446,7 +443,8 @@ params_species <- tibble(
   betaOFF       = c(9999,0.1,0.9,0,0,rep(0,11)),     
   seedlingsize  = c(9999,0.02,0.05,0.05,0.05,rep(0.05,11)),    
   LNbase        = c(9999,0.7E-3,0.7E-3,0.8E-3,0.6E-3,rep(0.5E-3,11)),  
-  lAImax        = c(9999,2.5,3.5,3.8,4.0,rep(3.5,11)),  
+  #lAImax        = c(9999,2.5,3.5,3.8,4.0,rep(3.5,11)),  
+  lAImax         = c(9999,2.0,3.0,3.5,3.5,rep(3.5,11)), 
   Nfixrate0     = rep(0,16),                     
   NfixCost0     = rep(0,16),                    
   phiCSA        = rep(0.25E-4,16),                
@@ -455,8 +453,10 @@ params_species <- tibble(
   maturalage    = c(9999,0,5,5,5,rep(5,11)),       
   v_seed        = c(9999,0.1,0.1,0.1,0.1,rep(0.1,11)),     
   fNSNmax       = rep(5,16),                      
-  LMA           = c(9999,0.02,0.03,0.07,0.12,rep(0.12,11)),  
-  rho_wood      = c(9999,80,320,350,320,rep(300,11)),        
+  #LMA           = c(9999,0.02,0.03,0.07,0.12,rep(0.12,11)),  
+  LMA           = c(9999,0.025,0.025,0.14,0.14,rep(0.14,11)), 
+  #rho_wood      = c(9999,80,320,350,320,rep(300,11)), 
+  rho_wood      = c(9999,120,350,300,300,rep(300,11)),    
   alphaBM       = rep(5200,16),                   
   thetaBM       = rep(2.5,16), 
   # add calibratable params
@@ -591,21 +591,21 @@ g2 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   ggplot() +
   geom_line(aes(x = year, y = sumBA,col=PFT)) +
   theme_classic()+labs(x = "Year", y = "BA") + 
-  scale_colour_discrete(labels = c("Grass","Broadleaf1","Broadleaf2","Needleleaf"))
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
 
 g3 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   summarise(CrownArea=sum(Acrown*density/10000)) %>% mutate(PFT=as.factor(PFT)) %>%
   ggplot() +
   geom_line(aes(x = year, y = CrownArea,col=PFT)) +
   theme_classic()+labs(x = "Year", y = "CrownArea") + 
-  scale_colour_discrete(labels = c("Grass","Broadleaf1","Broadleaf2","Needleleaf"))
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
 
 g4 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   summarise(npp=sum(NPP*density/10000)) %>% mutate(PFT=as.factor(PFT)) %>%
   ggplot() +
   geom_line(aes(x = year, y = npp,col=PFT)) +
   theme_classic()+labs(x = "Year", y = "NPP") + 
-  scale_colour_discrete(labels = c("Grass","Broadleaf1","Broadleaf2","Needleleaf"))
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
 
 g5 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   summarise(BAgrowth=sum(((DBH+dDBH)**2*pi/4-DBH**2*pi/4)*density/10000)) %>%
@@ -613,7 +613,7 @@ g5 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   ggplot() +
   geom_line(aes(x = year, y = BAgrowth,col=PFT)) +
   theme_classic()+labs(x = "Year", y = "BAgrowth") + 
-  scale_colour_discrete(labels = c("Grass","Broadleaf1","Broadleaf2","Needleleaf"))
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
 
 print(g1/g2/g3/g4/g5)
 

@@ -158,7 +158,7 @@ fignstem_size
 
 (figcveg + figcwood)/(figcwood_size + fignstem_size) + 
   plot_layout(guides = "collect") & theme(legend.position = 'right')
-ggsave("~/rsofun/data/figures/BiomeEP_P0_BCI_412ppm_PoolsSize.pdf", width = 8, height = 5.5, dpi=300)
+#ggsave("~/rsofun/data/figures/BiomeEP_P0_BCI_412ppm_PoolsSize.pdf", width = 8, height = 5.5, dpi=300)
 
 ## Leaf area index ####
 # lai
@@ -239,7 +239,7 @@ figheight
 
 (figlai + figCA)/(figBA + figheight) + 
   plot_layout(guides = "collect") & theme(legend.position = 'bottom')
-ggsave("~/rsofun/data/figures/BiomeEP_P0_BCI_412ppm_PoolsStructure.pdf", width = 8, height = 5.5, dpi=300)
+#ggsave("~/rsofun/data/figures/BiomeEP_P0_BCI_412ppm_PoolsStructure.pdf", width = 8, height = 5.5, dpi=300)
 
 # FLUXES ####
 ## Woody biomass growth ####
@@ -346,7 +346,7 @@ figstemmort_size
 
 (figWBgrowth + figBAgrowth)/(figcmort + figstemmort) + 
   plot_layout(guides = "collect") & theme(legend.position = 'bottom')
-ggsave("~/rsofun/data/figures/BiomeEP_P0_BCI_412ppm_FluxesdBAMortality.pdf", width = 8, height = 5.5, dpi=300)
+#ggsave("~/rsofun/data/figures/BiomeEP_P0_BCI_412ppm_FluxesdBAMortality.pdf", width = 8, height = 5.5, dpi=300)
 
 ## GPP - Carbon Mass Flux out of Atmosphere due to Gross Primary Production on Land ####
 # gpp
@@ -406,7 +406,7 @@ fignbp
 
 figgpp + fignpp + fignbp + plot_layout(guides = "collect") + 
   plot_layout(guides = "collect") & theme(legend.position = 'bottom')
-ggsave("~/rsofun/data/figures/BiomeEP_P0_BCI_412ppm_FluxesGrowth.pdf", width = 8, height = 3.5, dpi=300)
+#ggsave("~/rsofun/data/figures/BiomeEP_P0_BCI_412ppm_FluxesGrowth.pdf", width = 8, height = 3.5, dpi=300)
 
 # All plots
 fig1a + fig1b + fig1c + fig1d + 
@@ -470,7 +470,7 @@ fig1d
 
 (fig1a + fig1b)/(fig1c + fig1d) 
 #ggsave("~/rsofun/data/figures/BiomeEP_P0_BCI_562ppm_EcosystemC.png", width = 8, height = 5.5, dpi=300)
-ggsave("~/rsofun/data/figures/BiomeEP_P0_BCI_562ppm_EcosystemC.pdf", width = 8, height = 5.5, dpi=300)
+#ggsave("~/rsofun/data/figures/BiomeEP_P0_BCI_562ppm_EcosystemC.pdf", width = 8, height = 5.5, dpi=300)
 
 # POOLS ####
 ## Carbon mass in vegetation by PFT ####
@@ -566,7 +566,7 @@ fignstem_size
 
 (figcveg + figcwood)/(figcwood_size + fignstem_size) + 
   plot_layout(guides = "collect") & theme(legend.position = 'right')
-ggsave("~/rsofun/data/figures/BiomeEP_P0_BCI_562ppm_PoolsSize.pdf", width = 8, height = 5.5, dpi=300)
+#ggsave("~/rsofun/data/figures/BiomeEP_P0_BCI_562ppm_PoolsSize.pdf", width = 8, height = 5.5, dpi=300)
 
 ## Leaf area index ####
 # lai
@@ -647,7 +647,7 @@ figheight
 
 (figlai + figCA)/(figBA + figheight) + 
   plot_layout(guides = "collect") & theme(legend.position = 'bottom')
-ggsave("~/rsofun/data/figures/BiomeEP_P0_BCI_562ppm_PoolsStructure.pdf", width = 8, height = 5.5, dpi=300)
+#ggsave("~/rsofun/data/figures/BiomeEP_P0_BCI_562ppm_PoolsStructure.pdf", width = 8, height = 5.5, dpi=300)
 
 # FLUXES ####
 ## Woody biomass growth ####
@@ -754,7 +754,7 @@ figstemmort_size
 
 (figWBgrowth + figBAgrowth)/(figcmort + figstemmort) + 
   plot_layout(guides = "collect") & theme(legend.position = 'bottom')
-ggsave("~/rsofun/data/figures/BiomeEP_P0_BCI_562ppm_FluxesdBAMortality.pdf", width = 8, height = 5.5, dpi=300)
+#ggsave("~/rsofun/data/figures/BiomeEP_P0_BCI_562ppm_FluxesdBAMortality.pdf", width = 8, height = 5.5, dpi=300)
 
 ## GPP - Carbon Mass Flux out of Atmosphere due to Gross Primary Production on Land ####
 # gpp
@@ -814,7 +814,7 @@ fignbp
 
 figgpp + fignpp + fignbp + plot_layout(guides = "collect") + 
   plot_layout(guides = "collect") & theme(legend.position = 'bottom')
-ggsave("~/rsofun/data/figures/BiomeEP_P0_BCI_562ppm_FluxesGrowth.pdf", width = 8, height = 3.5, dpi=300)
+#ggsave("~/rsofun/data/figures/BiomeEP_P0_BCI_562ppm_FluxesGrowth.pdf", width = 8, height = 3.5, dpi=300)
 
 # All plots
 fig1a + fig1b + fig1c + fig1d + 
