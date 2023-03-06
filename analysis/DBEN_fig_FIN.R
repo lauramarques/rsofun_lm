@@ -829,7 +829,7 @@ fig1a + fig1b + fig1c + fig1d +
   figgpp + fignpp + fignbp + 
   plot_layout(ncol = 4) + 
   plot_layout(guides = "collect") & theme(legend.position = 'bottom')
-ggsave("~/rsofun/data/figures/BiomeEP_P0_FIN_562ppm_v2.pdf", width = 10, height = 13, dpi=300)
+ggsave("~/rsofun/data/figures/BiomeEP_P0_FIN_562ppm.pdf", width = 10, height = 13, dpi=300)
 
 # ________________####
 # PS - Sensitivity runs FIN  ####
