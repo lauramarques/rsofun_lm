@@ -23,6 +23,12 @@ PFT_reorder <- c(5,6,7,8)
 PFT_BCI <- tibble(PFT_species,PFT,PFT_reorder)
 PFT_BCI
 
+# Calculate deathrate and wood lifespan
+BiomeE_P0_BCI_aCO2_annual_cohorts %>% 
+  group_by(PFT) %>%
+  summarise(deathrate=mean(deathrate)) %>%
+  mutate(wood_lifespan=1/deathrate)
+
 # Pools ####
 # 1. Carbon mass in vegetation by PFT ####
 # cveg = Stem, coarse roots, fine roots, branches, leaves
@@ -5693,7 +5699,7 @@ CA <- BiomeE_PS1_BCI_eCO2_annual_cohorts %>%
   filter(year>510) %>%
   mutate(year = year-510) %>% left_join(PFT_BCI) %>% ungroup()
 CA_wid <- CA %>% select(c(year,CA,PFT_reorder)) %>% rename(PFT=PFT_reorder) %>%
-  pivot_wider(names_from = PFT, values_from = CA,values_fill = 0) %>% arrange(year) %%>%
+  pivot_wider(names_from = PFT, values_from = CA,values_fill = 0) %>% arrange(year) %>%
 mutate(`1`=0,`2`=0,`3`=0,`4`=0,) %>% 
   relocate(`1`,.after =year) %>% relocate(`2`,.after =`1`) %>% relocate(`3`,.after =`2`) %>%
   relocate(`4`,.after =`3`) %>% relocate(`5`,.after =`4`) %>% relocate(`6`,.after =`5`) %>% 

@@ -274,6 +274,8 @@ contains
           cc%resl = fapar_tree(i) * out_pmodel%vcmax25 * params_gpp%rd_to_vcmax * calc_ftemp_inst_rd( forcing%Tair - kTkelvin ) &
             * cc%crownarea * myinterface%step_seconds * c_molmass * 1.0e-3
 
+          !print*,'vcmax25 ', out_pmodel%vcmax25
+
         else
 
           ! no leaves means no photosynthesis and no stomatal conductance either

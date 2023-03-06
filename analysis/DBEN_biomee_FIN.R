@@ -1,7 +1,6 @@
 
 # load packages
 library(rsofun)
-library(tidyverse)
 library(dplyr)
 library(ggplot2)
 library(patchwork)
@@ -113,13 +112,14 @@ params_species <- tibble(
   Nfixrate0     = rep(0,16),                      
   NfixCost0     = rep(0,16),                     
   phiCSA        = rep(0.25E-4,16),                
-  mortrate_d_c  = c(9999,0.05,0.025,0.02,0.02,rep(0.02,11)),  # c(9999,0.05,0.02,0.03,0.01,rep(0.02,11)),
+  #mortrate_d_c  = c(9999,0.05,0.025,0.02,0.02,rep(0.02,11)),  # c(9999,0.05,0.02,0.03,0.01,rep(0.02,11)),
+  mortrate_d_c  = c(9999,0.05,0.025,0.03,0.01,rep(0.02,11)),  # c(9999,0.05,0.02,0.03,0.01,rep(0.02,11)),
   mortrate_d_u  = rep(0.075,16),                
   maturalage    = c(9999,0,5,5,5,rep(5,11)), 
   v_seed        = c(9999,0.1,0.1,0.1,0.1,rep(0.1,11)), # c(9999,0.4,0.1,0.1,0.1,rep(0.1,11)),   
   fNSNmax       = rep(5,16),                      
   LMA           = c(9999,0.025,0.025,0.14,0.14,rep(0.14,11)), # c(9999,0.025,0.025,0.08,0.14,rep(0.14,11)),
-  rho_wood      = c(9999,120,350,300,300,rep(300,11)),  #  c(9999,80,300,320,350,rep(300,11)),        
+  rho_wood      = c(9999,120,350,300,300,rep(300,11)),  #  c(9999,80,300,320,350,rep(300,11)), 
   alphaBM       = rep(5200,16),                   
   thetaBM       = rep(2.5,16), 
   # add calibratable params
@@ -247,7 +247,8 @@ out_sc1 <- runread_biomee_f(
 g1 <- out_sc1$data[[1]]$output_annual_tile %>%
   ggplot() +
   geom_line(aes(x = year, y = plantC)) +
-  theme_classic()+labs(x = "Year", y = "plantC") 
+  theme_classic()+labs(x = "Year", y = "plantC") +
+  scale_y_continuous(lim=c(0,20))
 
 g2 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   summarise(sumBA=sum(DBH*DBH*pi/4*density/10000)) %>% mutate(PFT=as.factor(PFT)) %>%
@@ -442,24 +443,25 @@ params_species <- tibble(
   gdd_crit      = c(9999,50,60,0,0,rep(0,11)), 
   betaON        = c(9999,0.2,0.2,0.2,0.2,rep(0.2,11)),     
   betaOFF       = c(9999,0.1,0.1,0.1,0.1,rep(0.1,11)),    
-  seedlingsize  = c(9999,0.01,0.05,0.05,0.05,rep(0.05,11)),   
+  seedlingsize  = c(9999,0.01,0.05,0.05,0.05,rep(0.05,11)), #c(9999,0.005,0.02,0.05,0.05,rep(0.05,11)), 
   LNbase         = c(9999,1.0E-3,0.8E-3,0.5E-3,0.5E-3,rep(0.5E-3,11)),  
-  lAImax         = c(9999,2.0,3.0,3.5,3.5,rep(3.5,11)), 
+  lAImax         = c(9999,2.0,3.0,3.5,3.5,rep(3.5,11)), # c(9999,2.0,3.0,3.2,3.5,rep(3.5,11)), 
   Nfixrate0     = rep(0,16),                      
   NfixCost0     = rep(0,16),                     
   phiCSA        = rep(0.25E-4,16),                
-  mortrate_d_c  = c(9999,0.05,0.025,0.02,0.02,rep(0.02,11)),  
+  #mortrate_d_c  = c(9999,0.05,0.025,0.02,0.02,rep(0.02,11)),  # c(9999,0.05,0.02,0.03,0.01,rep(0.02,11)),
+  mortrate_d_c  = c(9999,0.05,0.025,0.03,0.01,rep(0.02,11)),  # c(9999,0.05,0.02,0.03,0.01,rep(0.02,11)),
   mortrate_d_u  = rep(0.075,16),                
   maturalage    = c(9999,0,5,5,5,rep(5,11)), 
-  v_seed        = c(9999,0.1,0.1,0.1,0.1,rep(0.1,11)),     
+  v_seed        = c(9999,0.1,0.1,0.1,0.1,rep(0.1,11)), # c(9999,0.4,0.1,0.1,0.1,rep(0.1,11)),   
   fNSNmax       = rep(5,16),                      
-  LMA           = c(9999,0.025,0.025,0.14,0.14,rep(0.14,11)), 
-  rho_wood      = c(9999,120,350,300,300,rep(300,11)),         
+  LMA           = c(9999,0.025,0.025,0.14,0.14,rep(0.14,11)), # c(9999,0.025,0.025,0.08,0.14,rep(0.14,11)),
+  rho_wood      = c(9999,120,350,300,300,rep(300,11)),  #  c(9999,80,300,320,350,rep(300,11)), 
   alphaBM       = rep(5200,16),                   
   thetaBM       = rep(2.5,16), 
   # add calibratable params
   kphio         = rep(0.05,16),
-  phiRL         = rep(3.5,16),  
+  phiRL         = rep(3.5,16),  # #c(9999,1.0,1.5,0.8,1.2,rep(1.2,11)),
   LAI_light     = rep(3.5,16)   
 ) 
 
@@ -582,7 +584,8 @@ out_sc1 <- runread_biomee_f(
 g1 <- out_sc1$data[[1]]$output_annual_tile %>%
   ggplot() +
   geom_line(aes(x = year, y = plantC)) +
-  theme_classic()+labs(x = "Year", y = "plantC") 
+  theme_classic()+labs(x = "Year", y = "plantC") +
+  scale_y_continuous(lim=c(0,20))
 
 g2 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   summarise(sumBA=sum(DBH*DBH*pi/4*density/10000)) %>% mutate(PFT=as.factor(PFT)) %>%
@@ -615,11 +618,19 @@ g5 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
 
 print(g1/g2/g3/g4/g5)
 
-g6 <- out_sc1$data[[1]]$output_annual_tile %>%
+g6 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
+  summarise(gpp=sum(GPP*density/10000)) %>% mutate(PFT=as.factor(PFT)) %>%
+  ggplot() +
+  geom_line(aes(x = year, y = gpp,col=PFT)) +
+  theme_classic()+labs(x = "Year", y = "GPP") + 
+  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
+g6
+
+g7 <- out_sc1$data[[1]]$output_annual_tile %>%
   ggplot() +
   geom_line(aes(x = year, y = (SapwoodC+WoodC)*0.75)) +
   theme_classic()+labs(x = "Year", y = "AGW") + geom_hline(yintercept=10, col="grey")
-g6
+g7
 
 ## Outputs ####
 ### P0 ####

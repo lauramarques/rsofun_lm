@@ -65,8 +65,8 @@ module datatypes
 
     !===== Leaf traits
     real    :: LMA                                ! leaf mass per unit area, kg C/m2
-    real    :: leafLS                             ! leaf life span
-    real    :: alpha_L                            ! leaf turn over rate
+    real    :: leafLS                             ! leaf life span yr
+    real    :: alpha_L                            ! leaf turnover rate yr-1
     real    :: LNA                                ! leaf Nitrogen per unit area, kg N/m2
     real    :: LNbase                             ! basal leaf Nitrogen per unit area, kg N/m2, (Rubisco)
     real    :: CNleafsupport                      ! leaf structural tissues, 175
@@ -481,7 +481,7 @@ module datatypes
   real :: alphaHT(0:MSPECIES)        = 36.0
   real :: thetaHT(0:MSPECIES)        = 0.5 
   real :: alphaCA(0:MSPECIES)        = 150.0
-  real :: thetaCA(0:MSPECIES)        = 1.5
+  real :: thetaCA(0:MSPECIES)        = 1.5 !1.5
   ! real :: alphaBM(0:MSPECIES)      = 5200.0 !In Ensheng BiomeE: 5200.0
   ! real :: thetaBM(0:MSPECIES)      = 2.36 ! Beech (2.36); Spruce (2.30); Fir (2.45) In Ensheng BiomeE: 2.5
 
@@ -685,7 +685,7 @@ contains
     sp%CNleaf0 = sp%LMA/sp%LNA
 
     ! Leaf life span as a function of LMA
-    sp%leafLS = c_LLS * sp%LMA
+    sp%leafLS = c_LLS * sp%LMA            !c_LLS  = 28.57143 
     if(sp%leafLS>1.0)then
       sp%phenotype = 1
     else
@@ -694,6 +694,9 @@ contains
 
     ! Leaf turnover rate, (leaf longevity as a function of LMA)
     sp%alpha_L = 1.0/sp%leafLS * sp%phenotype
+
+    !print*,'Leaf life spam', sp%leafLS
+    !print*,'Leaf turnover rate', sp%alpha_L
 
   end subroutine init_derived_species_data
 

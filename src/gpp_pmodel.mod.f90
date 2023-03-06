@@ -319,7 +319,7 @@ contains
   !   real, intent(in) :: ca              ! ambient CO2 partial pressure (Pa)
   !   real, intent(in) :: gammastar       ! CO2 compensation point (Pa)
   !   real, intent(in) :: xi              ! slope parameter of stomatal response derived from P-model optimality, corresponding to sqrt(beta*(K+gammastar)/(1.6*etastar)) (Pa)
-  !   ! real, intent(in) :: dgs_unitiabs    ! stomatal conductance per unit absorbed light (mol CO2 Pa-1 m-2 s-1 / mol light)
+  !   ! real, intent(in) :: dgs_unitiabs  ! stomatal conductance per unit absorbed light (mol CO2 Pa-1 m-2 s-1 / mol light)
 
   !   ! function return variable
   !   real :: dgs                         ! leaf-level stomatal conductance to H2O, mean over daylight hours ( mol CO2 Pa-1 m-2 s-1 )
@@ -327,8 +327,7 @@ contains
   !   ! Leaf-level assimilation rate, average over daylight hours
   !   ! dgs = dassim * dgs_unitiabs
   !   dgs = (1.0 + xi / sqrt(vpd)) * dassim / (ca - gammastar)
-  !   ! print*,'instantaneous gs: ', dgs 
-    
+  !   ! print*,'instantaneous gs: ', dgs     
   ! end function calc_dgs
 
 

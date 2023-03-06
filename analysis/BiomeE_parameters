@@ -62,7 +62,7 @@ params_species <- tibble(
   maturalage                  # the age that can reproduce
   v_seed                      # fracton of G_SF to G_F ! seed allocation
   fNSNmax                     # multiplier for NSNmax as sum of potential bl and br
-  LMA                         # leaf mass per unit area
+  LMA                         # leaf mass per unit area kg C/m2
   rho_wood                    # woody density, kg C m-3 wood
   alphaBM                     # Allometry: biomass = alphaBM * DBH ** thetaBM        
   thetaBM                     # Allometry: biomass = alphaBM * DBH ** thetaBM     

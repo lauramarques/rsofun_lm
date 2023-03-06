@@ -22,6 +22,12 @@ PFT_reorder <- c(2,3,4,8)
 PFT_BIA <- tibble(PFT_species,PFT,PFT_reorder)
 PFT_BIA
 
+# Calculate deathrate and wood lifespan
+BiomeE_P0_BIA_aCO2_annual_cohorts %>% 
+  group_by(PFT) %>%
+  summarise(deathrate=mean(deathrate)) %>%
+  mutate(wood_lifespan=1/deathrate)
+
 # Pools ####
 # 1. Carbon mass in vegetation by PFT ####
 # cveg = Stem, coarse roots, fine roots, branches, leaves

@@ -253,21 +253,21 @@ g2 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   ggplot() +
   geom_line(aes(x = year, y = sumBA,col=PFT)) +
   theme_classic()+labs(x = "Year", y = "BA") + 
-  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
+  scale_colour_discrete(labels = c("Grass","Deciduous","Evergreen1","Evergreen2"))
 
 g3 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   summarise(CrownArea=sum(Acrown*density/10000)) %>% mutate(PFT=as.factor(PFT)) %>%
   ggplot() +
   geom_line(aes(x = year, y = CrownArea,col=PFT)) +
   theme_classic()+labs(x = "Year", y = "CrownArea") + 
-  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
+  scale_colour_discrete(labels = c("Grass","Deciduous","Evergreen1","Evergreen2"))
 
 g4 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   summarise(npp=sum(NPP*density/10000)) %>% mutate(PFT=as.factor(PFT)) %>%
   ggplot() +
   geom_line(aes(x = year, y = npp,col=PFT)) +
   theme_classic()+labs(x = "Year", y = "NPP") + 
-  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
+  scale_colour_discrete(labels = c("Grass","Deciduous","Evergreen1","Evergreen2"))
 
 g5 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   summarise(BAgrowth=sum(((DBH+dDBH)**2*pi/4-DBH**2*pi/4)*density/10000)) %>%
@@ -275,7 +275,7 @@ g5 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   ggplot() +
   geom_line(aes(x = year, y = BAgrowth,col=PFT)) +
   theme_classic()+labs(x = "Year", y = "BAgrowth") + 
-  scale_colour_discrete(labels = c("Grass","Broadleaf","Needleleaf1","Needleleaf2"))
+  scale_colour_discrete(labels = c("Grass","Deciduous","Evergreen1","Evergreen2"))
 
 print(g1/g2/g3/g4/g5)
 

@@ -1,7 +1,6 @@
 
 # load packages
 library(rsofun)
-library(tidyverse)
 library(dplyr)
 library(ggplot2)
 library(patchwork)
@@ -107,9 +106,11 @@ params_species <- tibble(
   gdd_crit      = c(9999,80,120,120,0,rep(0,11)),
   betaON        = c(9999,0.2,0.2,0.2,0.2,rep(0.2,11)),     
   betaOFF       = c(9999,0.1,0.1,0.1,0.1,rep(0.1,11)),
-  seedlingsize  = c(9999,0.01,0.05,0.05,0.05,rep(0.05,11)),  # c(9999,0.005,0.02,0.02,0.06,rep(0.05,11)),  
-  LNbase         = c(9999,1.0E-3,0.8E-3,0.7E-3,0.4E-3,rep(0.5E-3,11)),  
-  lAImax         = c(9999,2.0,3.0,3.0,3.5,rep(3.5,11)), # c(9999,2.0,3.2,3.3,3.5,rep(3.5,11)), 
+  seedlingsize  = c(9999,0.01,0.05,0.05,0.05,rep(0.05,11)),  # c(9999,0.005,0.02,0.02,0.06,rep(0.05,11)), 
+  #seedlingsize  = c(9999,0.005,0.02,0.02,0.06,rep(0.05,11)),  
+  LNbase        = c(9999,1.0E-3,0.8E-3,0.7E-3,0.4E-3,rep(0.5E-3,11)),  
+  lAImax        = c(9999,2.0,3.0,3.0,3.5,rep(3.5,11)), # c(9999,2.0,3.2,3.3,3.5,rep(3.5,11)), 
+  #lAImax        = c(9999,2.0,3.2,3.3,3.5,rep(3.5,11)), 
   Nfixrate0     = rep(0,16),                      
   NfixCost0     = rep(0,16),                     
   phiCSA        = rep(0.25E-4,16),               
@@ -117,9 +118,11 @@ params_species <- tibble(
   mortrate_d_u  = rep(0.075,16),                  
   maturalage    = c(9999,0,5,5,5,rep(5,11)),   
   v_seed        = c(9999,0.1,0.1,0.1,0.1,rep(0.1,11)),  # c(9999,0.4,0.1,0.1,0.1,rep(0.1,11)),   
+  #v_seed        = c(9999,0.4,0.1,0.1,0.1,rep(0.1,11)),   
   fNSNmax       = rep(5,16),                      
   LMA           = c(9999,0.025,0.025,0.025,0.14,rep(0.14,11)), 
-  rho_wood      = c(9999,120,350,350,300,rep(300,11)), # c(9999,80,320,350,300,rep(300,11)),         
+  rho_wood      = c(9999,120,350,350,300,rep(300,11)), # c(9999,80,320,350,300,rep(300,11)),  
+  #rho_wood      = c(9999,120,320,350,300,rep(300,11)),         
   alphaBM       = rep(5200,16),                   
   thetaBM       = rep(2.5,16), 
   # add calibratable params
@@ -142,17 +145,17 @@ params_soil <- tibble(
 
 init_cohort <- tibble(
   init_cohort_species = seq(1,10,1),   
-  init_cohort_nindivs = rep(0.008,10),  
-  init_cohort_bsw     = rep(0.2,10),  
+  init_cohort_nindivs = rep(0.008,10),  # c(2.0,.05,.05,.05,rep(.05,6)),  
+  init_cohort_bsw     = rep(0.2,10),    # c(0.01,0.2,0.2,0.2,rep(0.2,6)),
   init_cohort_bHW     = rep(0.0, 10), 
-  init_cohort_nsc     = rep(0.5,10)   
+  init_cohort_nsc     = rep(0.5,10)     # c(0.04,0.5,0.5,0.5,rep(0.5,6)),
 )
 
 init_soil <- tibble( #list
-  init_fast_soil_C    = 0.0,    
-  init_slow_soil_C    = 0.0,    
-  init_Nmineral       = 0.015,  
-  N_input             = 0.0008  
+  init_fast_soil_C    = 0.0,    # 0.5, 
+  init_slow_soil_C    = 0.0,    # 40,   
+  init_Nmineral       = 0.015,  # 50.0E-3, 
+  N_input             = 0.0008  # 11.E-3
 )
 
 df_soiltexture <- bind_rows(
@@ -279,6 +282,19 @@ g5 <- out_sc1$data[[1]]$output_annual_cohorts %>% group_by(PFT,year) %>%
   scale_colour_discrete(labels = c("Grass","Broadleaf1","Broadleaf2","Needleleaf"))
 
 print(g1/g2/g3/g4/g5)
+
+out_sc1$data[[1]]$output_annual_cohorts %>% 
+  mutate(PFT=as.factor(PFT)) %>%
+  group_by(PFT,year) %>%
+  summarise(BAgrowth=sum(((DBH+dDBH)**2*pi/4-DBH**2*pi/4)*density/10000)) %>%
+  #summarise(BAgrowth=sum(dBA*density)) %>% 
+  filter(year>510) %>%
+  mutate(year = year-510) %>%
+  ggplot() + 
+  geom_line(aes(x=year, y=BAgrowth,col=PFT)) +
+  labs(x = "year", y = expression(paste("Basal area growth (", m^2, " ",ha^-1, " ", yr^-1, ") "))) + 
+  theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_text(size = 10)) +
+  scale_colour_discrete(labels = c("Grasses","Tilia cordata","Betula pendula","Picea abies"))
 
 g6 <- out_sc1$data[[1]]$output_annual_tile %>%
   ggplot() +

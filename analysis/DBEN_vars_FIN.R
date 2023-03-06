@@ -22,6 +22,12 @@ PFT_reorder <- c(1,2,3,8)
 PFT_FIN <- tibble(PFT_species,PFT,PFT_reorder)
 PFT_FIN
 
+# Calculate deathrate and wood lifespan
+BiomeE_P0_FIN_aCO2_annual_cohorts %>% 
+  group_by(PFT) %>%
+  summarise(deathrate=mean(deathrate)) %>%
+  mutate(wood_lifespan=1/deathrate)
+
 # Pools ####
 # 1. Carbon mass in vegetation by PFT ####
 # cveg = Stem, coarse roots, fine roots, branches, leaves
@@ -4810,7 +4816,7 @@ cwood_size <- BiomeE_P0_FIN_eCO2_annual_cohorts %>%
   summarise(cwood_size=sum((sapwC+woodC)*density/10000)) %>% ungroup()
 cwood_size_wid <- cwood_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = cwood_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cwood_size_P0_FIN_562ppm", ".nc", sep="")
@@ -4846,7 +4852,7 @@ nstem_size <- BiomeE_P0_FIN_eCO2_annual_cohorts %>%
   summarise(nstem_size=sum(density)) %>% ungroup()
 nstem_size_wid <- nstem_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = nstem_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_nstem_size_P0_FIN_562ppm", ".nc", sep="")
@@ -5476,7 +5482,7 @@ cwood_size <- BiomeE_PS1_FIN_eCO2_annual_cohorts %>%
   summarise(cwood_size=sum((sapwC+woodC)*density/10000)) %>% ungroup()
 cwood_size_wid <- cwood_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = cwood_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cwood_size_PS1_FIN_562ppm", ".nc", sep="")
@@ -5512,7 +5518,7 @@ nstem_size <- BiomeE_PS1_FIN_eCO2_annual_cohorts %>%
   summarise(nstem_size=sum(density)) %>% ungroup()
 nstem_size_wid <- nstem_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = nstem_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_nstem_size_PS1_FIN_562ppm", ".nc", sep="")
@@ -5811,7 +5817,7 @@ cmort <- BiomeE_PS1_FIN_eCO2_annual_cohorts %>%
   summarise(cmort=sum(c_deadtrees)) %>% ungroup()
 cmort_wid <- cmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = cmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cmort_size_PS1_FIN_562ppm", ".nc", sep="")
@@ -5880,7 +5886,7 @@ stemmort <- BiomeE_PS1_FIN_eCO2_annual_cohorts %>%
   summarise(stemmort=sum(deathrate*density/10000)) %>% ungroup()
 stemmort_wid <- stemmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = stemmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_stemmort_size_PS1_FIN_562ppm", ".nc", sep="")
@@ -6142,7 +6148,7 @@ cwood_size <- BiomeE_PS2_FIN_eCO2_annual_cohorts %>%
   summarise(cwood_size=sum((sapwC+woodC)*density/10000)) %>% ungroup()
 cwood_size_wid <- cwood_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = cwood_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cwood_size_PS2_FIN_562ppm", ".nc", sep="")
@@ -6178,7 +6184,7 @@ nstem_size <- BiomeE_PS2_FIN_eCO2_annual_cohorts %>%
   summarise(nstem_size=sum(density)) %>% ungroup()
 nstem_size_wid <- nstem_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = nstem_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_nstem_size_PS2_FIN_562ppm", ".nc", sep="")
@@ -6477,7 +6483,7 @@ cmort <- BiomeE_PS2_FIN_eCO2_annual_cohorts %>%
   summarise(cmort=sum(c_deadtrees)) %>% ungroup()
 cmort_wid <- cmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = cmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cmort_size_PS2_FIN_562ppm", ".nc", sep="")
@@ -6546,7 +6552,7 @@ stemmort <- BiomeE_PS2_FIN_eCO2_annual_cohorts %>%
   summarise(stemmort=sum(deathrate*density/10000)) %>% ungroup()
 stemmort_wid <- stemmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = stemmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_stemmort_size_PS2_FIN_562ppm", ".nc", sep="")
@@ -6808,7 +6814,7 @@ cwood_size <- BiomeE_PS3_FIN_eCO2_annual_cohorts %>%
   summarise(cwood_size=sum((sapwC+woodC)*density/10000)) %>% ungroup()
 cwood_size_wid <- cwood_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = cwood_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cwood_size_PS3_FIN_562ppm", ".nc", sep="")
@@ -6844,7 +6850,7 @@ nstem_size <- BiomeE_PS3_FIN_eCO2_annual_cohorts %>%
   summarise(nstem_size=sum(density)) %>% ungroup()
 nstem_size_wid <- nstem_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = nstem_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_nstem_size_PS3_FIN_562ppm", ".nc", sep="")
@@ -7143,7 +7149,7 @@ cmort <- BiomeE_PS3_FIN_eCO2_annual_cohorts %>%
   summarise(cmort=sum(c_deadtrees)) %>% ungroup()
 cmort_wid <- cmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = cmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cmort_size_PS3_FIN_562ppm", ".nc", sep="")
@@ -7212,7 +7218,7 @@ stemmort <- BiomeE_PS3_FIN_eCO2_annual_cohorts %>%
   summarise(stemmort=sum(deathrate*density/10000)) %>% ungroup()
 stemmort_wid <- stemmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = stemmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_stemmort_size_PS3_FIN_562ppm", ".nc", sep="")
@@ -7474,7 +7480,7 @@ cwood_size <- BiomeE_PS4_FIN_eCO2_annual_cohorts %>%
   summarise(cwood_size=sum((sapwC+woodC)*density/10000)) %>% ungroup()
 cwood_size_wid <- cwood_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = cwood_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cwood_size_PS4_FIN_562ppm", ".nc", sep="")
@@ -7510,7 +7516,7 @@ nstem_size <- BiomeE_PS4_FIN_eCO2_annual_cohorts %>%
   summarise(nstem_size=sum(density)) %>% ungroup()
 nstem_size_wid <- nstem_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = nstem_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_nstem_size_PS4_FIN_562ppm", ".nc", sep="")
@@ -7809,7 +7815,7 @@ cmort <- BiomeE_PS4_FIN_eCO2_annual_cohorts %>%
   summarise(cmort=sum(c_deadtrees)) %>% ungroup()
 cmort_wid <- cmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = cmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cmort_size_PS4_FIN_562ppm", ".nc", sep="")
@@ -7878,7 +7884,7 @@ stemmort <- BiomeE_PS4_FIN_eCO2_annual_cohorts %>%
   summarise(stemmort=sum(deathrate*density/10000)) %>% ungroup()
 stemmort_wid <- stemmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = stemmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_stemmort_size_PS4_FIN_562ppm", ".nc", sep="")
@@ -8140,7 +8146,7 @@ cwood_size <- BiomeE_PS5_FIN_eCO2_annual_cohorts %>%
   summarise(cwood_size=sum((sapwC+woodC)*density/10000)) %>% ungroup()
 cwood_size_wid <- cwood_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = cwood_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cwood_size_PS5_FIN_562ppm", ".nc", sep="")
@@ -8176,7 +8182,7 @@ nstem_size <- BiomeE_PS5_FIN_eCO2_annual_cohorts %>%
   summarise(nstem_size=sum(density)) %>% ungroup()
 nstem_size_wid <- nstem_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = nstem_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_nstem_size_PS5_FIN_562ppm", ".nc", sep="")
@@ -8475,7 +8481,7 @@ cmort <- BiomeE_PS5_FIN_eCO2_annual_cohorts %>%
   summarise(cmort=sum(c_deadtrees)) %>% ungroup()
 cmort_wid <- cmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = cmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cmort_size_PS5_FIN_562ppm", ".nc", sep="")
@@ -8544,7 +8550,7 @@ stemmort <- BiomeE_PS5_FIN_eCO2_annual_cohorts %>%
   summarise(stemmort=sum(deathrate*density/10000)) %>% ungroup()
 stemmort_wid <- stemmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = stemmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_stemmort_size_PS5_FIN_562ppm", ".nc", sep="")
@@ -8806,7 +8812,7 @@ cwood_size <- BiomeE_PS6_FIN_eCO2_annual_cohorts %>%
   summarise(cwood_size=sum((sapwC+woodC)*density/10000)) %>% ungroup()
 cwood_size_wid <- cwood_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = cwood_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cwood_size_PS6_FIN_562ppm", ".nc", sep="")
@@ -8842,7 +8848,7 @@ nstem_size <- BiomeE_PS6_FIN_eCO2_annual_cohorts %>%
   summarise(nstem_size=sum(density)) %>% ungroup()
 nstem_size_wid <- nstem_size %>% 
   pivot_wider(names_from = dbh_bins, values_from = nstem_size,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_nstem_size_PS6_FIN_562ppm", ".nc", sep="")
@@ -9141,7 +9147,7 @@ cmort <- BiomeE_PS6_FIN_eCO2_annual_cohorts %>%
   summarise(cmort=sum(c_deadtrees)) %>% ungroup()
 cmort_wid <- cmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = cmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_cmort_size_PS6_FIN_562ppm", ".nc", sep="")
@@ -9210,7 +9216,7 @@ stemmort <- BiomeE_PS6_FIN_eCO2_annual_cohorts %>%
   summarise(stemmort=sum(deathrate*density/10000)) %>% ungroup()
 stemmort_wid <- stemmort %>% 
   pivot_wider(names_from = dbh_bins, values_from = stemmort,values_fill = 0) %>% arrange(year) %>%
-  select(-year) %>% mutate(`[60,70)`=0,`[70,80)`=0,`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
+  select(-year) %>% mutate(`[80,90)`=0,`[90,100)`=0,`[100,150)`=0,`[150,200)`=0,`[200,250)`=0)
 # create the netCDF filename 
 ncfname <- paste("~/rsofun/data/outputs_mod/nc_files/562ppm/FIN/", 
                  "BiomeEP_stemmort_size_PS6_FIN_562ppm", ".nc", sep="")
