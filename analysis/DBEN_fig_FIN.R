@@ -851,6 +851,22 @@ fig1a <- BiomeE_PS1_FIN_aCO2_annual_tile %>% #filter(year>510) %>%
   theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_text(size = 10)) 
 fig1a
 
+g1 <- BiomeE_PS1_FIN_aCO2_annual_tile %>%
+  ggplot() + 
+  geom_line(aes(x=year, y=plantC),col="#377EB8") + 
+  labs(x = "year", y = expression(paste("Plant C (kg C ", m^-2, ") "))) + 
+  theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_text(size = 10)) 
+
+g2 <- BiomeE_PS1_FIN_aCO2_annual_cohorts %>% group_by(PFT,year) %>%
+  summarise(BA=sum(DBH*DBH*pi/4*density/10000)) %>% mutate(PFT=as.factor(PFT)) %>%
+  ggplot() +
+  geom_line(aes(x = year, y = BA,col=PFT)) +
+  labs(x = "year", y = expression(paste("Basal area (", m^-2, " ", ha^-1, ") "))) + 
+  theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_text(size = 10)) +
+  scale_colour_discrete(labels = c("Grasses","Betula pendula","Picea abies","Pinus sylvestris"))
+
+g1/g2
+
 ## GPP ####
 fig1b <- BiomeE_PS1_FIN_aCO2_annual_tile %>% #filter(year>510) %>%
   slice(510+1:nrow(BiomeE_PS1_FIN_aCO2_annual_tile)) %>% 
@@ -1232,6 +1248,22 @@ fig1a <- BiomeE_PS2_FIN_aCO2_annual_tile %>% #filter(year>510) %>%
   labs(x = "year", y = expression(paste("Plant C (kg C ", m^-2, ") "))) + 
   theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_text(size = 10)) 
 fig1a
+
+g1 <- BiomeE_PS2_FIN_aCO2_annual_tile %>%
+  ggplot() + 
+  geom_line(aes(x=year, y=plantC),col="#377EB8") + 
+  labs(x = "year", y = expression(paste("Plant C (kg C ", m^-2, ") "))) + 
+  theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_text(size = 10)) 
+
+g2 <- BiomeE_PS2_FIN_aCO2_annual_cohorts %>% group_by(PFT,year) %>%
+  summarise(BA=sum(DBH*DBH*pi/4*density/10000)) %>% mutate(PFT=as.factor(PFT)) %>%
+  ggplot() +
+  geom_line(aes(x = year, y = BA,col=PFT)) +
+  labs(x = "year", y = expression(paste("Basal area (", m^-2, " ", ha^-1, ") "))) + 
+  theme_classic() + theme(axis.text = element_text(size = 10),axis.title = element_text(size = 10)) +
+  scale_colour_discrete(labels = c("Grasses","Betula pendula","Picea abies","Pinus sylvestris"))
+
+g1/g2
 
 ## GPP ####
 fig1b <- BiomeE_PS2_FIN_aCO2_annual_tile %>% #filter(year>510) %>%
