@@ -1,0 +1,859 @@
+---
+title: "run_biomee_f_bysite"
+output: html_document
+date: "2023-10-17"
+---
+
+    run_biomee_f_bysite <- function(
+      sitename,
+      params_siml,
+      site_info,
+      forcing,
+      params_tile,
+      params_species,
+      params_soil,
+      init_cohort,
+      init_soil,
+      makecheck = TRUE
+      )
+  
+#### **sitename**
+Name of the site.
+
+#### **params_siml**
+Simulation parameters.
+
+\ **spinup** \
+\ A logical value indicating whether this simulation does spin-up.
+
+\ **spinupyears** \
+\ Number of spin-up years.
+
+\ **recycle** \
+\ Length of standard recycling period (days).
+
+\ **firstyeartrend** \
+\ First transient year.
+
+\ **nyeartrend** \
+\ Number of transient years.
+
+\ **outputhourly** \
+\ A logical value indicating whether hourly output is produced.
+
+\ **outputdaily** \
+\ A logical value indicating whether daily output is produced.
+
+\ **do_U_shaped_mortality** \
+\ A logical value indicating whether U-shaped mortality is used. 
+
+\ **update_annualLAImax** \
+\ A logical value indicating whether updating LAImax (Maximum leaf area index) according to mineral nitrogen in soil.
+
+\ **do_closedN_run** \
+\ A logical value indicating whether doing Nitrogen closed runs to recover Nitrogen balance.
+
+\ **code_method_photosynth** \
+\ Method of photosynthesis used in the model. "pmodel" or "gs_leuning".
+
+\ **code_method_mortality** \
+\ Type of mortality in the model. "dbh" is size-dependent mortality.
+ 
+#### **site_info**
+Site meta info.
+
+\ **sitename** \
+\ Name of the site.
+
+\ **lon** \
+\ Longitud of the site location.
+
+\ **lat** \
+\ Latitude of the site location.
+
+\ **elv** \
+\ Elevation of the site location (m).
+
+\ **year_start** \
+\ First year of observation.
+
+\ **year_end** \
+\ Last year of observation.
+
+\ **classid** \
+\ Class ID.
+
+\ **c4** \
+\ A logical value, TRUE if grass with C4 photosynthetic pathway.
+
+\ **whc** \
+\ A numeric value for the total root zone water holding capacity (in mm), used for simulating the soil water balance.
+
+\ **koeppen_code** \
+\ A string value indicating the Köppen climate classification of the site.
+
+\ **igbp_land_use** \
+\ A string value indicating the IGBP land cover class.
+
+\ **plant_functional_type** \
+\ A string value indicating the PFT.
+
+\ **date_start** \
+\ First date of the observation in YYYY-MM-DD format.
+
+\ **date_end** \
+\ Last date of the observation in YYYY-MM-DD format.
+
+#### **params_tile** \
+Tile-level parameters.
+
+\ **soiltype** \   
+\ Type of soil \ 
+\ Sand = 1, LoamySand = 2, SandyLoam = 3, SiltLoam = 4, FrittedClay = 5, Loam = 6, Clay = 7.
+
+\ **FLDCAP** \
+\ Field capacity (vol/vol). Water remaining in a soil after it has been thoroughly saturated and allowed to drain freely.
+
+\ **WILTPT** \
+\ Wilting point (vol/vol). Water content of a soil at which plants wilt and fail to recover.
+
+\ **K1** \
+\ Fast soil C decomposition rate (yr-1).
+
+\ **K2** \
+\ Slow soil C decomposition rate (yr-1).
+
+\ **K_nitrogen** \
+\ Mineral Nitrogen turnover rate (yr-1).
+
+\ **MLmixRatio** \
+\ Ratio of carbon and nitrogen returned to litters from microbes.
+
+\ **etaN** \
+\ Nitrogen loss rate through runoff (organic and mineral) (yr-1).
+
+\ **LMAmin** \
+\ Minimum leaf mass per unit area (kg C m-2).
+
+\ **fsc_fine** \
+\ Fraction of fast turnover carbon in fine biomass.
+
+\ **fsc_wood** \
+\ Fraction of fast turnover carbon in wood biomass.
+
+\ **GR_factor** \
+\ Growth respiration factor.
+
+\ **l_fract** \
+\ Fraction of the carbon retained after leaf drop.
+
+\ **retransN** \
+\ Retranslocation coefficient of nitrogen.
+
+\ **f_initialBSW** \
+\ Coefficient for setting up a initial sapwood.
+
+\ **f_N_add** \
+\ Added nitrogen for sapwood.
+
+\ **tf_base** \
+\ Calibratable scalar for respiration. Used to increase LUE levels.
+
+\ **par_mort** \
+\ Calibratable parameter for canopy mortality
+
+\ **par_mort_under** \
+\ Calibratable parameter for understory mortality
+
+#### **params_species** \
+Species-level parameters
+
+\ **lifeform** \
+\ 0 for grasses; 1 for trees.
+
+\ **phenotype** \
+\ 0 for deciduous; 1 for evergreen.
+
+\ **pt** \
+\ Type of plant according to photosynthesis: 0 for C3; 1 for C4.
+
+\ **alpha_FR** \
+\ Fine root turnover rate (yr-1).
+
+\ **rho_FR** \
+\ Material density of fine roots (kg C m-3).
+
+\ **root_r** \
+\ Radius of the fine roots (m).
+
+\ **root_zeta** \
+\ e-folding parameter of root vertical distribution (m).
+
+\ **Kw_root** \
+\ Fine root water conductivity (mol m-2 s−1 MPa−1).
+
+\ **leaf_size** \
+\ Characteristic leaf size (m2).
+
+\ **Vmax** \
+\ Maximum rate of carboxylation at 25 ◦C (mol CO2 m−2 s−1).
+
+\ **Vannual** \
+\ Annual productivity per unit area at full sun (kgC m-2 yr-1).
+
+\ **wet_leaf_dreg** \
+\ Wet leaf photosynthesis down-regulation: wet leaf is 30% less than dry leaf.
+
+\ **m_cond** \
+\ Factor of stomatal conductance.
+
+\ **alpha_phot** \
+\ Photosynthesis efficiency.
+
+\ **gamma_L** \
+\ Leaf respiration coefficient (yr-1).
+
+\ **gamma_LN** \
+\ Leaf respiration coefficient per unit nitrogen.
+
+\ **gamma_SW** \
+\ Sapwood respiration rate (kg C m-2 cambium area yr-1).
+
+\ **gamma_FR** \
+\ fine root respiration rate (kg C kg N-1 yr-1).
+
+\ **tc_crit** \
+\ Critical temperature for the offset of phenology (K).
+
+\ **tc_crit_on** \
+\ Critical temperature for the onset of phenology (K).
+
+\ **gdd_crit** \
+\ Critical value of growing degree days for the onset of a growing season (K day).
+
+\ **seedlingsize** \
+\ Initial size of seedlings (kgC indiv-1).
+
+\ **LNbase** \
+\ Basal leaf Nitrogen per unit area (kgN m-2).
+
+\ **lAImax** \
+\ Maximum leaf area index (m2 m-2).
+
+\ **Nfixrate0** \
+\ Reference nitrogen fixation rate (kgN kgC-1 root).
+
+\ **NfixCost0** \
+\ Carbon cost of N fixation (kgC kgN-1).
+
+\ **phiCSA** \
+\ Ratio of sapwood area to leaf area.
+
+\ **mortrate_d_c** \
+\ Canopy tree mortality rate (year-1) 
+
+\ **mortrate_d_c** \
+\ Understory tree mortality rate (year-1) 
+
+\ **maturalage** \
+\ Age trees can reproduce (years). 
+
+\ **v_seed** \
+\ Fraction of allocation to wood and seeds.
+
+\ **fNSNmax** \
+\ Multiplier for maximum nonstructural nitrogen.
+
+\ **LMA** \
+\ Leaf mass per unit area (kg C m-2)
+
+\ **rho_wood** \
+\ Wood density (kg C m-3).
+
+\ **alphaBM** \
+\ Allometry coefficient (biomass = alphaBM * DBH ** thetaBM).
+
+\ **thetaBM** \
+\ Allometry coefficient (biomass = alphaBM * DBH ** thetaBM).
+
+\ **kphio** \
+\ Quantum yield efficiency (mol mol-1).
+
+\ **phiRL** \
+\ Ratio of fine root to leaf area.
+
+\ **LAI_light** \
+\ Maximum leaf area index limited by light (m2 m-2).
+
+#### **params_soil** \
+Soil parameters
+
+\ **GMD** \
+\ Geometric mean particle diameter (mm).
+
+\ **GSD** \
+\ Geometric standard deviation of particle size.
+
+\ **vwc_sat** \
+\ Saturated volumetric soil water content (vol/vol)
+
+\ **chb** \
+\ Soil texture parameter.
+
+\ **psi_sat_ref** \
+\ Saturation soil water potential (m).
+
+\ **k_sat_ref** \
+\ Hydraulic conductivity of saturated soil (kg m-2 s-1).
+
+\ **alphaSoil** \
+\ Vertical changes of soil property, 1: no change.
+
+\ **heat_capacity_dry** \
+\ Heat capacity dry air (J m-3 k-1).
+          
+#### **init_cohort** \
+Initial cohort specifications.
+
+\ **init_cohort_species** \
+\ A integer indicating different species.
+
+\ **init_cohort_nindivs** \
+\ Initial individual density (trees m-2).
+
+\ **init_cohort_bsw** \
+\ Initial biomass of sapwood (kg C tree-1).
+
+\ **init_cohort_bHW** \
+\ Initial biomass of heartwood (kg C tree-1).
+
+\ **init_cohort_nsc** \
+\ Initial nonstructural carbohydrates (kg C tree-1).
+ 
+#### **init_soil** \
+Initial soil pools.
+
+\ **init_fast_soil_C** \
+\ Initial fast soil carbon (kg C m-2).
+
+\ **init_slow_soil_C** \
+\ Initial slow soil carbon (kg C m-2).
+
+\ **init_Nmineral** \
+\ Initial mineral nitrogen pool (kg C m-2).
+
+\ **N_input** \
+\ Nitrogen input to soil nitrogen pool (kg N m-2 yr-1).
+
+### **Outputs** \
+
+#### **output_hourly_tile** \
+Hourly outputs at tile-level.
+
+\ **year** \
+\ Year of the simulation.
+
+\ **doy** \
+\ Day of the year.
+
+\ **hour** \
+\ Hour of the day.
+
+\ **rad** \
+\ Radiation (W m-2).
+
+\ **Tair** \
+\ Air temperature (K).
+
+\ **Prcp** \
+\ Precipitation (mm m-2).
+
+\ **GPP** \
+\ Gross primary productivity (kg C m-2 hour-1).
+
+\ **Resp** \
+\ Plant respiration (kg C m-2 hour-1).
+
+\ **Transp** \
+\ Transpiration (mm m-2 hour-1).
+
+\ **Evap** \
+\ Evaporation (mm m-2 hour-1).
+
+\ **Runoff** \
+\ Water runoff (mm m-2 hour-1).
+
+\ **Soilwater** \
+\ Soil water content in root zone (kg m-2).
+
+\ **wcl** \
+\ Volumetric soil water content for each layer (vol/vol)
+
+\ **FLDCAP** \
+\ Field capacity (vol/vol).
+
+\ **WILTPT** \
+\ Wilting point (vol/vol).
+
+#### **output_daily_tile** \
+Daily outputs at tile-level.
+
+\ **year** \
+\ Year of the simulation.
+
+\ **doy** \
+\ Day of the year.
+
+\ **Tc** \
+\ Air temperature (K).
+
+\ **Prcp** \
+\ Precipitation (mm m-2).
+
+\ **totWs** \
+\ Soil water content in root zone (kg m-2).
+
+\ **Trsp** \
+\ Transpiration (mm m-2 day-1).
+
+\ **Evap** \
+\ Evaporation (mm m-2 day-1).
+
+\ **Runoff** \
+\ Water runoff (mm m-2 day-1).
+
+\ **ws1** \
+\ Volumetric soil water content for layer 1.
+
+\ **ws2** \
+\ Volumetric soil water content for layer 2.
+
+\ **ws3** \
+\ Volumetric soil water content for layer 3.
+
+\ **LAI** \
+\ Leaf area index (m2/m2).
+
+\ **GPP** \
+\ Gross primary production (kg C m-2 day-1).
+
+\ **Rauto** \
+\ Plant autotrophic respiration (kg C m-2 day-1).
+
+\ **Rh** \
+\ Heterotrophic respiration (kg C m-2 day-1).
+
+\ **NSC** \
+\ Nonstructural carbohydrates (kg C m-2).
+
+\ **seedC** \
+\ Seed biomass (kg C m-2).
+
+\ **leafC** \
+\ Leaf biomass (kg C m-2).
+
+\ **rootC** \
+\ Fine roots biomass (kg C m-2).
+
+\ **SW_C** \
+\ Sapwood biomass (kg C m-2).
+
+\ **HW_C** \
+\ Heartwood biomass (kg C m-2).
+
+\ **NSN** \
+\ Nonstructural nitrogen (kg N m-2).
+
+\ **seedN** \
+\ Seed nitrogen (kg N m-2).
+
+\ **leafN** \
+\ Leaf nitrogen (kg N m-2).
+
+\ **rootN** \
+\ Fine roots nitrogen  (kg N m-2).
+
+\ **SW_N** \
+\ Sapwood nitrogen (kg N m-2).
+
+\ **HW_N** \
+\ Heartwood nitrogen (kg N m-2).
+
+\ **McrbC** \
+\ Microbial carbon (kg C m-2).
+
+\ **fastSOM** \
+\ Fast soil carbon pool (kg C m-2).
+
+\ **slowSOM** \
+\ Slow soil carbon pool (kg C m-2).
+
+\ **McrbN** \
+\ Microbial nitrogen (kg N m-2)
+
+\ **fastSoilN** \
+\ Fast soil nitrogen pool (kg N m-2).
+
+\ **slowSoilN** \
+\ Slow soil nitrogen pool (kg N m-2).
+
+\ **mineralN** \
+\ Mineral nitrogen pool (kg N m-2).
+
+\ **N_uptk** \
+\ Nitrogen uptake (kg N m-2).
+
+#### **output_daily_cohorts** \
+Daily outputs at cohort-level.
+
+\ **year** \
+\ Year of the simulation.
+
+\ **doy** \
+\ Day of the year.
+
+\ **hour** \
+\ Hour of the day.
+
+\ **cID** \
+\ An integer indicating the cohort identity.
+
+\ **PFT** \
+\ An integer indicating the Plant Functional Type.
+
+\ **layer** \
+\ An integer indicating the crown layer, numbered from top to bottom.
+
+\ **density** \
+\ Number of trees per area (trees ha-1) 
+
+\ **f_layer** \
+\ Fraction of layer area occupied by this cohort.   
+
+\ **LAI** \
+\ Leaf area index (m2 m-2).
+
+\ **gpp** \
+\ Gross primary productivity (kg C tree-1 day-1).
+
+\ **resp** \
+\ Plant autotrophic respiration (kg C tree-1 day-1).
+
+\ **transp** \
+\ Transpiration (mm tree-1 day-1).
+
+\ **NPPleaf** \
+\ Carbon allocated to leaves (kg C tree-1 day-1).
+
+\ **NPProot** \
+\ Carbon allocated to fine roots (kg C tree-1 day-1).
+
+\ **NPPwood** \ 
+\ Carbon allocated to wood (kg C tree-1 day-1).
+
+\ **NSC** \
+\ Nonstructural carbohydrates of a tree in this cohort (kg C tree-1).
+
+\ **seedC** \
+\ Seed biomass of a tree in this cohort (kg C tree-1).
+
+\ **leafC** \
+\ Leaf biomass of a tree in this cohort (kg C tree-1).
+
+\ **rootC** \
+\ Fine root biomass of a tree in this cohort (kg C tree-1).
+
+\ **SW_C** \
+\ Sapwood biomass of a tree in this cohort (kg C tree-1).
+
+\ **HW_C** \
+\ Heartwood biomass of a tree in this cohort (kg C tree-1).
+
+\ **NSN** \
+\ Nonstructural nitrogen of a tree in this cohort (kg N tree-1).
+
+\ **seedN** \
+\ Seed nitrogen of a tree in this cohort (kg N tree-1).
+
+\ **leafN** \
+\ Leaf nitrogen of a tree in this cohort (kg N tree-1).
+
+\ **rootN** \
+\ Fine root nitrogen of a tree in this cohort (kg N tree-1).
+
+\ **SW_N** \
+\ Sapwood nitrogen of a tree in this cohort (kg N tree-1).
+
+\ **HW_N** \
+\ Heartwood nitrogen of a tree in this cohort (kg N tree-1).
+
+#### **output_annual_tile** \
+Annual outputs at tile-level.
+
+\ **year** \
+\ Year of the simulation.
+
+\ **CAI** \
+\ Crown area index (m2 m-2).
+
+\ **LAI** \
+\ Leaf area index (m2 m-2).
+
+\ **Density** \
+\ Number of trees per area (trees ha-1).
+
+\ **DBH** \
+\ Diameter at tile level (cm).
+
+\ **Density12** \
+\ Tree density for trees with DBH > 12 cm (indivs ha-1). 
+
+\ **DBH12** \
+\ Diameter at tile level considering trees with DBH > 12cm (cm).
+
+\ **QMD** \
+\ Quadratic mean diameter at tile level considering trees with DBH > 12 cm (cm).
+
+\ **NPP** \
+\ Net primary productivity (kg C m-2 yr-1).
+
+\ **GPP** \
+\ Gross primary productivity (kg C m-2 yr-1).
+
+\ **Rauto** \
+\ Plant autotrophic respiration (kg C m-2 yr-1).
+
+\ **Rh** \
+\ Heterotrophic respiration (kg C m-2 yr-1).
+
+\ **rain** \
+\ Annual precipitation (mm m-2 yr-1)
+
+\ **SoilWater** \
+\ Soil water content in root zone (kg m-2).
+
+\ **Transp** \
+\ Transpiration (mm m-2 yr-1).
+
+\ **Evap** \
+\ Evaporation (mm m-2 yr-1).
+
+\ **Runoff** \
+\ Water runoff (mm m-2 yr-1).
+
+\ **plantC** \
+\ Plant biomass (kg C m-2)
+
+\ **soilC** \
+\ Soil carbon (kg C m-2)
+
+\ **plantN** \
+\ Plant nitrogen (kg N m-2).
+
+\ **soilN** \
+\ Soil nitrogen (kg N m-2).
+
+\ **totN** \
+\ Total nitrogen in plant and soil (kg N m-2).
+
+\ **NSC** \
+\ Nonstructural carbohydrates (kg C m-2).
+
+\ **SeedC** \
+\ Seed biomass (kg C m-2).
+
+\ **leafC** \
+\ Leaf biomass (kg C m-2).
+
+\ **rootC** \
+\ Fine root biomass (kg C m-2).
+
+\ **SapwoodC** \
+\  Sapwood biomass (kg C m-2).
+
+\ **WoodC** \
+\ Heartwood biomass (kg C m-2).
+
+\ **NSN** \
+\ Nonstructural nitrogen (kg N m-2).
+
+\ **SeedN** \
+\ Seed nitrogen (kg N m-2).
+
+\ **leafN** \
+\ Leaf nitrogen (kg N m-2).
+
+\ **rootN** \
+\ Fine root nitrogen (kg N m-2).
+
+\ **SapwoodN** \
+\ Sapwood nitrogen (kg N m-2).
+
+\ **WoodN** \
+\ Heartwood nitrogen (kg N m-2).
+
+\ **McrbC** \
+\ Microbial carbon (kg C m-2).
+
+\ **fastSOM** \
+\ Fast soil carbon pool (kg C m-2).
+
+\ **SlowSOM** \
+\ Slow soil carbon pool (kg C m-2).
+
+\ **McrbN** \
+\ Microbial nitrogen (kg N m-2)
+
+\ **fastSoilN** \
+\ Fast soil nitrogen pool (kg N m-2).
+
+\ **slowSoilN** \
+\ Slow soil nitrogen pool (kg N m-2).
+
+\ **mineralN** \
+\ Mineral nitrogen pool (kg N m-2).
+
+\ **N_fxed** \
+\ Nitrogen fixation (kg N m-2).
+
+\ **N_uptk** \
+\ Nitrogen uptake (kg N m-2).
+
+\ **N_yrMin** \
+\ Annual available nitrogen (kg N m-2).
+
+\ **N_P2S** \
+\ Annual nitrogen from plants to soil (kg N m-2).
+
+\ **N_loss** \
+\ Annual nitrogen loss (kg N m-2).
+
+\ **totseedC** \
+\ Total seed carbon (kg C m-2). 
+
+\ **totseedN** \
+\ Total seed nitrogen (kg N m-2).
+
+\ **Seedling_C** \
+\ Total carbon from all compartments but seeds (kg C m-2).
+
+\ **Seedling_N** \
+\ Total nitrogen from all compartments but seeds (kg N m-2).
+
+\ **MaxAge** \
+\ Age of the oldest tree in the tile (years).
+
+\ **MaxVolume** \
+\ Maximum volume of a tree in the tile (m3).
+
+\ **MaxDBH** \
+\ Maximum DBH of a tree in the tile (m).
+
+\ **NPPL** \
+\ Growth of a tree, including carbon allocated to leaves (kg C m-2 year-1).
+
+\ **NPPW** \
+\ Growth of a tree, including carbon allocated to sapwood (kg C m-2 year-1).
+
+\ **n_deadtrees** \
+\ Number of trees that died (trees m-2 yr-1).
+
+\ **c_deadtrees** \
+\ Carbon biomass of trees that died (kg C m-2 yr-1)
+
+\ **m_turnover** \
+\ Continuous biomass turnover (kg C m-2 yr-1)
+
+\ **c_turnover_time** \
+\ Carbon turnover rate, calculated as the ratio between plant biomass and NPP (yr-1).
+
+#### **output_annual_cohorts** \
+Annual outputs at cohort-level.
+
+\ **year** \
+\ Year of the simulation.
+
+\ **cID** \
+\  An integer indicating the cohort identity.
+
+\ **PFT** \
+\ An integer indicating the Plant Functional Type.
+
+\ **layer** \
+\ An integer indicating the crown layer, numbered from top to bottom.
+
+\ **density** \
+\ Number of trees per area (trees ha-1).
+
+\ **f_layer** \
+\ Fraction of layer area occupied by this cohort.
+
+\ **dDBH** \
+\ Diameter growth of a tree in this cohort (cm year-1).
+
+\ **dbh** \
+\ Tree diameter (cm).
+
+\ **height** \
+\ Tree height (m).
+
+\ **age** \
+\ Age of the cohort (years).
+
+\ **Acrown** \
+\ Crown area of a tree in this cohort (m2).  
+
+\ **wood** \
+\ Sum of sapwood and heartwood biomass of a tree in this cohort (kgC tree-1).
+
+\ **nsc** \
+\ Nonstructural carbohydrates in a tree (kgC tree-1).
+
+\ **NSN** \
+\ Nonstructural nitrogen of a tree (kg N tree-1).
+
+\ **NPPtr** \
+\ Total growth of a tree, including carbon allocated to seeds, leaves, fine roots, and sapwood (kg C tree-1 year-1).
+
+\ **seed** \
+\ Fraction of carbon allocated to seeds to total growth.
+
+\ **NPPL** \
+\ Fraction of carbon allocated to leaves to total growth.
+
+\ **NPPR** \
+\ Fraction of carbon allocated to fine roots to total growth.
+
+\ **NPPW** \
+\ Fraction of carbon allocated to sapwood to total growth.
+
+\ **GPP_yr** \
+\ Gross primary productivity of a tree (kgC tree-1 year-1).
+
+\ **NPP_yr** \
+\ Net primary productivity of a tree (kgC tree-1 year-1).
+
+\ **Rauto** \
+\ Plant autotrophic respiration (kg C tree-1 yr-1).
+
+\ **N_uptk** \
+\ Nitrogen uptake (kg N tree-1 yr-1).
+
+\ **N_fix** \
+\ Nitrogen fixation (kg N tree-1 yr-1).
+
+\ **maxLAI** \
+\ Maximum leaf area index for a tree (m2 m-2).
+
+\ **Volume** \
+\ Tree volume (m3).
+
+\ **n_deadtrees** \
+\ Number of trees that died (trees yr-1).
+
+\ **c_deadtrees** \
+\ Carbon biomass of trees that died (kg C yr-1).
+
+\ **deathrate** \
+\ Mortality rate of this cohort (yr-1).
+
